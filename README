@@ -1,0 +1,42 @@
+Hello LCA 2015 tutorial-goer!
+
+First, if you use Windows, I'm sorry; this should work, but you'll have to
+modify the directions for your setup. I haven't tested on Windows.
+
+To prepare for this tutorial, please:
+
+  1. Open up your favorite shell (bash/zsh/fish)
+
+  2. cd to the directory you copied from the USB stick (gostick/)
+
+  3. ls packages/ and pick the one that is best for you, they should be named
+     in a relatively straightforward fashion.
+
+  4. Untar the selected package into the gostick/ dir, like:
+
+        username:~/gostick$ tar -zxvf packages/go1.2.linux-amd64.tar.gz
+
+     Now, if you "ls -l", you should see something like this:
+
+-rwxr-xr-x   1 marksmith  staff  120 Jan  3 22:52 bash.sh
+-rwxr-xr-x   1 marksmith  staff  118 Jan  3 22:52 fish.sh
+drwxr-xr-x  20 marksmith  staff  680 Jan  3 22:50 go
+drwxr-xr-x   3 marksmith  staff  102 Jan  3 22:51 helloworld
+drwxr-xr-x  12 marksmith  staff  408 Jan  3 22:46 packages
+...
+
+     It's important that you untar the tarball from packages/ so that it ends
+     up in the go/ directory.
+
+  5. Source the right file for your shell ("source bash.sh" etc)
+
+  6. Verify go works, type "go", and you should see:
+
+        username:~/gostick$ go
+Go is a tool for managing Go source code.
+...
+
+  7. If the worst happens, ask a neighbor and/or ask for help so that you
+     are with us as we move along. :-)
+
+--Mark
