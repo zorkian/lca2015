@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>debug - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package debug</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "runtime/debug"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package debug contains facilities for programs to debug themselves while
+they are running.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#FreeOSMemory">func FreeOSMemory()</a></dd>
+			
+				
+				<dd><a href="#PrintStack">func PrintStack()</a></dd>
+			
+				
+				<dd><a href="#ReadGCStats">func ReadGCStats(stats *GCStats)</a></dd>
+			
+				
+				<dd><a href="#SetGCPercent">func SetGCPercent(percent int) int</a></dd>
+			
+				
+				<dd><a href="#SetMaxStack">func SetMaxStack(bytes int) int</a></dd>
+			
+				
+				<dd><a href="#SetMaxThreads">func SetMaxThreads(threads int) int</a></dd>
+			
+				
+				<dd><a href="#SetPanicOnFault">func SetPanicOnFault(enabled bool) bool</a></dd>
+			
+				
+				<dd><a href="#Stack">func Stack() []byte</a></dd>
+			
+				
+				<dd><a href="#WriteHeapDump">func WriteHeapDump(fd uintptr)</a></dd>
+			
+			
+				
+				<dd><a href="#GCStats">type GCStats</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/runtime/debug/garbage.go">garbage.go</a>
+			
+				<a href="/src/runtime/debug/stack.go">stack.go</a>
+			
+				<a href="/src/runtime/debug/stubs.go">stubs.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="FreeOSMemory">func <a href="/src/runtime/debug/garbage.go?s=4066:4085#L97">FreeOSMemory</a></h2>
+			<pre>func FreeOSMemory()</pre>
+			<p>
+FreeOSMemory forces a garbage collection followed by an
+attempt to return as much memory to the operating system
+as possible. (Even if this is not called, the runtime gradually
+returns memory to the operating system in a background task.)
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="PrintStack">func <a href="/src/runtime/debug/stack.go?s=516:533#L15">PrintStack</a></h2>
+			<pre>func PrintStack()</pre>
+			<p>
+PrintStack prints to standard error the stack trace returned by Stack.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ReadGCStats">func <a href="/src/runtime/debug/garbage.go?s=1207:1239#L21">ReadGCStats</a></h2>
+			<pre>func ReadGCStats(stats *<a href="#GCStats">GCStats</a>)</pre>
+			<p>
+ReadGCStats reads statistics about garbage collection into stats.
+The number of entries in the pause history is system-dependent;
+stats.Pause slice will be reused if large enough, reallocated otherwise.
+ReadGCStats may use the full capacity of the stats.Pause slice.
+If stats.PauseQuantiles is non-empty, ReadGCStats fills it with quantiles
+summarizing the distribution of pause time. For example, if
+len(stats.PauseQuantiles) is 5, it will be filled with the minimum,
+25%, 50%, 75%, and maximum pause times.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SetGCPercent">func <a href="/src/runtime/debug/garbage.go?s=3707:3741#L87">SetGCPercent</a></h2>
+			<pre>func SetGCPercent(percent <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+SetGCPercent sets the garbage collection target percentage:
+a collection is triggered when the ratio of freshly allocated data
+to live data remaining after the previous collection reaches this percentage.
+SetGCPercent returns the previous setting.
+The initial setting is the value of the GOGC environment variable
+at startup, or 100 if the variable is not set.
+A negative percentage disables garbage collection.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SetMaxStack">func <a href="/src/runtime/debug/garbage.go?s=4568:4599#L111">SetMaxStack</a></h2>
+			<pre>func SetMaxStack(bytes <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+SetMaxStack sets the maximum amount of memory that
+can be used by a single goroutine stack.
+If any goroutine exceeds this limit while growing its stack,
+the program crashes.
+SetMaxStack returns the previous setting.
+The initial setting is 1 GB on 64-bit systems, 250 MB on 32-bit systems.
+</p>
+<p>
+SetMaxStack is useful mainly for limiting the damage done by
+goroutines that enter an infinite recursion. It only limits future
+stack growth.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SetMaxThreads">func <a href="/src/runtime/debug/garbage.go?s=5412:5447#L129">SetMaxThreads</a></h2>
+			<pre>func SetMaxThreads(threads <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+SetMaxThreads sets the maximum number of operating system
+threads that the Go program can use. If it attempts to use more than
+this many, the program crashes.
+SetMaxThreads returns the previous setting.
+The initial setting is 10,000 threads.
+</p>
+<p>
+The limit controls the number of operating system threads, not the number
+of goroutines. A Go program creates a new thread only when a goroutine
+is ready to run but all the existing threads are blocked in system calls, cgo calls,
+or are locked to other goroutines due to use of runtime.LockOSThread.
+</p>
+<p>
+SetMaxThreads is useful mainly for limiting the damage done by
+programs that create an unbounded number of threads. The idea is
+to take down the program before it takes down the operating system.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SetPanicOnFault">func <a href="/src/runtime/debug/garbage.go?s=6072:6111#L142">SetPanicOnFault</a></h2>
+			<pre>func SetPanicOnFault(enabled <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+SetPanicOnFault controls the runtime&#39;s behavior when a program faults
+at an unexpected (non-nil) address. Such faults are typically caused by
+bugs such as runtime memory corruption, so the default response is to crash
+the program. Programs working with memory-mapped files or unsafe
+manipulation of memory may cause faults at non-nil addresses in less
+dramatic situations; SetPanicOnFault allows such programs to request
+that the runtime trigger only a panic, not a crash.
+SetPanicOnFault applies only to the current goroutine.
+It returns the previous setting.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Stack">func <a href="/src/runtime/debug/stack.go?s=919:938#L25">Stack</a></h2>
+			<pre>func Stack() []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Stack returns a formatted stack trace of the goroutine that calls it.
+For each routine, it includes the source line information and PC value,
+then attempts to discover, for Go functions, the calling function or
+method and the text of the line containing the invocation.
+</p>
+<p>
+This function is deprecated. Use package runtime&#39;s Stack instead.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="WriteHeapDump">func <a href="/src/runtime/debug/garbage.go?s=6327:6357#L149">WriteHeapDump</a></h2>
+			<pre>func WriteHeapDump(fd <a href="/pkg/builtin/#uintptr">uintptr</a>)</pre>
+			<p>
+WriteHeapDump writes a description of the heap and the objects in
+it to the given file descriptor.
+The heap dump format is defined at <a href="http://golang.org/s/go13heapdump">http://golang.org/s/go13heapdump</a>.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="GCStats">type <a href="/src/runtime/debug/garbage.go?s=280:672#L4">GCStats</a></h2>
+			<pre>type GCStats struct {
+        LastGC         <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>       <span class="comment">// time of last collection</span>
+        NumGC          <a href="/pkg/builtin/#int64">int64</a>           <span class="comment">// number of garbage collections</span>
+        PauseTotal     <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>   <span class="comment">// total pause for all collections</span>
+        Pause          []<a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a> <span class="comment">// pause history, most recent first</span>
+        PauseEnd       []<a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>     <span class="comment">// pause end times history, most recent first</span>
+        PauseQuantiles []<a href="/pkg/time/">time</a>.<a href="/pkg/time/#Duration">Duration</a>
+}</pre>
+			<p>
+GCStats collect information about recent garbage collections.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

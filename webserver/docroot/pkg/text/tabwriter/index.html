@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>tabwriter - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package tabwriter</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "text/tabwriter"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package tabwriter implements a write filter (tabwriter.Writer) that
+translates tabbed columns in input into properly aligned text.
+</p>
+<p>
+The package is using the Elastic Tabstops algorithm described at
+<a href="http://nickgravgaard.com/elastictabstops/index.html">http://nickgravgaard.com/elastictabstops/index.html</a>.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (b *Writer) Flush() (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Init">func (b *Writer) Init(output io.Writer, minwidth, tabwidth, padding int, padchar byte, flags uint) *Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Write">func (b *Writer) Write(buf []byte) (n int, err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Writer_Init">Writer.Init</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/text/tabwriter/tabwriter.go">tabwriter.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span class="comment">// Ignore html tags and treat entities (starting with &#39;&amp;&#39;</span>
+        <span class="comment">// and ending in &#39;;&#39;) as single characters (width = 1).</span>
+        <span id="FilterHTML">FilterHTML</span> <a href="/pkg/builtin/#uint">uint</a> = 1 &lt;&lt; <a href="/pkg/builtin/#iota">iota</a>
+
+        <span class="comment">// Strip Escape characters bracketing escaped text segments</span>
+        <span class="comment">// instead of passing them through unchanged with the text.</span>
+        <span id="StripEscape">StripEscape</span>
+
+        <span class="comment">// Force right-alignment of cell content.</span>
+        <span class="comment">// Default is left-alignment.</span>
+        <span id="AlignRight">AlignRight</span>
+
+        <span class="comment">// Handle empty columns as if they were not present in</span>
+        <span class="comment">// the input in the first place.</span>
+        <span id="DiscardEmptyColumns">DiscardEmptyColumns</span>
+
+        <span class="comment">// Always use tabs for indentation columns (i.e., padding of</span>
+        <span class="comment">// leading empty cells on the left) independent of padchar.</span>
+        <span id="TabIndent">TabIndent</span>
+
+        <span class="comment">// Print a vertical bar (&#39;|&#39;) between columns (after formatting).</span>
+        <span class="comment">// Discarded columns appear as zero-width columns (&#34;||&#34;).</span>
+        <span id="Debug">Debug</span>
+)</pre>
+				<p>
+Formatting can be controlled with these flags.
+</p>
+
+			
+				<pre>const <span id="Escape">Escape</span> = &#39;\xff&#39;</pre>
+				<p>
+To escape a text segment, bracket it with Escape characters.
+For instance, the tab in this string &#34;Ignore this tab: \xff\t\xff&#34;
+does not terminate a cell and constitutes a single character of
+width one for formatting purposes.
+</p>
+<p>
+The value 0xff was chosen because it cannot appear in a valid UTF-8 sequence.
+</p>
+
+			
+		
+		
+		
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/text/tabwriter/tabwriter.go?s=3231:3937#L67">Writer</a></h2>
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Writer is a filter that inserts padding around tab-delimited
+columns in its input to align them in the output.
+</p>
+<p>
+The Writer treats incoming bytes as UTF-8 encoded text consisting
+of cells terminated by (horizontal or vertical) tabs or line
+breaks (newline or formfeed characters). Cells in adjacent lines
+constitute a column. The Writer inserts padding as needed to
+make all cells in a column have the same width, effectively
+aligning the columns. It assumes that all characters have the
+same width except for tabs for which a tabwidth must be specified.
+Note that cells are tab-terminated, not tab-separated: trailing
+non-tab text at the end of a line does not form a column cell.
+</p>
+<p>
+The Writer assumes that all Unicode code points have the same width;
+this may not be true in some fonts.
+</p>
+<p>
+If DiscardEmptyColumns is set, empty columns that are terminated
+entirely by vertical (or &#34;soft&#34;) tabs are discarded. Columns
+terminated by horizontal (or &#34;hard&#34;) tabs are not affected by
+this flag.
+</p>
+<p>
+If a Writer is configured to filter HTML, HTML tags and entities
+are passed through. The widths of tags and entities are
+assumed to be zero (tags) and one (entities) for formatting purposes.
+</p>
+<p>
+A segment of text may be escaped by bracketing it with Escape
+characters. The tabwriter passes escaped text segments through
+unchanged. In particular, it does not interpret any tabs or line
+breaks within the segment. If the StripEscape flag is set, the
+Escape characters are stripped from the output; otherwise they
+are passed through as well. For the purpose of formatting, the
+width of the escaped text is always computed excluding the Escape
+characters.
+</p>
+<p>
+The formfeed character (&#39;\f&#39;) acts like a newline but it also
+terminates all columns in the current line (effectively calling
+Flush). Cells in the next line start new columns. Unless found
+inside an HTML tag or inside an escaped text segment, formfeed
+characters appear as newlines in the output.
+</p>
+<p>
+The Writer must buffer input internally, because proper spacing
+of one line may depend on the cells in future lines. Clients must
+call Flush when done calling Write.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/text/tabwriter/tabwriter.go?s=16274:16373#L546">NewWriter</a></h3>
+				<pre>func NewWriter(output <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, minwidth, tabwidth, padding <a href="/pkg/builtin/#int">int</a>, padchar <a href="/pkg/builtin/#byte">byte</a>, flags <a href="/pkg/builtin/#uint">uint</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter allocates and initializes a new tabwriter.Writer.
+The parameters are the same as for the Init function.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/text/tabwriter/tabwriter.go?s=13927:13963#L442">Flush</a></h3>
+				<pre>func (b *<a href="#Writer">Writer</a>) Flush() (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Flush should be called after the last call to Write to ensure
+that any data buffered in the Writer is written to output. Any
+incomplete escape sequence at the end is considered
+complete for formatting purposes.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Init">func (*Writer) <a href="/src/text/tabwriter/tabwriter.go?s=6891:6997#L162">Init</a></h3>
+				<pre>func (b *<a href="#Writer">Writer</a>) Init(output <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, minwidth, tabwidth, padding <a href="/pkg/builtin/#int">int</a>, padchar <a href="/pkg/builtin/#byte">byte</a>, flags <a href="/pkg/builtin/#uint">uint</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+A Writer must be initialized with a call to Init. The first parameter (output)
+specifies the filter output. The remaining parameters control the formatting:
+</p>
+<pre>minwidth	minimal cell width including any padding
+tabwidth	width of tab characters (equivalent number of spaces)
+padding		padding added to a cell before computing its width
+padchar		ASCII char used for padding
+		if padchar == &#39;\t&#39;, the Writer will assume that the
+		width of a &#39;\t&#39; in the formatted output is tabwidth,
+		and cells are left-aligned independent of align_left
+		(for correct-looking results, tabwidth must correspond
+		to the tab width in the viewer displaying the result)
+flags		formatting control
+</pre>
+
+				
+				<div id="example_Writer_Init" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;fmt&#34;
+	&#34;os&#34;
+	&#34;text/tabwriter&#34;
+)
+
+func main() {
+	w := new(tabwriter.Writer)
+
+	// Format in tab-separated columns with a tab stop of 8.
+	w.Init(os.Stdout, 0, 8, 0, &#39;\t&#39;, 0)
+	fmt.Fprintln(w, &#34;a\tb\tc\td\t.&#34;)
+	fmt.Fprintln(w, &#34;123\t12345\t1234567\t123456789\t.&#34;)
+	fmt.Fprintln(w)
+	w.Flush()
+
+	// Format right-aligned in space-separated columns of minimal width 5
+	// and at least one blank of padding (so wider column entries do not
+	// touch each other).
+	w.Init(os.Stdout, 5, 0, 1, &#39; &#39;, tabwriter.AlignRight)
+	fmt.Fprintln(w, &#34;a\tb\tc\td\t.&#34;)
+	fmt.Fprintln(w, &#34;123\t12345\t1234567\t123456789\t.&#34;)
+	fmt.Fprintln(w)
+	w.Flush()
+
+}
+</textarea></div>
+				<div class="output"><pre>a	b	c	d		.
+123	12345	1234567	123456789	.
+
+    a     b       c         d.
+  123 12345 1234567 123456789.
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="Writer.Write">func (*Writer) <a href="/src/text/tabwriter/tabwriter.go?s=14473:14526#L467">Write</a></h3>
+				<pre>func (b *<a href="#Writer">Writer</a>) Write(buf []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Write writes buf to the writer b.
+The only errors returned are ones encountered
+while writing to the underlying output stream.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

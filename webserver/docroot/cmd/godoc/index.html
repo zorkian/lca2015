@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="en">
+<head profile="http://a9.com/-/spec/opensearch/1.1/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/-/site.css?v=bf1ccd6efc28f5d787d7c28c6d1c8d97e5ec1b47" rel="stylesheet">
+  
+  <title>godoc - GoDoc</title>
+  
+    <meta name="twitter:title" content="Command godoc">
+    <meta property="og:title" content="Command godoc">
+    <meta name="description" content="Godoc extracts and generates documentation for Go programs.">
+    <meta name="twitter:description" content="Godoc extracts and generates documentation for Go programs.">
+    <meta property="og:description" content="Godoc extracts and generates documentation for Go programs.">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@golang">
+  
+  
+
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/"><strong>GoDoc</strong></a>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/-/index">Index</a></li>
+        <li><a href="/-/about">About</a></li>
+    </ul>
+    <form class="navbar-nav navbar-form navbar-right" id="x-search" action="/" role="search"><input class="form-control" id="x-search-query" type="text" name="q" placeholder="Search"></form>
+  </div>
+</div>
+</nav>
+
+<div class="container">
+  
+  <div class="clearfix" id="x-projnav">
+  <a href="https://golang.org/x/tools"><strong>tools:</strong></a>
+  <a href="/golang.org/x/tools">golang.org/x/tools</a><span class="text-muted">/</span><a href="/golang.org/x/tools/cmd">cmd</a><span class="text-muted">/</span><span class="text-muted">godoc</span>
+  
+</div>
+  <h2>Command godoc</h2>
+  <p>
+Godoc extracts and generates documentation for Go programs.
+</p>
+<p>
+It has two modes.
+</p>
+<p>
+Without the -http flag, it runs in command-line mode and prints plain text
+documentation to standard output and exits. If both a library package and
+a command with the same name exists, using the prefix cmd/ will force
+documentation on the command rather than the library package. If the -src
+flag is specified, godoc prints the exported interface of a package in Go
+source form, or the implementation of a specific exported language entity:
+</p>
+<pre>godoc fmt                # documentation for package <a href="/fmt">fmt</a>
+godoc fmt Printf         # documentation for fmt.Printf
+godoc cmd/go             # force documentation for the go command
+godoc -src fmt           # fmt package interface in Go source form
+godoc -src fmt Printf    # implementation of fmt.Printf
+</pre>
+<p>
+In command-line mode, the -q flag enables search queries against a godoc running
+as a webserver. If no explicit server address is specified with the -server flag,
+godoc first tries localhost:6060 and then <a href="http://golang.org">http://golang.org</a>.
+</p>
+<pre>godoc -q Reader
+godoc -q math.Sin
+godoc -server=:6060 -q sin
+</pre>
+<p>
+With the -http flag, it runs as a web server and presents the documentation as a
+web page.
+</p>
+<pre>godoc -http=:6060
+</pre>
+<p>
+Usage:
+</p>
+<pre>godoc [flag] package [name ...]
+</pre>
+<p>
+The flags are:
+</p>
+<pre>	-v
+		verbose mode
+	-q
+		arguments are considered search queries: a legal query is a
+		single identifier (such as ToLower) or a qualified identifier
+		(such as math.Sin)
+	-src
+		print (exported) source in command-line mode
+	-tabwidth=4
+		width of tabs in units of spaces
+	-timestamps=true
+		show timestamps with directory listings
+	-index
+		enable identifier and full text search index
+		(no search box is shown if -index is not set)
+	-index_files=&#34;&#34;
+		glob pattern specifying index files; if not empty,
+		the index is read from these files in sorted order
+	-index_throttle=0.75
+		index throttle value; a value of 0 means no time is allocated
+		to the indexer (the indexer will never finish), a value of 1.0
+		means that index creation is running at full throttle (other
+		goroutines may get no time while the index is built)
+	-links=true:
+		link identifiers to their declarations
+	-write_index=false
+		write index to a file; the file name must be specified with
+		-index_files
+	-maxresults=10000
+		maximum number of full text search results shown
+		(no full text index is built if maxresults &lt;= 0)
+	-notes=&#34;BUG&#34;
+		regular expression matching note markers to show
+		(e.g., &#34;BUG|TODO&#34;, &#34;.*&#34;)
+	-html
+		print HTML in command-line mode
+	-goroot=$GOROOT
+		Go root directory
+	-http=addr
+		HTTP service address (e.g., &#39;127.0.0.1:6060&#39; or just &#39;:6060&#39;)
+	-server=addr
+		webserver address for command line searches
+	-analysis=type,pointer
+		comma-separated list of analyses to perform
+    		&#34;type&#34;: display identifier resolution, type info, method sets,
+			&#39;implements&#39;, and static callees
+		&#34;pointer&#34; display channel peers, callers and dynamic callees
+			(significantly slower)
+		See <a href="http://golang.org/lib/godoc/analysis/help.html">http://golang.org/lib/godoc/analysis/help.html</a> for details.
+	-templates=&#34;&#34;
+		directory containing alternate template files; if set,
+		the directory may provide alternative template files
+		for the files in $GOROOT/lib/godoc
+	-url=path
+		print to standard output the data that would be served by
+		an HTTP request for path
+	-zip=&#34;&#34;
+		zip file providing the file system to serve; disabled if empty
+</pre>
+<p>
+By default, godoc looks at the packages it finds via $GOROOT and $GOPATH (if set).
+This behavior can be altered by providing an alternative $GOROOT with the -goroot
+flag.
+</p>
+<p>
+When godoc runs as a web server and -index is set, a search index is maintained.
+The index is created at startup.
+</p>
+<p>
+The index contains both identifier and full text search information (searchable
+via regular expressions). The maximum number of full text search results shown
+can be set with the -maxresults flag; if set to 0, no full text results are
+shown, and only an identifier index but no full text search index is created.
+</p>
+<p>
+The presentation mode of web pages served by godoc can be controlled with the
+&#34;m&#34; URL parameter; it accepts a comma-separated list of flag names as value:
+</p>
+<pre>all	show documentation for all declarations, not just the exported ones
+methods	show all embedded methods, not just those of unexported anonymous fields
+src	show the original source code rather then the extracted documentation
+text	present the page in textual (command-line) form rather than HTML
+flat	present flat (not indented) directory listings using full paths
+</pre>
+<p>
+For instance, <a href="http://golang.org/pkg/math/big/?m=all,text">http://golang.org/pkg/math/big/?m=all,text</a> shows the documentation
+for all (not just the exported) declarations of package big, in textual form (as
+it would appear when using godoc from the command line: &#34;godoc -src math/big .*&#34;).
+</p>
+<p>
+By default, godoc serves files from the file system of the underlying OS.
+Instead, a .zip file may be provided via the -zip flag, which contains
+the file system to serve. The file paths stored in the .zip file must use
+slash (&#39;/&#39;) as path separator; and they must be unrooted. $GOROOT (or -goroot)
+must be set to the .zip file directory path containing the Go root directory.
+For instance, for a .zip file created by the command:
+</p>
+<pre>zip go.zip $HOME/go
+</pre>
+<p>
+one may run godoc as follows:
+</p>
+<pre>godoc -http=:6060 -zip=go.zip -goroot=$HOME/go
+</pre>
+<p>
+Godoc documentation is converted to HTML or to text using the go/doc package;
+see <a href="http://golang.org/pkg/go/doc/#ToHTML">http://golang.org/pkg/go/doc/#ToHTML</a> for the exact rules.
+Godoc also shows example code that is runnable by the testing package;
+see <a href="http://golang.org/pkg/testing/#hdr-Examples">http://golang.org/pkg/testing/#hdr-Examples</a> for the conventions.
+See &#34;Godoc: documenting Go code&#34; for how to write good comments for godoc:
+<a href="http://golang.org/doc/articles/godoc_documenting_go_code.html">http://golang.org/doc/articles/godoc_documenting_go_code.html</a></p>
+
+  
+
+<div id="x-pkginfo">
+
+  <form name="x-refresh" method="POST" action="/-/refresh"><input type="hidden" name="path" value="golang.org/x/tools/cmd/godoc"></form>
+  <p>Package main imports <a href="?imports">38 packages</a> (<a href="?import-graph">graph</a>).
+  Updated <span class="timeago" title="2015-01-10T11:40:46Z">2015-01-10</span>.
+  <a href="javascript:document.getElementsByName('x-refresh')[0].submit();" title="Refresh this page from the source.">Refresh now</a>.
+  <a href="?tools">Tools</a> for package owners.
+  
+
+
+</div>
+
+
+</div>
+<div id="x-footer" class="clearfix">
+  <div class="container">
+    <a href="https://github.com/golang/gddo/issues">Website Issues</a>
+    <span class="text-muted">|</span> <a href="http://golang.org/">Go Language</a>
+    <span class="pull-right"><a href="#">Back to top</a></span>
+  </div>
+</div>
+
+<div id="x-shortcuts" tabindex="-1" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Keyboard shortcuts</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+          <tr><td align="right"><b>?</b></td><td> : This menu</td></tr>
+          <tr><td align="right"><b>/</b></td><td> : Search site</td></tr>
+          <tr><td align="right"><b>g</b> then <b>g</b></td><td> : Go to top of page</td></tr>
+          <tr><td align="right"><b>g</b> then <b>b</b></td><td> : Go to end of page</td></tr>
+          <tr class="text-muted"><td align="right"><b>g</b> then <b>i</b></td><td> : Go to index</td></tr>
+          <tr class="text-muted"><td align="right"><b>g</b> then <b>e</b></td><td> : Go to examples</td></tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="/-/site.js?v=d652d20bb449139d8586d925bdadedf46bdf64c5"></script>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-11222381-8']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

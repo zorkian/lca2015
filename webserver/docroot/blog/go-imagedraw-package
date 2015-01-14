@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>The Go image/draw package - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/learn-go-from-your-browser">Learn Go from your browser</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/go-image-package">The Go image package</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/go-imagedraw-package">The Go image/draw package</a></h3>
+		<p class="date">29 September 2011</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    <a href="http://golang.org/pkg/image/draw/" target="_blank">Package image/draw</a> defines only one operation: drawing a source image onto a destination image, through an optional mask image. This one operation is surprisingly versatile and can perform a number of common image manipulation tasks elegantly and efficiently.
+  </p>
+  
+
+  
+  <p>
+    Composition is performed pixel by pixel in the style of the Plan 9 graphics library and the X Render extension. The model is based on the classic &#34;Compositing Digital Images&#34; paper by Porter and Duff, with an additional mask parameter: <code>dst = (src IN mask) OP dst</code>. For a fully opaque mask, this reduces to the original Porter-Duff formula: <code>dst = src OP dst</code>. In Go, a nil mask image is equivalent to an infinitely sized, fully opaque mask image.
+  </p>
+  
+
+  
+  <p>
+    The Porter-Duff paper presented <a href="http://www.w3.org/TR/SVGCompositing/examples/compop-porterduff-examples.png" target="_blank">12 different composition operators</a>, but with an explicit mask, only 2 of these are needed in practice: source-over-destination and source. In Go, these operators are represented by the <code>Over</code> and <code>Src</code> constants. The <code>Over</code> operator performs the natural layering of a source image over a destination image: the change to the destination image is smaller where the source (after masking) is more transparent (that is, has lower alpha). The <code>Src</code> operator merely copies the source (after masking) with no regard for the destination image&#39;s original content. For fully opaque source and mask images, the two operators produce the same output, but the <code>Src</code> operator is usually faster.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">Geometric Alignment</h4>
+  
+  
+  <p>
+    Composition requires associating destination pixels with source and mask pixels. Obviously, this requires destination, source and mask images, and a composition operator, but it also requires specifying what rectangle of each image to use. Not every drawing should write to the entire destination: when updating an animating image, it is more efficient to only draw the parts of the image that have changed. Not every drawing should read from the entire source: when using a sprite that combines many small images into one large one, only a part of the image is needed. Not every drawing should read from the entire mask: a mask image that collects a font&#39;s glyphs is similar to a sprite. Thus, drawing also needs to know three rectangles, one for each image. Since each rectangle has the same width and height, it suffices to pass a destination rectangle <code>r</code> and two points <code>sp</code> and <code>mp</code>: the source rectangle is equal to <code>r</code> translated so that <code>r.Min</code> in the destination image aligns with <code>sp</code> in the source image, and similarly for <code>mp</code>. The effective rectangle is also clipped to each image&#39;s bounds in their respective co-ordinate space.
+  </p>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_20.png">
+</div>
+
+  
+  <p>
+    The <a href="http://golang.org/pkg/image/draw/#DrawMask" target="_blank"><code>DrawMask</code></a> function takes seven arguments, but an explicit mask and mask-point are usually unnecessary, so the <a href="http://golang.org/pkg/image/draw/#Draw" target="_blank"><code>Draw</code></a> function takes five:
+  </p>
+  
+
+  
+  <div class="code"><pre>// Draw calls DrawMask with a nil mask.
+func Draw(dst Image, r image.Rectangle, src image.Image, sp image.Point, op Op)
+func DrawMask(dst Image, r image.Rectangle, src image.Image, sp image.Point,
+ mask image.Image, mp image.Point, op Op)</pre></div>
+  
+
+  
+  <p>
+    The destination image must be mutable, so the image/draw package defines a <a href="http://golang.org/pkg/image/draw/#Image" target="_blank"><code>draw.Image</code></a> interface which has a <code>Set</code> method.
+  </p>
+  
+
+  
+  <div class="code"><pre>type Image interface {
+    image.Image
+    Set(x, y int, c color.Color)
+}</pre></div>
+  
+
+
+    
+      
+  <h4 id="TOC_3.">Filling a Rectangle</h4>
+  
+  
+  <p>
+    To fill a rectangle with a solid color, use an <code>image.Uniform</code> source. The <code>ColorImage</code> type re-interprets a <code>Color</code> as a practically infinite-sized <code>Image</code> of that color. For those familiar with the design of Plan 9&#39;s draw library, there is no need for an explicit &#34;repeat bit&#34; in Go&#39;s slice-based image types; the concept is subsumed by <code>Uniform</code>.
+  </p>
+  
+
+  
+  <div class="code"><pre>// image.ZP is the zero point -- the origin.
+draw.Draw(dst, r, &amp;image.Uniform{c}, image.ZP, draw.Src)</pre></div>
+  
+
+  
+  <p>
+    To initialize a new image to all-blue:
+  </p>
+  
+
+  
+  <div class="code"><pre>m := image.NewRGBA(image.Rect(0, 0, 640, 480))
+blue := color.RGBA{0, 0, 255, 255}
+draw.Draw(m, m.Bounds(), &amp;image.Uniform{blue}, image.ZP, draw.Src)</pre></div>
+  
+
+  
+  <p>
+    To reset an image to transparent (or black, if the destination image&#39;s color model cannot represent transparency), use <code>image.Transparent</code>, which is an <code>image.Uniform</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>draw.Draw(m, m.Bounds(), image.Transparent, image.ZP, draw.Src)</pre></div>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_2a.png">
+</div>
+
+
+    
+      
+  <h4 id="TOC_4.">Copying an Image</h4>
+  
+  
+  <p>
+    To copy from a rectangle <code>sr</code> in the source image to a rectangle starting at a point <code>dp</code> in the destination, convert the source rectangle into the destination image&#39;s co-ordinate space:
+  </p>
+  
+
+  
+  <div class="code"><pre>r := image.Rectangle{dp, dp.Add(sr.Size())}
+draw.Draw(dst, r, src, sr.Min, draw.Src)</pre></div>
+  
+
+  
+  <p>
+    Alternatively:
+  </p>
+  
+
+  
+  <div class="code"><pre>r := sr.Sub(sr.Min).Add(dp)
+draw.Draw(dst, r, src, sr.Min, draw.Src)</pre></div>
+  
+
+  
+  <p>
+    To copy the entire source image, use <code>sr = src.Bounds()</code>.
+  </p>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_2b.png">
+</div>
+
+
+    
+      
+  <h4 id="TOC_5.">Scrolling an Image</h4>
+  
+  
+  <p>
+    Scrolling an image is just copying an image to itself, with different destination and source rectangles. Overlapping destination and source images are perfectly valid, just as Go&#39;s built-in copy function can handle overlapping destination and source slices. To scroll an image m by 20 pixels:
+  </p>
+  
+
+  
+  <div class="code"><pre>b := m.Bounds()
+p := image.Pt(0, 20)
+// Note that even though the second argument is b,
+// the effective rectangle is smaller due to clipping.
+draw.Draw(m, b, m, b.Min.Add(p), draw.Src)
+dirtyRect := b.Intersect(image.Rect(b.Min.X, b.Max.Y-20, b.Max.X, b.Max.Y))</pre></div>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_2c.png">
+</div>
+
+
+    
+      
+  <h4 id="TOC_6.">Converting an Image to RGBA</h4>
+  
+  
+  <p>
+    The result of decoding an image format might not be an <code>image.RGBA</code>: decoding a GIF results in an <code>image.Paletted</code>, decoding a JPEG results in a <code>ycbcr.YCbCr</code>, and the result of decoding a PNG depends on the image data. To convert any image to an <code>image.RGBA</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>b := src.Bounds()
+m := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
+draw.Draw(m, m.Bounds(), src, b.Min, draw.Src)</pre></div>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_2d.png">
+</div>
+
+
+    
+      
+  <h4 id="TOC_7.">Drawing Through a Mask</h4>
+  
+  
+  <p>
+    To draw an image through a circular mask with center <code>p</code> and radius <code>r</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>type circle struct {
+    p image.Point
+    r int
+}
+
+func (c *circle) ColorModel() color.Model {
+    return color.AlphaModel
+}
+
+func (c *circle) Bounds() image.Rectangle {
+    return image.Rect(c.p.X-c.r, c.p.Y-c.r, c.p.X&#43;c.r, c.p.Y&#43;c.r)
+}
+
+func (c *circle) At(x, y int) color.Color {
+    xx, yy, rr := float64(x-c.p.X)&#43;0.5, float64(y-c.p.Y)&#43;0.5, float64(c.r)
+    if xx*xx&#43;yy*yy &lt; rr*rr {
+        return color.Alpha{255}
+    }
+    return color.Alpha{0}
+}
+
+    draw.DrawMask(dst, dst.Bounds(), src, image.ZP, &amp;circle{p, r}, image.ZP, draw.Over)</pre></div>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_2e.png">
+</div>
+
+
+    
+      
+  <h4 id="TOC_8.">Drawing Font Glyphs</h4>
+  
+  
+  <p>
+    To draw a font glyph in blue starting from a point <code>p</code>, draw with an <code>image.ColorImage</code> source and an <code>image.Alpha mask</code>. For simplicity, we aren&#39;t performing any sub-pixel positioning or rendering, or correcting for a font&#39;s height above a baseline.
+  </p>
+  
+
+  
+  <div class="code"><pre>src := &amp;image.Uniform{color.RGBA{0, 0, 255, 255}}
+mask := theGlyphImageForAFont()
+mr := theBoundsFor(glyphIndex)
+draw.DrawMask(dst, mr.Sub(mr.Min).Add(p), src, image.ZP, mask, mr.Min, draw.Over)</pre></div>
+  
+
+<div class="image">
+  <img src="go-imagedraw-package_2f.png">
+</div>
+
+
+    
+      
+  <h4 id="TOC_9.">Performance</h4>
+  
+  
+  <p>
+    The image/draw package implementation demonstrates how to provide an image manipulation function that is both general purpose, yet efficient for common cases. The <code>DrawMask</code> function takes arguments of interface types, but immediately makes type assertions that its arguments are of specific struct types, corresponding to common operations like drawing one <code>image.RGBA</code> image onto another, or drawing an <code>image.Alpha</code> mask (such as a font glyph) onto an <code>image.RGBA</code> image. If a type assertion succeeds, that type information is used to run a specialized implementation of the general algorithm. If the assertions fail, the fallback code path uses the generic <code>At</code> and <code>Set</code> methods. The fast-paths are purely a performance optimization; the resultant destination image is the same either way. In practice, only a small number of special cases are necessary to support typical applications.
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Nigel Tao</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/spotlight-on-external-go-libraries">Spotlight on external Go libraries</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>gosym - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package gosym</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "debug/gosym"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package gosym implements access to the Go symbol
+and line number tables embedded in Go binaries generated
+by the gc compilers.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="#DecodingError">type DecodingError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#DecodingError.Error">func (e *DecodingError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Func">type Func</a></dd>
+				
+				
+			
+				
+				<dd><a href="#LineTable">type LineTable</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewLineTable">func NewLineTable(data []byte, text uint64) *LineTable</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LineTable.LineToPC">func (t *LineTable) LineToPC(line int, maxpc uint64) uint64</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LineTable.PCToLine">func (t *LineTable) PCToLine(pc uint64) int</a></dd>
+				
+			
+				
+				<dd><a href="#Obj">type Obj</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Sym">type Sym</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Sym.BaseName">func (s *Sym) BaseName() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Sym.PackageName">func (s *Sym) PackageName() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Sym.ReceiverName">func (s *Sym) ReceiverName() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Sym.Static">func (s *Sym) Static() bool</a></dd>
+				
+			
+				
+				<dd><a href="#Table">type Table</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewTable">func NewTable(symtab []byte, pcln *LineTable) (*Table, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Table.LineToPC">func (t *Table) LineToPC(file string, line int) (pc uint64, fn *Func, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Table.LookupFunc">func (t *Table) LookupFunc(name string) *Func</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Table.LookupSym">func (t *Table) LookupSym(name string) *Sym</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Table.PCToFunc">func (t *Table) PCToFunc(pc uint64) *Func</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Table.PCToLine">func (t *Table) PCToLine(pc uint64) (file string, line int, fn *Func)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Table.SymByAddr">func (t *Table) SymByAddr(addr uint64) *Sym</a></dd>
+				
+			
+				
+				<dd><a href="#UnknownFileError">type UnknownFileError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnknownFileError.Error">func (e UnknownFileError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#UnknownLineError">type UnknownLineError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#UnknownLineError.Error">func (e *UnknownLineError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/debug/gosym/pclntab.go">pclntab.go</a>
+			
+				<a href="/src/debug/gosym/symtab.go">symtab.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+		
+			
+			
+			<h2 id="DecodingError">type <a href="/src/debug/gosym/symtab.go?s=15653:15720#L687">DecodingError</a></h2>
+			<pre>type DecodingError struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+DecodingError represents an error during the decoding of
+the symbol table.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="DecodingError.Error">func (*DecodingError) <a href="/src/debug/gosym/symtab.go?s=15722:15760#L693">Error</a></h3>
+				<pre>func (e *<a href="#DecodingError">DecodingError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Func">type <a href="/src/debug/gosym/symtab.go?s=1804:1951#L59">Func</a></h2>
+			<pre>type Func struct {
+        Entry <a href="/pkg/builtin/#uint64">uint64</a>
+        *<a href="#Sym">Sym</a>
+        End       <a href="/pkg/builtin/#uint64">uint64</a>
+        Params    []*<a href="#Sym">Sym</a>
+        Locals    []*<a href="#Sym">Sym</a>
+        FrameSize <a href="/pkg/builtin/#int">int</a>
+        LineTable *<a href="#LineTable">LineTable</a>
+        Obj       *<a href="#Obj">Obj</a>
+}</pre>
+			<p>
+A Func collects information about a single function.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="LineTable">type <a href="/src/debug/gosym/pclntab.go?s=1002:1326#L19">LineTable</a></h2>
+			<pre>type LineTable struct {
+        Data []<a href="/pkg/builtin/#byte">byte</a>
+        PC   <a href="/pkg/builtin/#uint64">uint64</a>
+        Line <a href="/pkg/builtin/#int">int</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A LineTable is a data structure mapping program counters to line numbers.
+</p>
+<p>
+In Go 1.1 and earlier, each function (represented by a Func) had its own LineTable,
+and the line number corresponded to a numbering of all source lines in the
+program, across all files. That absolute line number would then have to be
+converted separately to a file name and line number within the file.
+</p>
+<p>
+In Go 1.2, the format of the data changed so that there is a single LineTable
+for the entire program, shared by all Funcs, and there are no absolute line
+numbers, just line numbers within specific files.
+</p>
+<p>
+For the most part, LineTable&#39;s methods should be treated as an internal
+detail of the package; callers should use the methods on Table instead.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewLineTable">func <a href="/src/debug/gosym/pclntab.go?s=3486:3540#L112">NewLineTable</a></h3>
+				<pre>func NewLineTable(data []<a href="/pkg/builtin/#byte">byte</a>, text <a href="/pkg/builtin/#uint64">uint64</a>) *<a href="#LineTable">LineTable</a></pre>
+				<p>
+NewLineTable returns a new PC/line table
+corresponding to the encoded data.
+Text must be the start address of the
+corresponding text segment.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="LineTable.LineToPC">func (*LineTable) <a href="/src/debug/gosym/pclntab.go?s=3076:3135#L96">LineToPC</a></h3>
+				<pre>func (t *<a href="#LineTable">LineTable</a>) LineToPC(line <a href="/pkg/builtin/#int">int</a>, maxpc <a href="/pkg/builtin/#uint64">uint64</a>) <a href="/pkg/builtin/#uint64">uint64</a></pre>
+				<p>
+LineToPC returns the program counter for the given line number,
+considering only program counters before maxpc.
+Callers should use Table&#39;s LineToPC method instead.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="LineTable.PCToLine">func (*LineTable) <a href="/src/debug/gosym/pclntab.go?s=2762:2805#L85">PCToLine</a></h3>
+				<pre>func (t *<a href="#LineTable">LineTable</a>) PCToLine(pc <a href="/pkg/builtin/#uint64">uint64</a>) <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+PCToLine returns the line number for the given program counter.
+Callers should use Table&#39;s PCToLine method instead.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Obj">type <a href="/src/debug/gosym/symtab.go?s=2381:2696#L81">Obj</a></h2>
+			<pre>type Obj struct {
+        <span class="comment">// Funcs is a list of functions in the Obj.</span>
+        Funcs []<a href="#Func">Func</a>
+
+        <span class="comment">// In Go 1.1 and earlier, Paths is a list of symbols corresponding</span>
+        <span class="comment">// to the source file names that produced the Obj.</span>
+        <span class="comment">// In Go 1.2, Paths is nil.</span>
+        <span class="comment">// Use the keys of Table.Files to obtain a list of source files.</span>
+        Paths []<a href="#Sym">Sym</a> <span class="comment">// meta</span>
+}</pre>
+			<p>
+An Obj represents a collection of functions in a symbol table.
+</p>
+<p>
+The exact method of division of a binary into separate Objs is an internal detail
+of the symbol table format.
+</p>
+<p>
+In early versions of Go each source file became a different Obj.
+</p>
+<p>
+In Go 1 and Go 1.1, each package produced one Obj for all Go sources
+and one Obj per C source file.
+</p>
+<p>
+In Go 1.2, there is a single Obj for the entire program.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Sym">type <a href="/src/debug/gosym/symtab.go?s=745:898#L18">Sym</a></h2>
+			<pre>type Sym struct {
+        Value  <a href="/pkg/builtin/#uint64">uint64</a>
+        Type   <a href="/pkg/builtin/#byte">byte</a>
+        Name   <a href="/pkg/builtin/#string">string</a>
+        GoType <a href="/pkg/builtin/#uint64">uint64</a>
+        <span class="comment">// If this symbol if a function symbol, the corresponding Func</span>
+        Func *<a href="#Func">Func</a>
+}</pre>
+			<p>
+A Sym represents a single symbol table entry.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Sym.BaseName">func (*Sym) <a href="/src/debug/gosym/symtab.go?s=1620:1651#L51">BaseName</a></h3>
+				<pre>func (s *<a href="#Sym">Sym</a>) BaseName() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+BaseName returns the symbol name without the package or receiver name.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Sym.PackageName">func (*Sym) <a href="/src/debug/gosym/symtab.go?s=1135:1169#L32">PackageName</a></h3>
+				<pre>func (s *<a href="#Sym">Sym</a>) PackageName() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+PackageName returns the package part of the symbol name,
+or the empty string if there is none.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Sym.ReceiverName">func (*Sym) <a href="/src/debug/gosym/symtab.go?s=1361:1396#L41">ReceiverName</a></h3>
+				<pre>func (s *<a href="#Sym">Sym</a>) ReceiverName() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+ReceiverName returns the receiver type name of this symbol,
+or the empty string if there is none.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Sym.Static">func (*Sym) <a href="/src/debug/gosym/symtab.go?s=980:1007#L28">Static</a></h3>
+				<pre>func (s *<a href="#Sym">Sym</a>) Static() <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Static reports whether this symbol is static (not visible outside its file).
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Table">type <a href="/src/debug/gosym/symtab.go?s=2896:3114#L99">Table</a></h2>
+			<pre>type Table struct {
+        Syms  []<a href="#Sym">Sym</a>
+        Funcs []<a href="#Func">Func</a>
+        Files map[<a href="/pkg/builtin/#string">string</a>]*<a href="#Obj">Obj</a> <span class="comment">// nil for Go 1.2 and later binaries</span>
+        Objs  []<a href="#Obj">Obj</a>           <span class="comment">// nil for Go 1.2 and later binaries</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Table represents a Go symbol table.  It stores all of the
+symbols decoded from the program and provides methods to translate
+between symbols, names, and addresses.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewTable">func <a href="/src/debug/gosym/symtab.go?s=6517:6578#L263">NewTable</a></h3>
+				<pre>func NewTable(symtab []<a href="/pkg/builtin/#byte">byte</a>, pcln *<a href="#LineTable">LineTable</a>) (*<a href="#Table">Table</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewTable decodes the Go symbol table in data,
+returning an in-memory representation.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Table.LineToPC">func (*Table) <a href="/src/debug/gosym/symtab.go?s=11678:11758#L498">LineToPC</a></h3>
+				<pre>func (t *<a href="#Table">Table</a>) LineToPC(file <a href="/pkg/builtin/#string">string</a>, line <a href="/pkg/builtin/#int">int</a>) (pc <a href="/pkg/builtin/#uint64">uint64</a>, fn *<a href="#Func">Func</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+LineToPC looks up the first program counter on the given line in
+the named file.  It returns UnknownPathError or UnknownLineError if
+there is an error looking up this line.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Table.LookupFunc">func (*Table) <a href="/src/debug/gosym/symtab.go?s=12739:12784#L544">LookupFunc</a></h3>
+				<pre>func (t *<a href="#Table">Table</a>) LookupFunc(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Func">Func</a></pre>
+				<p>
+LookupFunc returns the text, data, or bss symbol with the given name,
+or nil if no such symbol is found.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Table.LookupSym">func (*Table) <a href="/src/debug/gosym/symtab.go?s=12377:12420#L528">LookupSym</a></h3>
+				<pre>func (t *<a href="#Table">Table</a>) LookupSym(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Sym">Sym</a></pre>
+				<p>
+LookupSym returns the text, data, or bss symbol with the given name,
+or nil if no such symbol is found.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Table.PCToFunc">func (*Table) <a href="/src/debug/gosym/symtab.go?s=10783:10824#L463">PCToFunc</a></h3>
+				<pre>func (t *<a href="#Table">Table</a>) PCToFunc(pc <a href="/pkg/builtin/#uint64">uint64</a>) *<a href="#Func">Func</a></pre>
+				<p>
+PCToFunc returns the function containing the program counter pc,
+or nil if there is no such function.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Table.PCToLine">func (*Table) <a href="/src/debug/gosym/symtab.go?s=11190:11259#L482">PCToLine</a></h3>
+				<pre>func (t *<a href="#Table">Table</a>) PCToLine(pc <a href="/pkg/builtin/#uint64">uint64</a>) (file <a href="/pkg/builtin/#string">string</a>, line <a href="/pkg/builtin/#int">int</a>, fn *<a href="#Func">Func</a>)</pre>
+				<p>
+PCToLine looks up line number information for a program counter.
+If there is no information, it returns fn == nil.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Table.SymByAddr">func (*Table) <a href="/src/debug/gosym/symtab.go?s=12974:13017#L555">SymByAddr</a></h3>
+				<pre>func (t *<a href="#Table">Table</a>) SymByAddr(addr <a href="/pkg/builtin/#uint64">uint64</a>) *<a href="#Sym">Sym</a></pre>
+				<p>
+SymByAddr returns the text, data, or bss symbol starting at the given address.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UnknownFileError">type <a href="/src/debug/gosym/symtab.go?s=15109:15137#L669">UnknownFileError</a></h2>
+			<pre>type UnknownFileError <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+UnknownFileError represents a failure to find the specific file in
+the symbol table.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="UnknownFileError.Error">func (UnknownFileError) <a href="/src/debug/gosym/symtab.go?s=15139:15179#L671">Error</a></h3>
+				<pre>func (e <a href="#UnknownFileError">UnknownFileError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="UnknownLineError">type <a href="/src/debug/gosym/symtab.go?s=15408:15463#L676">UnknownLineError</a></h2>
+			<pre>type UnknownLineError struct {
+        File <a href="/pkg/builtin/#string">string</a>
+        Line <a href="/pkg/builtin/#int">int</a>
+}</pre>
+			<p>
+UnknownLineError represents a failure to map a line to a program
+counter, either because the line is beyond the bounds of the file
+or because there is no code on the given line.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="UnknownLineError.Error">func (*UnknownLineError) <a href="/src/debug/gosym/symtab.go?s=15465:15506#L681">Error</a></h3>
+				<pre>func (e *<a href="#UnknownLineError">UnknownLineError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

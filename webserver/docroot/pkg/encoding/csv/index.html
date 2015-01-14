@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>csv - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package csv</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "encoding/csv"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package csv reads and writes comma-separated values (CSV) files.
+</p>
+<p>
+A csv file contains zero or more records of one or more fields per record.
+Each record is separated by the newline character. The final record may
+optionally be followed by a newline character.
+</p>
+<pre>field1,field2,field3
+</pre>
+<p>
+White space is considered part of a field.
+</p>
+<p>
+Carriage returns before newline characters are silently removed.
+</p>
+<p>
+Blank lines are ignored.  A line with only whitespace characters (excluding
+the ending newline character) is not considered a blank line.
+</p>
+<p>
+Fields which start and stop with the quote character &#34; are called
+quoted-fields.  The beginning and ending quote are not part of the
+field.
+</p>
+<p>
+The source:
+</p>
+<pre>normal string,&#34;quoted-field&#34;
+</pre>
+<p>
+results in the fields
+</p>
+<pre>{`normal string`, `quoted-field`}
+</pre>
+<p>
+Within a quoted-field a quote character followed by a second quote
+character is considered a single quote.
+</p>
+<pre>&#34;the &#34;&#34;word&#34;&#34; is true&#34;,&#34;a &#34;&#34;quoted-field&#34;&#34;&#34;
+</pre>
+<p>
+results in
+</p>
+<pre>{`the &#34;word&#34; is true`, `a &#34;quoted-field&#34;`}
+</pre>
+<p>
+Newlines and commas may be included in a quoted-field
+</p>
+<pre>&#34;Multi-line
+field&#34;,&#34;comma is ,&#34;
+</pre>
+<p>
+results in
+</p>
+<pre>{`Multi-line
+field`, `comma is ,`}
+</pre>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+			
+				
+				<dd><a href="#ParseError">type ParseError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseError.Error">func (e *ParseError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(r io.Reader) *Reader</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Read">func (r *Reader) Read() (record []string, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadAll">func (r *Reader) ReadAll() (records [][]string, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer) *Writer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Error">func (w *Writer) Error() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (w *Writer) Flush()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Write">func (w *Writer) Write(record []string) (err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.WriteAll">func (w *Writer) WriteAll(records [][]string) (err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/encoding/csv/reader.go">reader.go</a>
+			
+				<a href="/src/encoding/csv/writer.go">writer.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span id="ErrTrailingComma">ErrTrailingComma</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;extra delimiter at end of line&#34;) <span class="comment">// no longer used</span>
+        <span id="ErrBareQuote">ErrBareQuote</span>     = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;bare \&#34; in non-quoted-field&#34;)
+        <span id="ErrQuote">ErrQuote</span>         = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;extraneous \&#34; in field&#34;)
+        <span id="ErrFieldCount">ErrFieldCount</span>    = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;wrong number of fields in line&#34;)
+)</pre>
+				<p>
+These are the errors that can be returned in ParseError.Error
+</p>
+
+			
+		
+		
+		
+			
+			
+			<h2 id="ParseError">type <a href="/src/encoding/csv/reader.go?s=1568:1737#L53">ParseError</a></h2>
+			<pre>type ParseError struct {
+        Line   <a href="/pkg/builtin/#int">int</a>   <span class="comment">// Line where the error occurred</span>
+        Column <a href="/pkg/builtin/#int">int</a>   <span class="comment">// Column (rune index) where the error occurred</span>
+        Err    <a href="/pkg/builtin/#error">error</a> <span class="comment">// The actual error</span>
+}</pre>
+			<p>
+A ParseError is returned for parsing errors.
+The first line is 1.  The first column is 0.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ParseError.Error">func (*ParseError) <a href="/src/encoding/csv/reader.go?s=1739:1774#L59">Error</a></h3>
+				<pre>func (e *<a href="#ParseError">ParseError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/encoding/csv/reader.go?s=3152:3631#L92">Reader</a></h2>
+			<pre>type Reader struct {
+        Comma            <a href="/pkg/builtin/#rune">rune</a> <span class="comment">// field delimiter (set to &#39;,&#39; by NewReader)</span>
+        Comment          <a href="/pkg/builtin/#rune">rune</a> <span class="comment">// comment character for start of line</span>
+        FieldsPerRecord  <a href="/pkg/builtin/#int">int</a>  <span class="comment">// number of expected fields per record</span>
+        LazyQuotes       <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// allow lazy quotes</span>
+        TrailingComma    <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// ignored; here for backwards compatibility</span>
+        TrimLeadingSpace <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// trim leading space</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Reader reads records from a CSV-encoded file.
+</p>
+<p>
+As returned by NewReader, a Reader expects input conforming to RFC 4180.
+The exported fields can be changed to customize the details before the
+first call to Read or ReadAll.
+</p>
+<p>
+Comma is the field delimiter.  It defaults to &#39;,&#39;.
+</p>
+<p>
+Comment, if not 0, is the comment character. Lines beginning with the
+Comment character are ignored.
+</p>
+<p>
+If FieldsPerRecord is positive, Read requires each record to
+have the given number of fields.  If FieldsPerRecord is 0, Read sets it to
+the number of fields in the first record, so that future records must
+have the same field count.  If FieldsPerRecord is negative, no check is
+made and records may have a variable number of fields.
+</p>
+<p>
+If LazyQuotes is true, a quote may appear in an unquoted field and a
+non-doubled quote may appear in a quoted field.
+</p>
+<p>
+If TrimLeadingSpace is true, leading white space in a field is ignored.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="/src/encoding/csv/reader.go?s=3686:3721#L106">NewReader</a></h3>
+				<pre>func NewReader(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) *<a href="#Reader">Reader</a></pre>
+				<p>
+NewReader returns a new Reader that reads from r.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Reader.Read">func (*Reader) <a href="/src/encoding/csv/reader.go?s=4071:4123#L124">Read</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Read() (record []<a href="/pkg/builtin/#string">string</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Read reads one record from r.  The record is a slice of strings with each
+string representing one field.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadAll">func (*Reader) <a href="/src/encoding/csv/reader.go?s=4753:4811#L151">ReadAll</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadAll() (records [][]<a href="/pkg/builtin/#string">string</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadAll reads all the remaining records from r.
+Each record is a slice of fields.
+A successful call returns err == nil, not err == EOF. Because ReadAll is
+defined to read until EOF, it does not treat end of file as an error to be
+reported.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/encoding/csv/writer.go?s=631:792#L14">Writer</a></h2>
+			<pre>type Writer struct {
+        Comma   <a href="/pkg/builtin/#rune">rune</a> <span class="comment">// Field delimiter (set to &#39;,&#39; by NewWriter)</span>
+        UseCRLF <a href="/pkg/builtin/#bool">bool</a> <span class="comment">// True to use \r\n as the line terminator</span>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Writer writes records to a CSV encoded file.
+</p>
+<p>
+As returned by NewWriter, a Writer writes records terminated by a
+newline and uses &#39;,&#39; as the field delimiter.  The exported fields can be
+changed to customize the details before the first call to Write or WriteAll.
+</p>
+<p>
+Comma is the field delimiter.
+</p>
+<p>
+If UseCRLF is true, the Writer ends each record with \r\n instead of \n.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/encoding/csv/writer.go?s=846:881#L21">NewWriter</a></h3>
+				<pre>func NewWriter(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter returns a new Writer that writes to w.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Error">func (*Writer) <a href="/src/encoding/csv/writer.go?s=2339:2369#L91">Error</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Error() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Error reports any error that has occurred during a previous Write or Flush.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/encoding/csv/writer.go?s=2217:2241#L86">Flush</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Flush()</pre>
+				<p>
+Flush writes any buffered data to the underlying io.Writer.
+To check if an error occurred during the Flush, call Error.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Write">func (*Writer) <a href="/src/encoding/csv/writer.go?s=1094:1145#L30">Write</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Write(record []<a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Writer writes a single CSV record to w along with any necessary quoting.
+A record is a slice of strings with each string being one field.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.WriteAll">func (*Writer) <a href="/src/encoding/csv/writer.go?s=2492:2549#L97">WriteAll</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) WriteAll(records [][]<a href="/pkg/builtin/#string">string</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+WriteAll writes multiple CSV records to w using Write and then calls Flush.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

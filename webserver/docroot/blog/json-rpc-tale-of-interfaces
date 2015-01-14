@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>JSON-RPC: a tale of interfaces - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/new-talk-and-tutorials">New Talk and Tutorials</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/third-party-libraries-goprotobuf-and">Third-party libraries: goprotobuf and beyond</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></h3>
+		<p class="date">27 April 2010</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    Here we present an example where Go&#39;s <a href="http://golang.org/doc/effective_go.html#interfaces_and_types" target="_blank">interfaces</a> made it easy to refactor some existing code to make it more flexible and extensible. Originally, the standard library&#39;s <a href="http://golang.org/pkg/net/rpc/" target="_blank">RPC package</a> used a custom wire format called <a href="http://golang.org/pkg/encoding/gob/" target="_blank">gob</a>. For a particular application, we wanted to use <a href="http://golang.org/pkg/encoding/json/" target="_blank">JSON</a> as an alternate wire format.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    We first defined a pair of interfaces to describe the functionality of the existing wire format, one for the client, and one for the server (depicted below).
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>type ServerCodec interface {
+ ReadRequestHeader(*Request) error
+ ReadRequestBody(interface{}) error
+ WriteResponse(*Response, interface{}) error
+ Close() error
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    On the server side, we then changed two internal function signatures to accept the <code>ServerCodec</code> interface instead of our existing <code>gob.Encoder</code>. Here&#39;s one of them:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func sendResponse(sending *sync.Mutex, req *Request,
+ reply interface{}, enc *gob.Encoder, errmsg string)</pre></div>
+  
+
+      
+        
+  
+  <p>
+    became
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func sendResponse(sending *sync.Mutex, req *Request,
+  reply interface{}, enc ServerCodec, errmsg string)</pre></div>
+  
+
+      
+        
+  
+  <p>
+    We then wrote a trivial <code>gobServerCodec</code> wrapper to reproduce the original functionality. From there it is simple to build a <code>jsonServerCodec</code>.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    After some similar changes to the client side, this was the full extent of the work we needed to do on the RPC package. This whole exercise took about 20 minutes! After tidying up and testing the new code, the <a href="http://code.google.com/p/go/source/diff?spec=svn9daf796ebf1cae97b2fcf760a4ab682f1f063f29&amp;r=9daf796ebf1cae97b2fcf760a4ab682f1f063f29&amp;format=side&amp;path=/src/pkg/rpc/server.go" target="_blank">final changeset</a> was submitted.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    In an inheritance-oriented language like Java or C++, the obvious path would be to generalize the RPC class, and create JsonRPC and GobRPC subclasses. However, this approach becomes tricky if you want to make a further generalization orthogonal to that hierarchy. (For example, if you were to implement an alternate RPC standard). In our Go package, we took a route that is both conceptually simpler and requires less code be written or changed.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    A vital quality for any codebase is maintainability. As needs change, it is essential to adapt your code easily and cleanly, lest it become unwieldy to work with. We believe Go&#39;s lightweight, composition-oriented type system provides a means of structuring code that scales.
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

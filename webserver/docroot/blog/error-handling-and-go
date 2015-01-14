@@ -1,0 +1,692 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Error handling and Go - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/go-for-app-engine-is-now-generally">Go for App Engine is now generally available</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/error-handling-and-go">Error handling and Go</a></h3>
+		<p class="date">12 July 2011</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    If you have written any Go code you have probably encountered the built-in <code>error</code> type. Go code uses <code>error</code> values to indicate an abnormal state. For example, the <code>os.Open</code> function returns a non-nil <code>error</code> value when it fails to open a file.
+  </p>
+  
+
+  
+  <div class="code"><pre>func Open(name string) (file *File, err error)</pre></div>
+  
+
+  
+  <p>
+    The following code uses <code>os.Open</code> to open a file. If an error occurs it calls <code>log.Fatal</code> to print the error message and stop.
+  </p>
+  
+
+  
+  <div class="code"><pre>f, err := os.Open(&#34;filename.ext&#34;)
+if err != nil {
+    log.Fatal(err)
+}
+// do something with the open *File f</pre></div>
+  
+
+  
+  <p>
+    You can get a lot done in Go knowing just this about the <code>error</code> type, but in this article we&#39;ll take a closer look at <code>error</code> and discuss some good practices for error handling in Go.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">The error type</h4>
+  
+  
+  <p>
+    The <code>error</code> type is an interface type. An <code>error</code> variable represents any value that can describe itself as a string. Here is the interface&#39;s declaration:
+  </p>
+  
+
+  
+  <div class="code"><pre>type error interface {
+    Error() string
+}</pre></div>
+  
+
+  
+  <p>
+    The <code>error</code> type, as with all built in types, is <a href="http://golang.org/doc/go_spec.html#Predeclared_identifiers" target="_blank">predeclared</a> in the <a href="http://golang.org/doc/go_spec.html#Blocks" target="_blank">universe block</a>.
+  </p>
+  
+
+  
+  <p>
+    The most commonly-used <code>error</code> implementation is the <a href="http://golang.org/pkg/errors/" target="_blank">errors</a> package&#39;s unexported <code>errorString</code> type.
+  </p>
+  
+
+  
+  <div class="code"><pre>// errorString is a trivial implementation of error.
+type errorString struct {
+    s string
+}
+
+func (e *errorString) Error() string {
+    return e.s
+}</pre></div>
+  
+
+  
+  <p>
+    You can construct one of these values with the <code>errors.New</code> function. It takes a string that it converts to an <code>errors.errorString</code> and returns as an <code>error</code> value.
+  </p>
+  
+
+  
+  <div class="code"><pre>// New returns an error that formats as the given text.
+func New(text string) error {
+    return &amp;errorString{text}
+}</pre></div>
+  
+
+  
+  <p>
+    Here&#39;s how you might use <code>errors.New</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>func Sqrt(f float64) (float64, error) {
+    if f &lt; 0 {
+        return 0, errors.New(&#34;math: square root of negative number&#34;)
+    }
+    // implementation
+}</pre></div>
+  
+
+  
+  <p>
+    A caller passing a negative argument to <code>Sqrt</code> receives a non-nil <code>error</code> value (whose concrete representation is an <code>errors.errorString</code> value). The caller can access the error string (&#34;math: square root of...&#34;) by calling the `error`&#39;s <code>Error</code> method, or by just printing it:
+  </p>
+  
+
+  
+  <div class="code"><pre>f, err := Sqrt(-1)
+if err != nil {
+    fmt.Println(err)
+}</pre></div>
+  
+
+  
+  <p>
+    The <a href="http://golang.org/pkg/fmt/" target="_blank">fmt</a> package formats an <code>error</code> value by calling its <code>Error() string</code> method.
+  </p>
+  
+
+  
+  <p>
+    It is the error implementation&#39;s responsibility to summarize the context. The error returned by <code>os.Open</code> formats as &#34;open /etc/passwd: permission denied,&#34; not just &#34;permission denied.&#34;  The error returned by our <code>Sqrt</code> is missing information about the invalid argument.
+  </p>
+  
+
+  
+  <p>
+    To add that information, a useful function is the <code>fmt</code> package&#39;s <code>Errorf</code>. It formats a string according to `Printf`&#39;s rules and returns it as an <code>error</code> created by <code>errors.New</code>.
+  </p>
+  
+
+  
+  <div class="code"><pre>if f &lt; 0 {
+    return 0, fmt.Errorf(&#34;math: square root of negative number %g&#34;, f)
+}</pre></div>
+  
+
+  
+  <p>
+    In many cases <code>fmt.Errorf</code> is good enough, but since <code>error</code> is an interface, you can use arbitrary data structures as error values, to allow callers to inspect the details of the error.
+  </p>
+  
+
+  
+  <p>
+    For instance, our hypothetical callers might want to recover the invalid argument passed to <code>Sqrt</code>. We can enable that by defining a new error implementation instead of using <code>errors.errorString</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>type NegativeSqrtError float64
+
+func (f NegativeSqrtError) Error() string {
+    return fmt.Sprintf(&#34;math: square root of negative number %g&#34;, float64(f))
+}</pre></div>
+  
+
+  
+  <p>
+    A sophisticated caller can then use a <a href="http://golang.org/doc/go_spec.html#Type_assertions" target="_blank">type assertion</a> to check for a <code>NegativeSqrtError</code> and handle it specially, while callers that just pass the error to <code>fmt.Println</code> or <code>log.Fatal</code> will see no change in behavior.
+  </p>
+  
+
+  
+  <p>
+    As another example, the <a href="http://golang.org/pkg/encoding/json/" target="_blank">json</a> package specifies a <code>SyntaxError</code> type that the <code>json.Decode</code> function returns when it encounters a syntax error parsing a JSON blob.
+  </p>
+  
+
+  
+  <div class="code"><pre>type SyntaxError struct {
+    msg    string // description of error
+    Offset int64  // error occurred after reading Offset bytes
+}
+
+func (e *SyntaxError) Error() string { return e.msg }</pre></div>
+  
+
+  
+  <p>
+    The <code>Offset</code> field isn&#39;t even shown in the default formatting of the error, but callers can use it to add file and line information to their error messages:
+  </p>
+  
+
+  
+  <div class="code"><pre>if err := dec.Decode(&amp;val); err != nil {
+    if serr, ok := err.(*json.SyntaxError); ok {
+        line, col := findLine(f, serr.Offset)
+        return fmt.Errorf(&#34;%s:%d:%d: %v&#34;, f.Name(), line, col, err)
+    }
+    return err
+}</pre></div>
+  
+
+  
+  <p>
+    (This is a slightly simplified version of some <a href="http://camlistore.org/code/?p=camlistore.git;a=blob;f=lib/go/camli/jsonconfig/eval.go#l68" target="_blank">actual code</a> from the <a href="http://camlistore.org" target="_blank">Camlistore</a> project.)
+  </p>
+  
+
+  
+  <p>
+    The <code>error</code> interface requires only a <code>Error</code> method; specific error implementations might have additional methods. For instance, the <a href="http://golang.org/pkg/net/" target="_blank">net</a> package returns errors of type <code>error</code>, following the usual convention, but some of the error implementations have additional methods defined by the <code>net.Error</code> interface:
+  </p>
+  
+
+  
+  <div class="code"><pre>package net
+
+type Error interface {
+    error
+    Timeout() bool   // Is the error a timeout?
+    Temporary() bool // Is the error temporary?
+}</pre></div>
+  
+
+  
+  <p>
+    Client code can test for a <code>net.Error</code> with a type assertion and then distinguish transient network errors from permanent ones. For instance, a web crawler might sleep and retry when it encounters a temporary error and give up otherwise.
+  </p>
+  
+
+  
+  <div class="code"><pre>if nerr, ok := err.(net.Error); ok &amp;&amp; nerr.Temporary() {
+    time.Sleep(1e9)
+    continue
+}
+if err != nil {
+    log.Fatal(err)
+}</pre></div>
+  
+
+
+    
+      
+  <h4 id="TOC_3.">Simplifying repetitive error handling</h4>
+  
+  
+  <p>
+    In Go, error handling is important. The language&#39;s design and conventions encourage you to explicitly check for errors where they occur (as distinct from the convention in other languages of throwing exceptions and sometimes catching them). In some cases this makes Go code verbose, but fortunately there are some techniques you can use to minimize repetitive error handling.
+  </p>
+  
+
+  
+  <p>
+    Consider an <a href="http://code.google.com/appengine/docs/go/" target="_blank">App Engine</a> application with an HTTP handler that retrieves a record from the datastore and formats it with a template.
+  </p>
+  
+
+  
+  <div class="code"><pre>func init() {
+    http.HandleFunc(&#34;/view&#34;, viewRecord)
+}
+
+func viewRecord(w http.ResponseWriter, r *http.Request) {
+    c := appengine.NewContext(r)
+    key := datastore.NewKey(c, &#34;Record&#34;, r.FormValue(&#34;id&#34;), 0, nil)
+    record := new(Record)
+    if err := datastore.Get(c, key, record); err != nil {
+        http.Error(w, err.Error(), 500)
+        return
+    }
+    if err := viewTemplate.Execute(w, record); err != nil {
+        http.Error(w, err.Error(), 500)
+    }
+}</pre></div>
+  
+
+  
+  <p>
+    This function handles errors returned by the <code>datastore.Get</code> function and `viewTemplate`&#39;s <code>Execute</code> method. In both cases, it presents a simple error message to the user with the HTTP status code 500 (&#34;Internal Server Error&#34;). This looks like a manageable amount of code, but add some more HTTP handlers and you quickly end up with many copies of identical error handling code.
+  </p>
+  
+
+  
+  <p>
+    To reduce the repetition we can define our own HTTP <code>appHandler</code> type that includes an <code>error</code> return value:
+  </p>
+  
+
+  
+  <div class="code"><pre>type appHandler func(http.ResponseWriter, *http.Request) error</pre></div>
+  
+
+  
+  <p>
+    Then we can change our <code>viewRecord</code> function to return errors:
+  </p>
+  
+
+  
+  <div class="code"><pre>func viewRecord(w http.ResponseWriter, r *http.Request) error {
+    c := appengine.NewContext(r)
+    key := datastore.NewKey(c, &#34;Record&#34;, r.FormValue(&#34;id&#34;), 0, nil)
+    record := new(Record)
+    if err := datastore.Get(c, key, record); err != nil {
+        return err
+    }
+    return viewTemplate.Execute(w, record)
+}</pre></div>
+  
+
+  
+  <p>
+    This is simpler than the original version, but the <a href="http://golang.org/pkg/net/http/" target="_blank">http</a> package doesn&#39;t understand functions that return <code>error</code>. To fix this we can implement the <code>http.Handler</code> interface&#39;s <code>ServeHTTP</code> method on <code>appHandler</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    if err := fn(w, r); err != nil {
+        http.Error(w, err.Error(), 500)
+    }
+}</pre></div>
+  
+
+  
+  <p>
+    The <code>ServeHTTP</code> method calls the <code>appHandler</code> function and displays the returned error (if any) to the user.  Notice that the method&#39;s receiver, <code>fn</code>, is a function. (Go can do that!) The method invokes the function by calling the receiver in the expression <code>fn(w, r)</code>.
+  </p>
+  
+
+  
+  <p>
+    Now when registering <code>viewRecord</code> with the http package we use the <code>Handle</code> function (instead of <code>HandleFunc</code>) as <code>appHandler</code> is an <code>http.Handler</code> (not an <code>http.HandlerFunc</code>).
+  </p>
+  
+
+  
+  <div class="code"><pre>func init() {
+    http.Handle(&#34;/view&#34;, appHandler(viewRecord))
+}</pre></div>
+  
+
+  
+  <p>
+    With this basic error handling infrastructure in place, we can make it more user friendly. Rather than just displaying the error string, it would be better to give the user a simple error message with an appropriate HTTP status code, while logging the full error to the App Engine developer console for debugging purposes.
+  </p>
+  
+
+  
+  <p>
+    To do this we create an <code>appError</code> struct containing an <code>error</code> and some other fields:
+  </p>
+  
+
+  
+  <div class="code"><pre>type appError struct {
+    Error   error
+    Message string
+    Code    int
+}</pre></div>
+  
+
+  
+  <p>
+    Next we modify the appHandler type to return <code>*appError</code> values:
+  </p>
+  
+
+  
+  <div class="code"><pre>type appHandler func(http.ResponseWriter, *http.Request) *appError</pre></div>
+  
+
+  
+  <p>
+    (It&#39;s usually a mistake to pass back the concrete type of an error rather than <code>error</code>, for reasons discussed in <a href="http://golang.org/doc/go_faq.html#nil_error" target="_blank">the Go FAQ</a>, but it&#39;s the right thing to do here because <code>ServeHTTP</code> is the only place that sees the value and uses its contents.)
+  </p>
+  
+
+  
+  <p>
+    And make `appHandler`&#39;s <code>ServeHTTP</code> method display the `appError`&#39;s <code>Message</code> to the user with the correct HTTP status <code>Code</code> and log the full <code>Error</code> to the developer console:
+  </p>
+  
+
+  
+  <div class="code"><pre>func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    if e := fn(w, r); e != nil { // e is *appError, not os.Error.
+        c := appengine.NewContext(r)
+        c.Errorf(&#34;%v&#34;, e.Error)
+        http.Error(w, e.Message, e.Code)
+    }
+}</pre></div>
+  
+
+  
+  <p>
+    Finally, we update <code>viewRecord</code> to the new function signature and have it return more context when it encounters an error:
+  </p>
+  
+
+  
+  <div class="code"><pre>func viewRecord(w http.ResponseWriter, r *http.Request) *appError {
+    c := appengine.NewContext(r)
+    key := datastore.NewKey(c, &#34;Record&#34;, r.FormValue(&#34;id&#34;), 0, nil)
+    record := new(Record)
+    if err := datastore.Get(c, key, record); err != nil {
+        return &amp;appError{err, &#34;Record not found&#34;, 404}
+    }
+    if err := viewTemplate.Execute(w, record); err != nil {
+        return &amp;appError{err, &#34;Can&#39;t display record&#34;, 500}
+    }
+    return nil
+}</pre></div>
+  
+
+  
+  <p>
+    This version of <code>viewRecord</code> is the same length as the original, but now each of those lines has specific meaning and we are providing a friendlier user experience.
+  </p>
+  
+
+  
+  <p>
+    It doesn&#39;t end there; we can further improve the error handling in our application. Some ideas:
+  </p>
+  
+
+  <ul>
+  
+    <li>give the error handler a pretty HTML template,</li>
+  
+  </ul>
+
+  <ul>
+  
+    <li>make debugging easier by writing the stack trace to the HTTP response when the user is an administrator,</li>
+  
+  </ul>
+
+  <ul>
+  
+    <li>write a constructor function for <code>appError</code> that stores the stack trace for easier debugging,</li>
+  
+  </ul>
+
+  <ul>
+  
+    <li>recover from panics inside the <code>appHandler</code>, logging the error to the console as &#34;Critical,&#34; while telling the user &#34;a serious error has occurred.&#34; This is a nice touch to avoid exposing the user to inscrutable error messages caused by programming errors. See the <a href="http://golang.org/doc/articles/defer_panic_recover.html" target="_blank">Defer, Panic, and Recover</a> article for more details.</li>
+  
+  </ul>
+
+
+    
+      
+  <h4 id="TOC_4.">Conclusion</h4>
+  
+  
+  <p>
+    Proper error handling is an essential requirement of good software. By employing the techniques described in this post you should be able to write more reliable and succinct Go code.
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

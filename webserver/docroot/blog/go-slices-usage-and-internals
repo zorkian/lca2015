@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Go Slices: usage and internals - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/json-and-go">JSON and Go</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/go-one-year-ago-today">Go: one year ago today</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></h3>
+		<p class="date">5 January 2011</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    Go&#39;s slice type provides a convenient and efficient means of working with sequences of typed data. Slices are analogous to arrays in other languages, but have some unusual properties. This article will look at what slices are and how they are used.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">Arrays</h4>
+  
+  
+  <p>
+    The slice type is an abstraction built on top of Go&#39;s array type, and so to understand slices we must first understand arrays.
+  </p>
+  
+
+  
+  <p>
+    An array type definition specifies a length and an element type. For example, the type <code>[4]int</code> represents an array of four integers. An array&#39;s size is fixed; its length is part of its type (<code>[4]int</code> and <code>[5]int</code> are distinct, incompatible types). Arrays can be indexed in the usual way, so the expression <code>s[n]</code> accesses the nth element, starting from zero.
+  </p>
+  
+
+  
+  <div class="code"><pre>var a [4]int
+a[0] = 1
+i := a[0]
+// i == 1</pre></div>
+  
+
+  
+  <p>
+    Arrays do not need to be initialized explicitly; the zero value of an array is a ready-to-use array whose elements are themselves zeroed:
+  </p>
+  
+
+  
+  <div class="code"><pre>// a[2] == 0, the zero value of the int type</pre></div>
+  
+
+  
+  <p>
+    The in-memory representation of <code>[4]int</code> is just four integer values laid out sequentially:
+  </p>
+  
+
+<div class="image">
+  <img src="go-slices-usage-and-internals_slice-array.png">
+</div>
+
+  
+  <p>
+    Go&#39;s arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C).  This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a <i>pointer</i> to the array, but then that&#39;s a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
+  </p>
+  
+
+  
+  <p>
+    An array literal can be specified like so:
+  </p>
+  
+
+  
+  <div class="code"><pre>b := [2]string{&#34;Penn&#34;, &#34;Teller&#34;}</pre></div>
+  
+
+  
+  <p>
+    Or, you can have the compiler count the array elements for you:
+  </p>
+  
+
+  
+  <div class="code"><pre>b := [...]string{&#34;Penn&#34;, &#34;Teller&#34;}</pre></div>
+  
+
+  
+  <p>
+    In both cases, the type of <code>b</code> is <code>[2]string</code>.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_3.">Slices</h4>
+  
+  
+  <p>
+    Arrays have their place, but they&#39;re a bit inflexible, so you don&#39;t see them too often in Go code. Slices, though, are everywhere. They build on arrays to provide great power and convenience.
+  </p>
+  
+
+  
+  <p>
+    The type specification for a slice is <code>[]T</code>, where <code>T</code> is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
+  </p>
+  
+
+  
+  <p>
+    A slice literal is declared just like an array literal, except you leave out the element count:
+  </p>
+  
+
+  
+  <div class="code"><pre>letters := []string{&#34;a&#34;, &#34;b&#34;, &#34;c&#34;, &#34;d&#34;}</pre></div>
+  
+
+  
+  <p>
+    A slice can be created with the built-in function called <code>make</code>, which has the signature,
+  </p>
+  
+
+  
+  <div class="code"><pre>func make([]T, len, cap) []T</pre></div>
+  
+
+  
+  <p>
+    where T stands for the element type of the slice to be created. The <code>make</code> function takes a type, a length, and an optional capacity. When called, <code>make</code> allocates an array and returns a slice that refers to that array.
+  </p>
+  
+
+  
+  <div class="code"><pre>var s []byte
+s = make([]byte, 5, 5)
+// s == []byte{0, 0, 0, 0, 0}</pre></div>
+  
+
+  
+  <p>
+    When the capacity argument is omitted, it defaults to the specified length. Here&#39;s a more succinct version of the same code:
+  </p>
+  
+
+  
+  <div class="code"><pre>s := make([]byte, 5)</pre></div>
+  
+
+  
+  <p>
+    The length and capacity of a slice can be inspected using the built-in <code>len</code> and <code>cap</code> functions.
+  </p>
+  
+
+  
+  <div class="code"><pre>len(s) == 5
+cap(s) == 5</pre></div>
+  
+
+  
+  <p>
+    The next two sections discuss the relationship between length and capacity.
+  </p>
+  
+
+  
+  <p>
+    The zero value of a slice is <code>nil</code>. The <code>len</code> and <code>cap</code> functions will both return 0 for a nil slice.
+  </p>
+  
+
+  
+  <p>
+    A slice can also be formed by &#34;slicing&#34; an existing slice or array. Slicing is done by specifying a half-open range with two indices separated by a colon. For example, the expression <code>b[1:4]</code> creates a slice including elements 1 through 3 of <code>b</code> (the indices of the resulting slice will be 0 through 2).
+  </p>
+  
+
+  
+  <div class="code"><pre>b := []byte{&#39;g&#39;, &#39;o&#39;, &#39;l&#39;, &#39;a&#39;, &#39;n&#39;, &#39;g&#39;}
+// b[1:4] == []byte{&#39;o&#39;, &#39;l&#39;, &#39;a&#39;}, sharing the same storage as b</pre></div>
+  
+
+  
+  <p>
+    The start and end indices of a slice expression are optional; they default to zero and the slice&#39;s length respectively:
+  </p>
+  
+
+  
+  <div class="code"><pre>// b[:2] == []byte{&#39;g&#39;, &#39;o&#39;}
+// b[2:] == []byte{&#39;l&#39;, &#39;a&#39;, &#39;n&#39;, &#39;g&#39;}
+// b[:] == b</pre></div>
+  
+
+  
+  <p>
+    This is also the syntax to create a slice given an array:
+  </p>
+  
+
+  
+  <div class="code"><pre>x := [3]string{&#34;Лайка&#34;, &#34;Белка&#34;, &#34;Стрелка&#34;}
+s := x[:] // a slice referencing the storage of x</pre></div>
+  
+
+
+    
+      
+  <h4 id="TOC_4.">Slice internals</h4>
+  
+  
+  <p>
+    A slice is a descriptor of an array segment. It consists of a pointer to the array, the length of the segment, and its capacity (the maximum length of the segment).
+  </p>
+  
+
+<div class="image">
+  <img src="go-slices-usage-and-internals_slice-struct.png">
+</div>
+
+  
+  <p>
+    Our variable <code>s</code>, created earlier by <code>make([]byte, 5)</code>, is structured like this:
+  </p>
+  
+
+<div class="image">
+  <img src="go-slices-usage-and-internals_slice-1.png">
+</div>
+
+  
+  <p>
+    The length is the number of elements referred to by the slice. The capacity is the number of elements in the underlying array (beginning at the element referred to by the slice pointer). The distinction between length and capacity will be made clear as we walk through the next few examples.
+  </p>
+  
+
+  
+  <p>
+    As we slice <code>s</code>, observe the changes in the slice data structure and their relation to the underlying array:
+  </p>
+  
+
+  
+  <div class="code"><pre>s = s[2:4]</pre></div>
+  
+
+<div class="image">
+  <img src="go-slices-usage-and-internals_slice-2.png">
+</div>
+
+  
+  <p>
+    Slicing does not copy the slice&#39;s data. It creates a new slice value that points to the original array. This makes slice operations as efficient as manipulating array indices. Therefore, modifying the <i>elements</i> (not the slice itself) of a re-slice modifies the elements of the original slice:
+  </p>
+  
+
+  
+  <div class="code"><pre>d := []byte{&#39;r&#39;, &#39;o&#39;, &#39;a&#39;, &#39;d&#39;}
+e := d[2:] 
+// e == []byte{&#39;a&#39;, &#39;d&#39;}
+e[1] = &#39;m&#39;
+// e == []byte{&#39;a&#39;, &#39;m&#39;}
+// d == []byte{&#39;r&#39;, &#39;o&#39;, &#39;a&#39;, &#39;m&#39;}</pre></div>
+  
+
+  
+  <p>
+    Earlier we sliced <code>s</code> to a length shorter than its capacity. We can grow s to its capacity by slicing it again:
+  </p>
+  
+
+  
+  <div class="code"><pre>s = s[:cap(s)]</pre></div>
+  
+
+<div class="image">
+  <img src="go-slices-usage-and-internals_slice-3.png">
+</div>
+
+  
+  <p>
+    A slice cannot be grown beyond its capacity. Attempting to do so will cause a runtime panic, just as when indexing outside the bounds of a slice or array. Similarly, slices cannot be re-sliced below zero to access earlier elements in the array.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_5.">Growing slices (the copy and append functions)</h4>
+  
+  
+  <p>
+    To increase the capacity of a slice one must create a new, larger slice and copy the contents of the original slice into it. This technique is how dynamic array implementations from other languages work behind the scenes. The next example doubles the capacity of <code>s</code> by making a new slice, <code>t</code>, copying the contents of <code>s</code> into <code>t</code>, and then assigning the slice value <code>t</code> to <code>s</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>t := make([]byte, len(s), (cap(s)&#43;1)*2) // &#43;1 in case cap(s) == 0
+for i := range s {
+        t[i] = s[i]
+}
+s = t</pre></div>
+  
+
+  
+  <p>
+    The looping piece of this common operation is made easier by the built-in copy function. As the name suggests, copy copies data from a source slice to a destination slice. It returns the number of elements copied.
+  </p>
+  
+
+  
+  <div class="code"><pre>func copy(dst, src []T) int</pre></div>
+  
+
+  
+  <p>
+    The <code>copy</code> function supports copying between slices of different lengths (it will copy only up to the smaller number of elements). In addition, <code>copy</code> can handle source and destination slices that share the same underlying array, handling overlapping slices correctly.
+  </p>
+  
+
+  
+  <p>
+    Using <code>copy</code>, we can simplify the code snippet above:
+  </p>
+  
+
+  
+  <div class="code"><pre>t := make([]byte, len(s), (cap(s)&#43;1)*2)
+copy(t, s)
+s = t</pre></div>
+  
+
+  
+  <p>
+    A common operation is to append data to the end of a slice. This function appends byte elements to a slice of bytes, growing the slice if necessary, and returns the updated slice value:
+  </p>
+  
+
+  
+  <div class="code"><pre>func AppendByte(slice []byte, data ...byte) []byte {
+    m := len(slice)
+    n := m &#43; len(data)
+    if n &gt; cap(slice) { // if necessary, reallocate
+        // allocate double what&#39;s needed, for future growth.
+        newSlice := make([]byte, (n&#43;1)*2)
+        copy(newSlice, slice)
+        slice = newSlice
+    }
+    slice = slice[0:n]
+    copy(slice[m:n], data)
+    return slice
+}</pre></div>
+  
+
+  
+  <p>
+    One could use <code>AppendByte</code> like this:
+  </p>
+  
+
+  
+  <div class="code"><pre>p := []byte{2, 3, 5}
+p = AppendByte(p, 7, 11, 13)
+// p == []byte{2, 3, 5, 7, 11, 13}</pre></div>
+  
+
+  
+  <p>
+    Functions like <code>AppendByte</code> are useful because they offer complete control over the way the slice is grown. Depending on the characteristics of the program, it may be desirable to allocate in smaller or larger chunks, or to put a ceiling on the size of a reallocation.
+  </p>
+  
+
+  
+  <p>
+    But most programs don&#39;t need complete control, so Go provides a built-in <code>append</code> function that&#39;s good for most purposes; it has the signature
+  </p>
+  
+
+  
+  <div class="code"><pre>func append(s []T, x ...T) []T</pre></div>
+  
+
+  
+  <p>
+    The <code>append</code> function appends the elements <code>x</code> to the end of the slice <code>s</code>, and grows the slice if a greater capacity is needed.
+  </p>
+  
+
+  
+  <div class="code"><pre>a := make([]int, 1)
+// a == []int{0}
+a = append(a, 1, 2, 3)
+// a == []int{0, 1, 2, 3}</pre></div>
+  
+
+  
+  <p>
+    To append one slice to another, use <code>...</code> to expand the second argument to a list of arguments.
+  </p>
+  
+
+  
+  <div class="code"><pre>a := []string{&#34;John&#34;, &#34;Paul&#34;}
+b := []string{&#34;George&#34;, &#34;Ringo&#34;, &#34;Pete&#34;}
+a = append(a, b...) // equivalent to &#34;append(a, b[0], b[1], b[2])&#34;
+// a == []string{&#34;John&#34;, &#34;Paul&#34;, &#34;George&#34;, &#34;Ringo&#34;, &#34;Pete&#34;}</pre></div>
+  
+
+  
+  <p>
+    Since the zero value of a slice (<code>nil</code>) acts like a zero-length slice, you can declare a slice variable and then append to it in a loop:
+  </p>
+  
+
+  
+  <div class="code"><pre>// Filter returns a new slice holding only
+// the elements of s that satisfy f()
+func Filter(s []int, fn func(int) bool) []int {
+    var p []int // == nil
+    for _, v := range s {
+        if fn(v) {
+            p = append(p, v)
+        }
+    }
+    return p
+}</pre></div>
+  
+
+
+    
+      
+  <h4 id="TOC_6.">A possible &#34;gotcha&#34;</h4>
+  
+  
+  <p>
+    As mentioned earlier, re-slicing a slice doesn&#39;t make a copy of the underlying array. The full array will be kept in memory until it is no longer referenced. Occasionally this can cause the program to hold all the data in memory when only a small piece of it is needed.
+  </p>
+  
+
+  
+  <p>
+    For example, this <code>FindDigits</code> function loads a file into memory and searches it for the first group of consecutive numeric digits, returning them as a new slice.
+  </p>
+  
+
+  
+  <div class="code"><pre>var digitRegexp = regexp.MustCompile(&#34;[0-9]&#43;&#34;)
+
+func FindDigits(filename string) []byte {
+    b, _ := ioutil.ReadFile(filename)
+    return digitRegexp.Find(b)
+}</pre></div>
+  
+
+  
+  <p>
+    This code behaves as advertised, but the returned <code>[]byte</code> points into an array containing the entire file. Since the slice references the original array, as long as the slice is kept around the garbage collector can&#39;t release the array; the few useful bytes of the file keep the entire contents in memory.
+  </p>
+  
+
+  
+  <p>
+    To fix this problem one can copy the interesting data to a new slice before returning it:
+  </p>
+  
+
+  
+  <div class="code"><pre>func CopyDigits(filename string) []byte {
+    b, _ := ioutil.ReadFile(filename)
+    b = digitRegexp.Find(b)
+    c := make([]byte, len(b))
+    copy(c, b)
+    return c
+}</pre></div>
+  
+
+  
+  <p>
+    A more concise version of this function could be constructed by using <code>append</code>. This is left as an exercise for the reader.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_7.">Further Reading</h4>
+  
+  
+  <p>
+    <a href="http://golang.org/doc/effective_go.html" target="_blank">Effective Go</a> contains an in-depth treatment of <a href="http://golang.org/doc/effective_go.html#slices" target="_blank">slices</a> and <a href="http://golang.org/doc/effective_go.html#arrays" target="_blank">arrays</a>, and the Go <a href="http://golang.org/doc/go_spec.html" target="_blank">language specification</a> defines <a href="http://golang.org/doc/go_spec.html#Slice_types" target="_blank">slices</a> and their <a href="http://golang.org/doc/go_spec.html#Length_and_capacity" target="_blank">associated</a> <a href="http://golang.org/doc/go_spec.html#Making_slices_maps_and_channels" target="_blank">helper</a> <a href="http://golang.org/doc/go_spec.html#Appending_and_copying_slices" target="_blank">functions</a>.
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/slices">Arrays, slices (and strings): The mechanics of &#39;append&#39;</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

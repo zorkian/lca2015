@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>base32 - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package base32</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "encoding/base32"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package base32 implements base32 encoding as specified by RFC 4648.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#NewDecoder">func NewDecoder(enc *Encoding, r io.Reader) io.Reader</a></dd>
+			
+				
+				<dd><a href="#NewEncoder">func NewEncoder(enc *Encoding, w io.Writer) io.WriteCloser</a></dd>
+			
+			
+				
+				<dd><a href="#CorruptInputError">type CorruptInputError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CorruptInputError.Error">func (e CorruptInputError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Encoding">type Encoding</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewEncoding">func NewEncoding(encoder string) *Encoding</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoding.Decode">func (enc *Encoding) Decode(dst, src []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoding.DecodeString">func (enc *Encoding) DecodeString(s string) ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoding.DecodedLen">func (enc *Encoding) DecodedLen(n int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoding.Encode">func (enc *Encoding) Encode(dst, src []byte)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoding.EncodeToString">func (enc *Encoding) EncodeToString(src []byte) string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoding.EncodedLen">func (enc *Encoding) EncodedLen(n int) int</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Encoding_DecodeString">Encoding.DecodeString</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Encoding_EncodeToString">Encoding.EncodeToString</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewEncoder">NewEncoder</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/encoding/base32/base32.go">base32.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="HexEncoding">HexEncoding</span> = <a href="#NewEncoding">NewEncoding</a>(encodeHex)</pre>
+				<p>
+HexEncoding is the &ldquo;Extended Hex Alphabet&rdquo; defined in RFC 4648.
+It is typically used in DNS.
+</p>
+
+			
+				<pre>var <span id="StdEncoding">StdEncoding</span> = <a href="#NewEncoding">NewEncoding</a>(encodeStd)</pre>
+				<p>
+StdEncoding is the standard base32 encoding, as defined in
+RFC 4648.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="NewDecoder">func <a href="/src/encoding/base32/base32.go?s=9835:9888#L410">NewDecoder</a></h2>
+			<pre>func NewDecoder(enc *<a href="#Encoding">Encoding</a>, r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a></pre>
+			<p>
+NewDecoder constructs a new base32 stream decoder.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="NewEncoder">func <a href="/src/encoding/base32/base32.go?s=4803:4861#L206">NewEncoder</a></h2>
+			<pre>func NewEncoder(enc *<a href="#Encoding">Encoding</a>, w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) <a href="/pkg/io/">io</a>.<a href="/pkg/io/#WriteCloser">WriteCloser</a></pre>
+			<p>
+NewEncoder returns a new base32 stream encoder.  Data written to
+the returned writer will be encoded using enc and then written to w.
+Base32 encodings operate in 5-byte blocks; when finished
+writing, the caller must Close the returned encoder to flush any
+partially written blocks.
+</p>
+
+			<div id="example_NewEncoder" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/base32&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	input := []byte(&#34;foo\x00bar&#34;)
+	encoder := base32.NewEncoder(base32.StdEncoding, os.Stdout)
+	encoder.Write(input)
+	// Must close the encoder when finished to flush any partial blocks.
+	// If you comment out the following line, the last partial block &#34;r&#34;
+	// won&#39;t be encoded.
+	encoder.Close()
+}
+</textarea></div>
+				<div class="output"><pre>MZXW6ADCMFZA====
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+		
+		
+			
+			
+			<h2 id="CorruptInputError">type <a href="/src/encoding/base32/base32.go?s=5090:5118#L218">CorruptInputError</a></h2>
+			<pre>type CorruptInputError <a href="/pkg/builtin/#int64">int64</a></pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="CorruptInputError.Error">func (CorruptInputError) <a href="/src/encoding/base32/base32.go?s=5120:5161#L220">Error</a></h3>
+				<pre>func (e <a href="#CorruptInputError">CorruptInputError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Encoding">type <a href="/src/encoding/base32/base32.go?s=570:633#L13">Encoding</a></h2>
+			<pre>type Encoding struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+An Encoding is a radix 32 encoding/decoding scheme, defined by a
+32-character alphabet.  The most common is the &#34;base32&#34; encoding
+introduced for SASL GSSAPI and standardized in RFC 4648.
+The alternate &#34;base32hex&#34; encoding is used in DNSSEC.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewEncoding">func <a href="/src/encoding/base32/base32.go?s=846:888#L23">NewEncoding</a></h3>
+				<pre>func NewEncoding(encoder <a href="/pkg/builtin/#string">string</a>) *<a href="#Encoding">Encoding</a></pre>
+				<p>
+NewEncoding returns a new Encoding defined by the given alphabet,
+which must be a 32-byte string.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Encoding.Decode">func (*Encoding) <a href="/src/encoding/base32/base32.go?s=7760:7823#L311">Decode</a></h3>
+				<pre>func (enc *<a href="#Encoding">Encoding</a>) Decode(dst, src []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Decode decodes src using the encoding enc.  It writes at most
+DecodedLen(len(src)) bytes to dst and returns the number of bytes
+written.  If src contains invalid base32 data, it will return the
+number of bytes successfully written and CorruptInputError.
+New line characters (\r and \n) are ignored.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Encoding.DecodeString">func (*Encoding) <a href="/src/encoding/base32/base32.go?s=7985:8044#L318">DecodeString</a></h3>
+				<pre>func (enc *<a href="#Encoding">Encoding</a>) DecodeString(s <a href="/pkg/builtin/#string">string</a>) ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+DecodeString returns the bytes represented by the base32 string s.
+</p>
+
+				
+				<div id="example_Encoding_DecodeString" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/base32&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	str := &#34;ONXW2ZJAMRQXIYJAO5UXI2BAAAQGC3TEEDX3XPY=&#34;
+	data, err := base32.StdEncoding.DecodeString(str)
+	if err != nil {
+		fmt.Println(&#34;error:&#34;, err)
+		return
+	}
+	fmt.Printf(&#34;%q\n&#34;, data)
+}
+</textarea></div>
+				<div class="output"><pre>&#34;some data with \x00 and \ufeff&#34;
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="Encoding.DecodedLen">func (*Encoding) <a href="/src/encoding/base32/base32.go?s=10074:10116#L416">DecodedLen</a></h3>
+				<pre>func (enc *<a href="#Encoding">Encoding</a>) DecodedLen(n <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+DecodedLen returns the maximum length in bytes of the decoded data
+corresponding to n bytes of base32-encoded data.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Encoding.Encode">func (*Encoding) <a href="/src/encoding/base32/base32.go?s=1739:1783#L60">Encode</a></h3>
+				<pre>func (enc *<a href="#Encoding">Encoding</a>) Encode(dst, src []<a href="/pkg/builtin/#byte">byte</a>)</pre>
+				<p>
+Encode encodes src using the encoding enc, writing
+EncodedLen(len(src)) bytes to dst.
+</p>
+<p>
+The encoding pads the output to a multiple of 8 bytes,
+so Encode is not appropriate for use on individual blocks
+of a large data stream.  Use NewEncoder() instead.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Encoding.EncodeToString">func (*Encoding) <a href="/src/encoding/base32/base32.go?s=3012:3066#L126">EncodeToString</a></h3>
+				<pre>func (enc *<a href="#Encoding">Encoding</a>) EncodeToString(src []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+EncodeToString returns the base32 encoding of src.
+</p>
+
+				
+				<div id="example_Encoding_EncodeToString" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;encoding/base32&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	data := []byte(&#34;any + old &amp; data&#34;)
+	str := base32.StdEncoding.EncodeToString(data)
+	fmt.Println(str)
+}
+</textarea></div>
+				<div class="output"><pre>MFXHSIBLEBXWYZBAEYQGIYLUME======
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="Encoding.EncodedLen">func (*Encoding) <a href="/src/encoding/base32/base32.go?s=5000:5042#L212">EncodedLen</a></h3>
+				<pre>func (enc *<a href="#Encoding">Encoding</a>) EncodedLen(n <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+EncodedLen returns the length in bytes of the base32 encoding
+of an input buffer of length n.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

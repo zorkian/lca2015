@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>macho - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package macho</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "debug/macho"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package macho implements access to Mach-O object files.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+			
+				
+				<dd><a href="#Cpu">type Cpu</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cpu.GoString">func (i Cpu) GoString() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Cpu.String">func (i Cpu) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Dylib">type Dylib</a></dd>
+				
+				
+			
+				
+				<dd><a href="#DylibCmd">type DylibCmd</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Dysymtab">type Dysymtab</a></dd>
+				
+				
+			
+				
+				<dd><a href="#DysymtabCmd">type DysymtabCmd</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FatArch">type FatArch</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FatArchHeader">type FatArchHeader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FatFile">type FatFile</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewFatFile">func NewFatFile(r io.ReaderAt) (*FatFile, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpenFat">func OpenFat(name string) (ff *FatFile, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FatFile.Close">func (ff *FatFile) Close() error</a></dd>
+				
+			
+				
+				<dd><a href="#File">type File</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewFile">func NewFile(r io.ReaderAt) (*File, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Open">func Open(name string) (*File, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Close">func (f *File) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.DWARF">func (f *File) DWARF() (*dwarf.Data, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.ImportedLibraries">func (f *File) ImportedLibraries() ([]string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.ImportedSymbols">func (f *File) ImportedSymbols() ([]string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Section">func (f *File) Section(name string) *Section</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Segment">func (f *File) Segment(name string) *Segment</a></dd>
+				
+			
+				
+				<dd><a href="#FileHeader">type FileHeader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FormatError">type FormatError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FormatError.Error">func (e *FormatError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Load">type Load</a></dd>
+				
+				
+			
+				
+				<dd><a href="#LoadBytes">type LoadBytes</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LoadBytes.Raw">func (b LoadBytes) Raw() []byte</a></dd>
+				
+			
+				
+				<dd><a href="#LoadCmd">type LoadCmd</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LoadCmd.GoString">func (i LoadCmd) GoString() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#LoadCmd.String">func (i LoadCmd) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Nlist32">type Nlist32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Nlist64">type Nlist64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Regs386">type Regs386</a></dd>
+				
+				
+			
+				
+				<dd><a href="#RegsAMD64">type RegsAMD64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Section">type Section</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Section.Data">func (s *Section) Data() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Section.Open">func (s *Section) Open() io.ReadSeeker</a></dd>
+				
+			
+				
+				<dd><a href="#Section32">type Section32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Section64">type Section64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SectionHeader">type SectionHeader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Segment">type Segment</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Segment.Data">func (s *Segment) Data() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Segment.Open">func (s *Segment) Open() io.ReadSeeker</a></dd>
+				
+			
+				
+				<dd><a href="#Segment32">type Segment32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Segment64">type Segment64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SegmentHeader">type SegmentHeader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Symbol">type Symbol</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Symtab">type Symtab</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SymtabCmd">type SymtabCmd</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Thread">type Thread</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Type">type Type</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/debug/macho/fat.go">fat.go</a>
+			
+				<a href="/src/debug/macho/file.go">file.go</a>
+			
+				<a href="/src/debug/macho/macho.go">macho.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="Magic32">Magic32</span>  <a href="/pkg/builtin/#uint32">uint32</a> = 0xfeedface
+        <span id="Magic64">Magic64</span>  <a href="/pkg/builtin/#uint32">uint32</a> = 0xfeedfacf
+        <span id="MagicFat">MagicFat</span> <a href="/pkg/builtin/#uint32">uint32</a> = 0xcafebabe
+)</pre>
+				
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrNotFat">ErrNotFat</span> = &amp;<a href="#FormatError">FormatError</a>{0, &#34;not a fat Mach-O file&#34;, <a href="/pkg/builtin/#nil">nil</a>}</pre>
+				<p>
+ErrNotFat is returned from NewFatFile or OpenFat when the file is not a
+universal binary but may be a thin binary, based on its magic number.
+</p>
+
+			
+		
+		
+		
+			
+			
+			<h2 id="Cpu">type <a href="/src/debug/macho/macho.go?s=921:936#L35">Cpu</a></h2>
+			<pre>type Cpu <a href="/pkg/builtin/#uint32">uint32</a></pre>
+			<p>
+A Cpu is a Mach-O cpu type.
+</p>
+
+
+			
+				<pre>const (
+        <span id="Cpu386">Cpu386</span>   <a href="#Cpu">Cpu</a> = 7
+        <span id="CpuAmd64">CpuAmd64</span> <a href="#Cpu">Cpu</a> = <a href="#Cpu386">Cpu386</a> | cpuArch64
+        <span id="CpuArm">CpuArm</span>   <a href="#Cpu">Cpu</a> = 12
+        <span id="CpuPpc">CpuPpc</span>   <a href="#Cpu">Cpu</a> = 18
+        <span id="CpuPpc64">CpuPpc64</span> <a href="#Cpu">Cpu</a> = <a href="#CpuPpc">CpuPpc</a> | cpuArch64
+)</pre>
+				
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Cpu.GoString">func (Cpu) <a href="/src/debug/macho/macho.go?s=1372:1402#L56">GoString</a></h3>
+				<pre>func (i <a href="#Cpu">Cpu</a>) GoString() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Cpu.String">func (Cpu) <a href="/src/debug/macho/macho.go?s=1289:1317#L55">String</a></h3>
+				<pre>func (i <a href="#Cpu">Cpu</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Dylib">type <a href="/src/debug/macho/file.go?s=2756:2880#L114">Dylib</a></h2>
+			<pre>type Dylib struct {
+        <a href="#LoadBytes">LoadBytes</a>
+        Name           <a href="/pkg/builtin/#string">string</a>
+        Time           <a href="/pkg/builtin/#uint32">uint32</a>
+        CurrentVersion <a href="/pkg/builtin/#uint32">uint32</a>
+        CompatVersion  <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A Dylib represents a Mach-O load dynamic library command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="DylibCmd">type <a href="/src/debug/macho/macho.go?s=2808:2971#L114">DylibCmd</a></h2>
+			<pre>type DylibCmd struct {
+        Cmd            <a href="#LoadCmd">LoadCmd</a>
+        Len            <a href="/pkg/builtin/#uint32">uint32</a>
+        Name           <a href="/pkg/builtin/#uint32">uint32</a>
+        Time           <a href="/pkg/builtin/#uint32">uint32</a>
+        CurrentVersion <a href="/pkg/builtin/#uint32">uint32</a>
+        CompatVersion  <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A DylibCmd is a Mach-O load dynamic library command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Dysymtab">type <a href="/src/debug/macho/file.go?s=3061:3160#L130">Dysymtab</a></h2>
+			<pre>type Dysymtab struct {
+        <a href="#LoadBytes">LoadBytes</a>
+        <a href="#DysymtabCmd">DysymtabCmd</a>
+        IndirectSyms []<a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// indices into Symtab.Syms</span>
+}</pre>
+			<p>
+A Dysymtab represents a Mach-O dynamic symbol table command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="DysymtabCmd">type <a href="/src/debug/macho/macho.go?s=3758:4246#L165">DysymtabCmd</a></h2>
+			<pre>type DysymtabCmd struct {
+        Cmd            <a href="#LoadCmd">LoadCmd</a>
+        Len            <a href="/pkg/builtin/#uint32">uint32</a>
+        Ilocalsym      <a href="/pkg/builtin/#uint32">uint32</a>
+        Nlocalsym      <a href="/pkg/builtin/#uint32">uint32</a>
+        Iextdefsym     <a href="/pkg/builtin/#uint32">uint32</a>
+        Nextdefsym     <a href="/pkg/builtin/#uint32">uint32</a>
+        Iundefsym      <a href="/pkg/builtin/#uint32">uint32</a>
+        Nundefsym      <a href="/pkg/builtin/#uint32">uint32</a>
+        Tocoffset      <a href="/pkg/builtin/#uint32">uint32</a>
+        Ntoc           <a href="/pkg/builtin/#uint32">uint32</a>
+        Modtaboff      <a href="/pkg/builtin/#uint32">uint32</a>
+        Nmodtab        <a href="/pkg/builtin/#uint32">uint32</a>
+        Extrefsymoff   <a href="/pkg/builtin/#uint32">uint32</a>
+        Nextrefsyms    <a href="/pkg/builtin/#uint32">uint32</a>
+        Indirectsymoff <a href="/pkg/builtin/#uint32">uint32</a>
+        Nindirectsyms  <a href="/pkg/builtin/#uint32">uint32</a>
+        Extreloff      <a href="/pkg/builtin/#uint32">uint32</a>
+        Nextrel        <a href="/pkg/builtin/#uint32">uint32</a>
+        Locreloff      <a href="/pkg/builtin/#uint32">uint32</a>
+        Nlocrel        <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A DysymtabCmd is a Mach-O dynamic symbol table command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FatArch">type <a href="/src/debug/macho/fat.go?s=647:692#L23">FatArch</a></h2>
+			<pre>type FatArch struct {
+        <a href="#FatArchHeader">FatArchHeader</a>
+        *<a href="#File">File</a>
+}</pre>
+			<p>
+A FatArch is a Mach-O File inside a FatFile.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FatArchHeader">type <a href="/src/debug/macho/fat.go?s=463:564#L12">FatArchHeader</a></h2>
+			<pre>type FatArchHeader struct {
+        Cpu    <a href="#Cpu">Cpu</a>
+        SubCpu <a href="/pkg/builtin/#uint32">uint32</a>
+        Offset <a href="/pkg/builtin/#uint32">uint32</a>
+        Size   <a href="/pkg/builtin/#uint32">uint32</a>
+        Align  <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A FatArchHeader represents a fat header for a specific image architecture.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FatFile">type <a href="/src/debug/macho/fat.go?s=309:383#L5">FatFile</a></h2>
+			<pre>type FatFile struct {
+        Magic  <a href="/pkg/builtin/#uint32">uint32</a>
+        Arches []<a href="#FatArch">FatArch</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A FatFile is a Mach-O universal binary that contains at least one architecture.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewFatFile">func <a href="/src/debug/macho/fat.go?s=1076:1124#L35">NewFatFile</a></h3>
+				<pre>func NewFatFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>) (*<a href="#FatFile">FatFile</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewFatFile creates a new FatFile for accessing all the Mach-O images in a
+universal binary. The Mach-O binary is expected to start at position 0 in
+the ReaderAt.
+</p>
+
+				
+				
+			
+				
+				<h3 id="OpenFat">func <a href="/src/debug/macho/fat.go?s=3688:3738#L115">OpenFat</a></h3>
+				<pre>func OpenFat(name <a href="/pkg/builtin/#string">string</a>) (ff *<a href="#FatFile">FatFile</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+OpenFat opens the named file using os.Open and prepares it for use as a Mach-O
+universal binary.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="FatFile.Close">func (*FatFile) <a href="/src/debug/macho/fat.go?s=3905:3937#L129">Close</a></h3>
+				<pre>func (ff *<a href="#FatFile">FatFile</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="File">type <a href="/src/debug/macho/file.go?s=403:561#L10">File</a></h2>
+			<pre>type File struct {
+        <a href="#FileHeader">FileHeader</a>
+        ByteOrder <a href="/pkg/encoding/binary/">binary</a>.<a href="/pkg/encoding/binary/#ByteOrder">ByteOrder</a>
+        Loads     []<a href="#Load">Load</a>
+        Sections  []*<a href="#Section">Section</a>
+
+        Symtab   *<a href="#Symtab">Symtab</a>
+        Dysymtab *<a href="#Dysymtab">Dysymtab</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A File represents an open Mach-O file.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewFile">func <a href="/src/debug/macho/file.go?s=4250:4292#L186">NewFile</a></h3>
+				<pre>func NewFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>) (*<a href="#File">File</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewFile creates a new File for accessing a Mach-O binary in an underlying reader.
+The Mach-O binary is expected to start at position 0 in the ReaderAt.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Open">func <a href="/src/debug/macho/file.go?s=3637:3674#L158">Open</a></h3>
+				<pre>func Open(name <a href="/pkg/builtin/#string">string</a>) (*<a href="#File">File</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Open opens the named file using os.Open and prepares it for use as a Mach-O binary.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="File.Close">func (*File) <a href="/src/debug/macho/file.go?s=3964:3992#L175">Close</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the File.
+If the File was created using NewFile directly instead of Open,
+Close has no effect.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.DWARF">func (*File) <a href="/src/debug/macho/file.go?s=11334:11377#L463">DWARF</a></h3>
+				<pre>func (f *<a href="#File">File</a>) DWARF() (*<a href="/pkg/debug/dwarf/">dwarf</a>.<a href="/pkg/debug/dwarf/#Data">Data</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+DWARF returns the DWARF debug information for the Mach-O file.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.ImportedLibraries">func (*File) <a href="/src/debug/macho/file.go?s=12604:12656#L506">ImportedLibraries</a></h3>
+				<pre>func (f *<a href="#File">File</a>) ImportedLibraries() ([]<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ImportedLibraries returns the paths of all libraries
+referred to by the binary f that are expected to be
+linked with the binary at dynamic link time.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.ImportedSymbols">func (*File) <a href="/src/debug/macho/file.go?s=12112:12162#L489">ImportedSymbols</a></h3>
+				<pre>func (f *<a href="#File">File</a>) ImportedSymbols() ([]<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ImportedSymbols returns the names of all symbols
+referred to by the binary f that are expected to be
+satisfied by other libraries at dynamic load time.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.Section">func (*File) <a href="/src/debug/macho/file.go?s=11133:11177#L453">Section</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Section(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Section">Section</a></pre>
+				<p>
+Section returns the first section with the given name, or nil if no such
+section exists.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.Segment">func (*File) <a href="/src/debug/macho/file.go?s=10877:10921#L442">Segment</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Segment(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Segment">Segment</a></pre>
+				<p>
+Segment returns the first Segment with the given name, or nil if no such segment exists.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="FileHeader">type <a href="/src/debug/macho/macho.go?s=397:523#L3">FileHeader</a></h2>
+			<pre>type FileHeader struct {
+        Magic  <a href="/pkg/builtin/#uint32">uint32</a>
+        Cpu    <a href="#Cpu">Cpu</a>
+        SubCpu <a href="/pkg/builtin/#uint32">uint32</a>
+        Type   <a href="#Type">Type</a>
+        Ncmd   <a href="/pkg/builtin/#uint32">uint32</a>
+        Cmdsz  <a href="/pkg/builtin/#uint32">uint32</a>
+        Flags  <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A FileHeader represents a Mach-O file header.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FormatError">type <a href="/src/debug/macho/file.go?s=3301:3368#L142">FormatError</a></h2>
+			<pre>type FormatError struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+FormatError is returned by some operations if the data does
+not have the correct format for an object file.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="FormatError.Error">func (*FormatError) <a href="/src/debug/macho/file.go?s=3370:3406#L148">Error</a></h3>
+				<pre>func (e *<a href="#FormatError">FormatError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Load">type <a href="/src/debug/macho/file.go?s=609:646#L23">Load</a></h2>
+			<pre>type Load interface {
+        Raw() []<a href="/pkg/builtin/#byte">byte</a>
+}</pre>
+			<p>
+A Load represents any Mach-O load command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="LoadBytes">type <a href="/src/debug/macho/file.go?s=716:737#L28">LoadBytes</a></h2>
+			<pre>type LoadBytes []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+A LoadBytes is the uninterpreted bytes of a Mach-O load command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="LoadBytes.Raw">func (LoadBytes) <a href="/src/debug/macho/file.go?s=739:770#L30">Raw</a></h3>
+				<pre>func (b <a href="#LoadBytes">LoadBytes</a>) Raw() []<a href="/pkg/builtin/#byte">byte</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="LoadCmd">type <a href="/src/debug/macho/macho.go?s=1494:1513#L59">LoadCmd</a></h2>
+			<pre>type LoadCmd <a href="/pkg/builtin/#uint32">uint32</a></pre>
+			<p>
+A LoadCmd is a Mach-O load command.
+</p>
+
+
+			
+				<pre>const (
+        <span id="LoadCmdSegment">LoadCmdSegment</span>    <a href="#LoadCmd">LoadCmd</a> = 1
+        <span id="LoadCmdSymtab">LoadCmdSymtab</span>     <a href="#LoadCmd">LoadCmd</a> = 2
+        <span id="LoadCmdThread">LoadCmdThread</span>     <a href="#LoadCmd">LoadCmd</a> = 4
+        <span id="LoadCmdUnixThread">LoadCmdUnixThread</span> <a href="#LoadCmd">LoadCmd</a> = 5 <span class="comment">// thread+stack</span>
+        <span id="LoadCmdDysymtab">LoadCmdDysymtab</span>   <a href="#LoadCmd">LoadCmd</a> = 11
+        <span id="LoadCmdDylib">LoadCmdDylib</span>      <a href="#LoadCmd">LoadCmd</a> = 12
+        <span id="LoadCmdDylinker">LoadCmdDylinker</span>   <a href="#LoadCmd">LoadCmd</a> = 15
+        <span id="LoadCmdSegment64">LoadCmdSegment64</span>  <a href="#LoadCmd">LoadCmd</a> = 25
+)</pre>
+				
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="LoadCmd.GoString">func (LoadCmd) <a href="/src/debug/macho/macho.go?s=2141:2175#L81">GoString</a></h3>
+				<pre>func (i <a href="#LoadCmd">LoadCmd</a>) GoString() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="LoadCmd.String">func (LoadCmd) <a href="/src/debug/macho/macho.go?s=2054:2086#L80">String</a></h3>
+				<pre>func (i <a href="#LoadCmd">LoadCmd</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Nlist32">type <a href="/src/debug/macho/macho.go?s=4301:4392#L189">Nlist32</a></h2>
+			<pre>type Nlist32 struct {
+        Name  <a href="/pkg/builtin/#uint32">uint32</a>
+        Type  <a href="/pkg/builtin/#uint8">uint8</a>
+        Sect  <a href="/pkg/builtin/#uint8">uint8</a>
+        Desc  <a href="/pkg/builtin/#uint16">uint16</a>
+        Value <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+An Nlist32 is a Mach-O 32-bit symbol table entry.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Nlist64">type <a href="/src/debug/macho/macho.go?s=4447:4538#L198">Nlist64</a></h2>
+			<pre>type Nlist64 struct {
+        Name  <a href="/pkg/builtin/#uint32">uint32</a>
+        Type  <a href="/pkg/builtin/#uint8">uint8</a>
+        Sect  <a href="/pkg/builtin/#uint8">uint8</a>
+        Desc  <a href="/pkg/builtin/#uint16">uint16</a>
+        Value <a href="/pkg/builtin/#uint64">uint64</a>
+}</pre>
+			<p>
+An Nlist64 is a Mach-O 64-bit symbol table entry.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Regs386">type <a href="/src/debug/macho/macho.go?s=4867:5114#L224">Regs386</a></h2>
+			<pre>type Regs386 struct {
+        AX    <a href="/pkg/builtin/#uint32">uint32</a>
+        BX    <a href="/pkg/builtin/#uint32">uint32</a>
+        CX    <a href="/pkg/builtin/#uint32">uint32</a>
+        DX    <a href="/pkg/builtin/#uint32">uint32</a>
+        DI    <a href="/pkg/builtin/#uint32">uint32</a>
+        SI    <a href="/pkg/builtin/#uint32">uint32</a>
+        BP    <a href="/pkg/builtin/#uint32">uint32</a>
+        SP    <a href="/pkg/builtin/#uint32">uint32</a>
+        SS    <a href="/pkg/builtin/#uint32">uint32</a>
+        FLAGS <a href="/pkg/builtin/#uint32">uint32</a>
+        IP    <a href="/pkg/builtin/#uint32">uint32</a>
+        CS    <a href="/pkg/builtin/#uint32">uint32</a>
+        DS    <a href="/pkg/builtin/#uint32">uint32</a>
+        ES    <a href="/pkg/builtin/#uint32">uint32</a>
+        FS    <a href="/pkg/builtin/#uint32">uint32</a>
+        GS    <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+Regs386 is the Mach-O 386 register structure.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="RegsAMD64">type <a href="/src/debug/macho/macho.go?s=5169:5488#L244">RegsAMD64</a></h2>
+			<pre>type RegsAMD64 struct {
+        AX    <a href="/pkg/builtin/#uint64">uint64</a>
+        BX    <a href="/pkg/builtin/#uint64">uint64</a>
+        CX    <a href="/pkg/builtin/#uint64">uint64</a>
+        DX    <a href="/pkg/builtin/#uint64">uint64</a>
+        DI    <a href="/pkg/builtin/#uint64">uint64</a>
+        SI    <a href="/pkg/builtin/#uint64">uint64</a>
+        BP    <a href="/pkg/builtin/#uint64">uint64</a>
+        SP    <a href="/pkg/builtin/#uint64">uint64</a>
+        R8    <a href="/pkg/builtin/#uint64">uint64</a>
+        R9    <a href="/pkg/builtin/#uint64">uint64</a>
+        R10   <a href="/pkg/builtin/#uint64">uint64</a>
+        R11   <a href="/pkg/builtin/#uint64">uint64</a>
+        R12   <a href="/pkg/builtin/#uint64">uint64</a>
+        R13   <a href="/pkg/builtin/#uint64">uint64</a>
+        R14   <a href="/pkg/builtin/#uint64">uint64</a>
+        R15   <a href="/pkg/builtin/#uint64">uint64</a>
+        IP    <a href="/pkg/builtin/#uint64">uint64</a>
+        FLAGS <a href="/pkg/builtin/#uint64">uint64</a>
+        CS    <a href="/pkg/builtin/#uint64">uint64</a>
+        FS    <a href="/pkg/builtin/#uint64">uint64</a>
+        GS    <a href="/pkg/builtin/#uint64">uint64</a>
+}</pre>
+			<p>
+RegsAMD64 is the Mach-O AMD64 register structure.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Section">type <a href="/src/debug/macho/file.go?s=2004:2313#L87">Section</a></h2>
+			<pre>type Section struct {
+        <a href="#SectionHeader">SectionHeader</a>
+
+        <span class="comment">// Embed ReaderAt for ReadAt method.</span>
+        <span class="comment">// Do not embed SectionReader directly</span>
+        <span class="comment">// to avoid having Read and Seek.</span>
+        <span class="comment">// If a client wants Read and Seek it must use</span>
+        <span class="comment">// Open() to avoid fighting over the seek offset</span>
+        <span class="comment">// with other clients.</span>
+        <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Section.Data">func (*Section) <a href="/src/debug/macho/file.go?s=2377:2417#L101">Data</a></h3>
+				<pre>func (s *<a href="#Section">Section</a>) Data() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Data reads and returns the contents of the Mach-O section.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Section.Open">func (*Section) <a href="/src/debug/macho/file.go?s=2606:2644#L111">Open</a></h3>
+				<pre>func (s *<a href="#Section">Section</a>) Open() <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a></pre>
+				<p>
+Open returns a new ReadSeeker reading the Mach-O section.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Section32">type <a href="/src/debug/macho/macho.go?s=3023:3239#L124">Section32</a></h2>
+			<pre>type Section32 struct {
+        Name     [16]<a href="/pkg/builtin/#byte">byte</a>
+        Seg      [16]<a href="/pkg/builtin/#byte">byte</a>
+        Addr     <a href="/pkg/builtin/#uint32">uint32</a>
+        Size     <a href="/pkg/builtin/#uint32">uint32</a>
+        Offset   <a href="/pkg/builtin/#uint32">uint32</a>
+        Align    <a href="/pkg/builtin/#uint32">uint32</a>
+        Reloff   <a href="/pkg/builtin/#uint32">uint32</a>
+        Nreloc   <a href="/pkg/builtin/#uint32">uint32</a>
+        Flags    <a href="/pkg/builtin/#uint32">uint32</a>
+        Reserve1 <a href="/pkg/builtin/#uint32">uint32</a>
+        Reserve2 <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A Section32 is a 32-bit Mach-O section header.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Section64">type <a href="/src/debug/macho/macho.go?s=3291:3524#L139">Section64</a></h2>
+			<pre>type Section64 struct {
+        Name     [16]<a href="/pkg/builtin/#byte">byte</a>
+        Seg      [16]<a href="/pkg/builtin/#byte">byte</a>
+        Addr     <a href="/pkg/builtin/#uint64">uint64</a>
+        Size     <a href="/pkg/builtin/#uint64">uint64</a>
+        Offset   <a href="/pkg/builtin/#uint32">uint32</a>
+        Align    <a href="/pkg/builtin/#uint32">uint32</a>
+        Reloff   <a href="/pkg/builtin/#uint32">uint32</a>
+        Nreloc   <a href="/pkg/builtin/#uint32">uint32</a>
+        Flags    <a href="/pkg/builtin/#uint32">uint32</a>
+        Reserve1 <a href="/pkg/builtin/#uint32">uint32</a>
+        Reserve2 <a href="/pkg/builtin/#uint32">uint32</a>
+        Reserve3 <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A Section32 is a 64-bit Mach-O section header.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SectionHeader">type <a href="/src/debug/macho/file.go?s=1838:2002#L75">SectionHeader</a></h2>
+			<pre>type SectionHeader struct {
+        Name   <a href="/pkg/builtin/#string">string</a>
+        Seg    <a href="/pkg/builtin/#string">string</a>
+        Addr   <a href="/pkg/builtin/#uint64">uint64</a>
+        Size   <a href="/pkg/builtin/#uint64">uint64</a>
+        Offset <a href="/pkg/builtin/#uint32">uint32</a>
+        Align  <a href="/pkg/builtin/#uint32">uint32</a>
+        Reloff <a href="/pkg/builtin/#uint32">uint32</a>
+        Nreloc <a href="/pkg/builtin/#uint32">uint32</a>
+        Flags  <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Segment">type <a href="/src/debug/macho/file.go?s=1150:1470#L48">Segment</a></h2>
+			<pre>type Segment struct {
+        <a href="#LoadBytes">LoadBytes</a>
+        <a href="#SegmentHeader">SegmentHeader</a>
+
+        <span class="comment">// Embed ReaderAt for ReadAt method.</span>
+        <span class="comment">// Do not embed SectionReader directly</span>
+        <span class="comment">// to avoid having Read and Seek.</span>
+        <span class="comment">// If a client wants Read and Seek it must use</span>
+        <span class="comment">// Open() to avoid fighting over the seek offset</span>
+        <span class="comment">// with other clients.</span>
+        <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Segment represents a Mach-O 32-bit or 64-bit load segment command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Segment.Data">func (*Segment) <a href="/src/debug/macho/file.go?s=1527:1567#L63">Data</a></h3>
+				<pre>func (s *<a href="#Segment">Segment</a>) Data() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Data reads and returns the contents of the segment.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Segment.Open">func (*Segment) <a href="/src/debug/macho/file.go?s=1749:1787#L73">Open</a></h3>
+				<pre>func (s *<a href="#Segment">Segment</a>) Open() <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a></pre>
+				<p>
+Open returns a new ReadSeeker reading the segment.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Segment32">type <a href="/src/debug/macho/macho.go?s=2546:2750#L99">Segment32</a></h2>
+			<pre>type Segment32 struct {
+        Cmd     <a href="#LoadCmd">LoadCmd</a>
+        Len     <a href="/pkg/builtin/#uint32">uint32</a>
+        Name    [16]<a href="/pkg/builtin/#byte">byte</a>
+        Addr    <a href="/pkg/builtin/#uint32">uint32</a>
+        Memsz   <a href="/pkg/builtin/#uint32">uint32</a>
+        Offset  <a href="/pkg/builtin/#uint32">uint32</a>
+        Filesz  <a href="/pkg/builtin/#uint32">uint32</a>
+        Maxprot <a href="/pkg/builtin/#uint32">uint32</a>
+        Prot    <a href="/pkg/builtin/#uint32">uint32</a>
+        Nsect   <a href="/pkg/builtin/#uint32">uint32</a>
+        Flag    <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A Segment32 is a 32-bit Mach-O segment load command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Segment64">type <a href="/src/debug/macho/macho.go?s=2284:2488#L84">Segment64</a></h2>
+			<pre>type Segment64 struct {
+        Cmd     <a href="#LoadCmd">LoadCmd</a>
+        Len     <a href="/pkg/builtin/#uint32">uint32</a>
+        Name    [16]<a href="/pkg/builtin/#byte">byte</a>
+        Addr    <a href="/pkg/builtin/#uint64">uint64</a>
+        Memsz   <a href="/pkg/builtin/#uint64">uint64</a>
+        Offset  <a href="/pkg/builtin/#uint64">uint64</a>
+        Filesz  <a href="/pkg/builtin/#uint64">uint64</a>
+        Maxprot <a href="/pkg/builtin/#uint32">uint32</a>
+        Prot    <a href="/pkg/builtin/#uint32">uint32</a>
+        Nsect   <a href="/pkg/builtin/#uint32">uint32</a>
+        Flag    <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A Segment64 is a 64-bit Mach-O segment load command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SegmentHeader">type <a href="/src/debug/macho/file.go?s=870:1076#L33">SegmentHeader</a></h2>
+			<pre>type SegmentHeader struct {
+        Cmd     <a href="#LoadCmd">LoadCmd</a>
+        Len     <a href="/pkg/builtin/#uint32">uint32</a>
+        Name    <a href="/pkg/builtin/#string">string</a>
+        Addr    <a href="/pkg/builtin/#uint64">uint64</a>
+        Memsz   <a href="/pkg/builtin/#uint64">uint64</a>
+        Offset  <a href="/pkg/builtin/#uint64">uint64</a>
+        Filesz  <a href="/pkg/builtin/#uint64">uint64</a>
+        Maxprot <a href="/pkg/builtin/#uint32">uint32</a>
+        Prot    <a href="/pkg/builtin/#uint32">uint32</a>
+        Nsect   <a href="/pkg/builtin/#uint32">uint32</a>
+        Flag    <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A SegmentHeader is the header for a Mach-O 32-bit or 64-bit load segment command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Symbol">type <a href="/src/debug/macho/macho.go?s=4601:4691#L207">Symbol</a></h2>
+			<pre>type Symbol struct {
+        Name  <a href="/pkg/builtin/#string">string</a>
+        Type  <a href="/pkg/builtin/#uint8">uint8</a>
+        Sect  <a href="/pkg/builtin/#uint8">uint8</a>
+        Desc  <a href="/pkg/builtin/#uint16">uint16</a>
+        Value <a href="/pkg/builtin/#uint64">uint64</a>
+}</pre>
+			<p>
+A Symbol is a Mach-O 32-bit or 64-bit symbol table entry.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Symtab">type <a href="/src/debug/macho/file.go?s=2936:2995#L123">Symtab</a></h2>
+			<pre>type Symtab struct {
+        <a href="#LoadBytes">LoadBytes</a>
+        <a href="#SymtabCmd">SymtabCmd</a>
+        Syms []<a href="#Symbol">Symbol</a>
+}</pre>
+			<p>
+A Symtab represents a Mach-O symbol table command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SymtabCmd">type <a href="/src/debug/macho/macho.go?s=3575:3697#L155">SymtabCmd</a></h2>
+			<pre>type SymtabCmd struct {
+        Cmd     <a href="#LoadCmd">LoadCmd</a>
+        Len     <a href="/pkg/builtin/#uint32">uint32</a>
+        Symoff  <a href="/pkg/builtin/#uint32">uint32</a>
+        Nsyms   <a href="/pkg/builtin/#uint32">uint32</a>
+        Stroff  <a href="/pkg/builtin/#uint32">uint32</a>
+        Strsize <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A SymtabCmd is a Mach-O symbol table command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Thread">type <a href="/src/debug/macho/macho.go?s=4739:4816#L216">Thread</a></h2>
+			<pre>type Thread struct {
+        Cmd  <a href="#LoadCmd">LoadCmd</a>
+        Len  <a href="/pkg/builtin/#uint32">uint32</a>
+        Type <a href="/pkg/builtin/#uint32">uint32</a>
+        Data []<a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			<p>
+A Thread is a Mach-O thread state command.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Type">type <a href="/src/debug/macho/macho.go?s=777:793#L25">Type</a></h2>
+			<pre>type Type <a href="/pkg/builtin/#uint32">uint32</a></pre>
+			<p>
+A Type is the Mach-O file type, e.g. an object file, executable, or dynamic library.
+</p>
+
+
+			
+				<pre>const (
+        <span id="TypeObj">TypeObj</span>    <a href="#Type">Type</a> = 1
+        <span id="TypeExec">TypeExec</span>   <a href="#Type">Type</a> = 2
+        <span id="TypeDylib">TypeDylib</span>  <a href="#Type">Type</a> = 6
+        <span id="TypeBundle">TypeBundle</span> <a href="#Type">Type</a> = 8
+)</pre>
+				
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

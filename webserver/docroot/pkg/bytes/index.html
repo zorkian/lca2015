@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>bytes - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package bytes</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "bytes"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package bytes implements functions for the manipulation of byte slices.
+It is analogous to the facilities of the strings package.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#Compare">func Compare(a, b []byte) int</a></dd>
+			
+				
+				<dd><a href="#Contains">func Contains(b, subslice []byte) bool</a></dd>
+			
+				
+				<dd><a href="#Count">func Count(s, sep []byte) int</a></dd>
+			
+				
+				<dd><a href="#Equal">func Equal(a, b []byte) bool</a></dd>
+			
+				
+				<dd><a href="#EqualFold">func EqualFold(s, t []byte) bool</a></dd>
+			
+				
+				<dd><a href="#Fields">func Fields(s []byte) [][]byte</a></dd>
+			
+				
+				<dd><a href="#FieldsFunc">func FieldsFunc(s []byte, f func(rune) bool) [][]byte</a></dd>
+			
+				
+				<dd><a href="#HasPrefix">func HasPrefix(s, prefix []byte) bool</a></dd>
+			
+				
+				<dd><a href="#HasSuffix">func HasSuffix(s, suffix []byte) bool</a></dd>
+			
+				
+				<dd><a href="#Index">func Index(s, sep []byte) int</a></dd>
+			
+				
+				<dd><a href="#IndexAny">func IndexAny(s []byte, chars string) int</a></dd>
+			
+				
+				<dd><a href="#IndexByte">func IndexByte(s []byte, c byte) int</a></dd>
+			
+				
+				<dd><a href="#IndexFunc">func IndexFunc(s []byte, f func(r rune) bool) int</a></dd>
+			
+				
+				<dd><a href="#IndexRune">func IndexRune(s []byte, r rune) int</a></dd>
+			
+				
+				<dd><a href="#Join">func Join(s [][]byte, sep []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#LastIndex">func LastIndex(s, sep []byte) int</a></dd>
+			
+				
+				<dd><a href="#LastIndexAny">func LastIndexAny(s []byte, chars string) int</a></dd>
+			
+				
+				<dd><a href="#LastIndexFunc">func LastIndexFunc(s []byte, f func(r rune) bool) int</a></dd>
+			
+				
+				<dd><a href="#Map">func Map(mapping func(r rune) rune, s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#Repeat">func Repeat(b []byte, count int) []byte</a></dd>
+			
+				
+				<dd><a href="#Replace">func Replace(s, old, new []byte, n int) []byte</a></dd>
+			
+				
+				<dd><a href="#Runes">func Runes(s []byte) []rune</a></dd>
+			
+				
+				<dd><a href="#Split">func Split(s, sep []byte) [][]byte</a></dd>
+			
+				
+				<dd><a href="#SplitAfter">func SplitAfter(s, sep []byte) [][]byte</a></dd>
+			
+				
+				<dd><a href="#SplitAfterN">func SplitAfterN(s, sep []byte, n int) [][]byte</a></dd>
+			
+				
+				<dd><a href="#SplitN">func SplitN(s, sep []byte, n int) [][]byte</a></dd>
+			
+				
+				<dd><a href="#Title">func Title(s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#ToLower">func ToLower(s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#ToLowerSpecial">func ToLowerSpecial(_case unicode.SpecialCase, s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#ToTitle">func ToTitle(s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#ToTitleSpecial">func ToTitleSpecial(_case unicode.SpecialCase, s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#ToUpper">func ToUpper(s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#ToUpperSpecial">func ToUpperSpecial(_case unicode.SpecialCase, s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#Trim">func Trim(s []byte, cutset string) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimFunc">func TrimFunc(s []byte, f func(r rune) bool) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimLeft">func TrimLeft(s []byte, cutset string) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimLeftFunc">func TrimLeftFunc(s []byte, f func(r rune) bool) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimPrefix">func TrimPrefix(s, prefix []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimRight">func TrimRight(s []byte, cutset string) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimRightFunc">func TrimRightFunc(s []byte, f func(r rune) bool) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimSpace">func TrimSpace(s []byte) []byte</a></dd>
+			
+				
+				<dd><a href="#TrimSuffix">func TrimSuffix(s, suffix []byte) []byte</a></dd>
+			
+			
+				
+				<dd><a href="#Buffer">type Buffer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewBuffer">func NewBuffer(buf []byte) *Buffer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewBufferString">func NewBufferString(s string) *Buffer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Bytes">func (b *Buffer) Bytes() []byte</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Grow">func (b *Buffer) Grow(n int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Len">func (b *Buffer) Len() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Next">func (b *Buffer) Next(n int) []byte</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Read">func (b *Buffer) Read(p []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.ReadByte">func (b *Buffer) ReadByte() (c byte, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.ReadBytes">func (b *Buffer) ReadBytes(delim byte) (line []byte, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.ReadFrom">func (b *Buffer) ReadFrom(r io.Reader) (n int64, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.ReadRune">func (b *Buffer) ReadRune() (r rune, size int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.ReadString">func (b *Buffer) ReadString(delim byte) (line string, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Reset">func (b *Buffer) Reset()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.String">func (b *Buffer) String() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Truncate">func (b *Buffer) Truncate(n int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.UnreadByte">func (b *Buffer) UnreadByte() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.UnreadRune">func (b *Buffer) UnreadRune() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.Write">func (b *Buffer) Write(p []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.WriteByte">func (b *Buffer) WriteByte(c byte) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.WriteRune">func (b *Buffer) WriteRune(r rune) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.WriteString">func (b *Buffer) WriteString(s string) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Buffer.WriteTo">func (b *Buffer) WriteTo(w io.Writer) (n int64, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(b []byte) *Reader</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Len">func (r *Reader) Len() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Read">func (r *Reader) Read(b []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadAt">func (r *Reader) ReadAt(b []byte, off int64) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadByte">func (r *Reader) ReadByte() (b byte, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.ReadRune">func (r *Reader) ReadRune() (ch rune, size int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Seek">func (r *Reader) Seek(offset int64, whence int) (int64, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.UnreadByte">func (r *Reader) UnreadByte() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.UnreadRune">func (r *Reader) UnreadRune() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.WriteTo">func (r *Reader) WriteTo(w io.Writer) (n int64, err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Buffer">Buffer</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Buffer_reader">Buffer (Reader)</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Compare">Compare</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Compare_search">Compare (Search)</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_TrimPrefix">TrimPrefix</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_TrimSuffix">TrimSuffix</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/bytes/buffer.go">buffer.go</a>
+			
+				<a href="/src/bytes/bytes.go">bytes.go</a>
+			
+				<a href="/src/bytes/bytes_decl.go">bytes_decl.go</a>
+			
+				<a href="/src/bytes/reader.go">reader.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const <span id="MinRead">MinRead</span> = 512</pre>
+				<p>
+MinRead is the minimum slice size passed to a Read call by
+Buffer.ReadFrom.  As long as the Buffer has at least MinRead bytes beyond
+what is required to hold the contents of r, ReadFrom will not grow the
+underlying buffer.
+</p>
+
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrTooLarge">ErrTooLarge</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;bytes.Buffer: too large&#34;)</pre>
+				<p>
+ErrTooLarge is passed to panic if memory cannot be allocated to store data in a buffer.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="Compare">func <a href="/src/bytes/bytes_decl.go?s=785:814#L14">Compare</a></h2>
+			<pre>func Compare(a, b []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+Compare returns an integer comparing two byte slices lexicographically.
+The result will be 0 if a==b, -1 if a &lt; b, and +1 if a &gt; b.
+A nil argument is equivalent to an empty slice.
+</p>
+
+			<div id="example_Compare" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+)
+
+func main() {
+	// Interpret Compare&#39;s result by comparing it to zero.
+	var a, b []byte
+	if bytes.Compare(a, b) &lt; 0 {
+		// a less b
+	}
+	if bytes.Compare(a, b) &lt;= 0 {
+		// a less or equal b
+	}
+	if bytes.Compare(a, b) &gt; 0 {
+		// a greater b
+	}
+	if bytes.Compare(a, b) &gt;= 0 {
+		// a greater or equal b
+	}
+
+	// Prefer Equal to Compare for equality comparisons.
+	if bytes.Equal(a, b) {
+		// a equal b
+	}
+	if !bytes.Equal(a, b) {
+		// a not equal b
+	}
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+<div id="example_Compare_search" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (Search)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (Search)</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;sort&#34;
+)
+
+func main() {
+	// Binary search to find a matching byte slice.
+	var needle []byte
+	var haystack [][]byte // Assume sorted
+	i := sort.Search(len(haystack), func(i int) bool {
+		// Return haystack[i] &gt;= needle.
+		return bytes.Compare(haystack[i], needle) &gt;= 0
+	})
+	if i &lt; len(haystack) &amp;&amp; bytes.Equal(haystack[i], needle) {
+		// Found it!
+	}
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+		
+			
+			
+			<h2 id="Contains">func <a href="/src/bytes/bytes.go?s=1495:1533#L71">Contains</a></h2>
+			<pre>func Contains(b, subslice []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Contains reports whether subslice is within b.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Count">func <a href="/src/bytes/bytes.go?s=1059:1088#L40">Count</a></h2>
+			<pre>func Count(s, sep []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+Count counts the number of non-overlapping instances of sep in s.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Equal">func <a href="/src/bytes/bytes_decl.go?s=523:551#L7">Equal</a></h2>
+			<pre>func Equal(a, b []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+Equal returns a boolean reporting whether a and b
+are the same length and contain the same bytes.
+A nil argument is equivalent to an empty slice.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="EqualFold">func <a href="/src/bytes/bytes.go?s=17211:17243#L642">EqualFold</a></h2>
+			<pre>func EqualFold(s, t []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+EqualFold reports whether s and t, interpreted as UTF-8 strings,
+are equal under Unicode case-folding.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Fields">func <a href="/src/bytes/bytes.go?s=6277:6307#L252">Fields</a></h2>
+			<pre>func Fields(s []<a href="/pkg/builtin/#byte">byte</a>) [][]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Fields splits the slice s around each instance of one or more consecutive white space
+characters, returning a slice of subslices of s or an empty list if s contains only white space.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="FieldsFunc">func <a href="/src/bytes/bytes.go?s=6783:6836#L262">FieldsFunc</a></h2>
+			<pre>func FieldsFunc(s []<a href="/pkg/builtin/#byte">byte</a>, f func(<a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#bool">bool</a>) [][]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+FieldsFunc interprets s as a sequence of UTF-8-encoded Unicode code points.
+It splits the slice s at each run of code points c satisfying f(c) and
+returns a slice of subslices of s.  If all code points in s satisfy f(c), or
+len(s) == 0, an empty slice is returned.
+FieldsFunc makes no guarantees about the order in which it calls f(c).
+If f does not return consistent results for a given c, FieldsFunc may crash.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="HasPrefix">func <a href="/src/bytes/bytes.go?s=7986:8023#L323">HasPrefix</a></h2>
+			<pre>func HasPrefix(s, prefix []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+HasPrefix tests whether the byte slice s begins with prefix.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="HasSuffix">func <a href="/src/bytes/bytes.go?s=8156:8193#L328">HasSuffix</a></h2>
+			<pre>func HasSuffix(s, suffix []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+HasSuffix tests whether the byte slice s ends with suffix.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Index">func <a href="/src/bytes/bytes.go?s=1668:1697#L76">Index</a></h2>
+			<pre>func Index(s, sep []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+Index returns the index of the first instance of sep in s, or -1 if sep is not present in s.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexAny">func <a href="/src/bytes/bytes.go?s=3086:3127#L148">IndexAny</a></h2>
+			<pre>func IndexAny(s []<a href="/pkg/builtin/#byte">byte</a>, chars <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+IndexAny interprets s as a sequence of UTF-8-encoded Unicode code points.
+It returns the byte index of the first occurrence in s of any of the Unicode
+code points in chars.  It returns -1 if chars is empty or if there is no code
+point in common.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexByte">func <a href="/src/bytes/bytes_decl.go?s=287:323#L1">IndexByte</a></h2>
+			<pre>func IndexByte(s []<a href="/pkg/builtin/#byte">byte</a>, c <a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+IndexByte returns the index of the first instance of c in s, or -1 if c is not present in s.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexFunc">func <a href="/src/bytes/bytes.go?s=13704:13753#L503">IndexFunc</a></h2>
+			<pre>func IndexFunc(s []<a href="/pkg/builtin/#byte">byte</a>, f func(r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+IndexFunc interprets s as a sequence of UTF-8-encoded Unicode code points.
+It returns the byte index in s of the first Unicode
+code point satisfying f(c), or -1 if none do.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="IndexRune">func <a href="/src/bytes/bytes.go?s=2665:2701#L133">IndexRune</a></h2>
+			<pre>func IndexRune(s []<a href="/pkg/builtin/#byte">byte</a>, r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+IndexRune interprets s as a sequence of UTF-8-encoded Unicode code points.
+It returns the byte index of the first occurrence in s of the given rune.
+It returns -1 if rune is not present in s.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Join">func <a href="/src/bytes/bytes.go?s=7549:7589#L300">Join</a></h2>
+			<pre>func Join(s [][]<a href="/pkg/builtin/#byte">byte</a>, sep []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Join concatenates the elements of s to create a new byte slice. The separator
+sep is placed between elements in the resulting slice.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="LastIndex">func <a href="/src/bytes/bytes.go?s=2246:2279#L116">LastIndex</a></h2>
+			<pre>func LastIndex(s, sep []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+LastIndex returns the index of the last instance of sep in s, or -1 if sep is not present in s.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="LastIndexAny">func <a href="/src/bytes/bytes.go?s=3687:3732#L173">LastIndexAny</a></h2>
+			<pre>func LastIndexAny(s []<a href="/pkg/builtin/#byte">byte</a>, chars <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+LastIndexAny interprets s as a sequence of UTF-8-encoded Unicode code
+points.  It returns the byte index of the last occurrence in s of any of
+the Unicode code points in chars.  It returns -1 if chars is empty or if
+there is no code point in common.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="LastIndexFunc">func <a href="/src/bytes/bytes.go?s=13974:14027#L510">LastIndexFunc</a></h2>
+			<pre>func LastIndexFunc(s []<a href="/pkg/builtin/#byte">byte</a>, f func(r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#bool">bool</a>) <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+LastIndexFunc interprets s as a sequence of UTF-8-encoded Unicode code points.
+It returns the byte index in s of the last Unicode
+code point satisfying f(c), or -1 if none do.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Map">func <a href="/src/bytes/bytes.go?s=8578:8630#L336">Map</a></h2>
+			<pre>func Map(mapping func(r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#rune">rune</a>, s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Map returns a copy of the byte slice s with all its characters modified
+according to the mapping function. If mapping returns a negative value, the character is
+dropped from the string with no replacement.  The characters in s and the
+output are interpreted as UTF-8-encoded Unicode code points.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Repeat">func <a href="/src/bytes/bytes.go?s=9503:9542#L370">Repeat</a></h2>
+			<pre>func Repeat(b []<a href="/pkg/builtin/#byte">byte</a>, count <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Repeat returns a new byte slice consisting of count copies of b.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Replace">func <a href="/src/bytes/bytes.go?s=16454:16500#L604">Replace</a></h2>
+			<pre>func Replace(s, old, new []<a href="/pkg/builtin/#byte">byte</a>, n <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Replace returns a copy of the slice s with the first n
+non-overlapping instances of old replaced by new.
+If old is empty, it matches at the beginning of the slice
+and after each UTF-8 sequence, yielding up to k+1 replacements
+for a k-rune slice.
+If n &lt; 0, there is no limit on the number of replacements.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Runes">func <a href="/src/bytes/bytes.go?s=15963:15990#L586">Runes</a></h2>
+			<pre>func Runes(s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#rune">rune</a></pre>
+			<p>
+Runes returns a slice of runes (Unicode code points) equivalent to s.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Split">func <a href="/src/bytes/bytes.go?s=5701:5735#L240">Split</a></h2>
+			<pre>func Split(s, sep []<a href="/pkg/builtin/#byte">byte</a>) [][]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Split slices s into all subslices separated by sep and returns a slice of
+the subslices between those separators.
+If sep is empty, Split splits after each UTF-8 sequence.
+It is equivalent to SplitN with a count of -1.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SplitAfter">func <a href="/src/bytes/bytes.go?s=6004:6043#L246">SplitAfter</a></h2>
+			<pre>func SplitAfter(s, sep []<a href="/pkg/builtin/#byte">byte</a>) [][]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+SplitAfter slices s into all subslices after each instance of sep and
+returns a slice of those subslices.
+If sep is empty, SplitAfter splits after each UTF-8 sequence.
+It is equivalent to SplitAfterN with a count of -1.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SplitAfterN">func <a href="/src/bytes/bytes.go?s=5380:5427#L232">SplitAfterN</a></h2>
+			<pre>func SplitAfterN(s, sep []<a href="/pkg/builtin/#byte">byte</a>, n <a href="/pkg/builtin/#int">int</a>) [][]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+SplitAfterN slices s into subslices after each instance of sep and
+returns a slice of those subslices.
+If sep is empty, SplitAfterN splits after each UTF-8 sequence.
+The count determines the number of subslices to return:
+</p>
+<pre>n &gt; 0: at most n subslices; the last subslice will be the unsplit remainder.
+n == 0: the result is nil (zero subslices)
+n &lt; 0: all subslices
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SplitN">func <a href="/src/bytes/bytes.go?s=4912:4954#L223">SplitN</a></h2>
+			<pre>func SplitN(s, sep []<a href="/pkg/builtin/#byte">byte</a>, n <a href="/pkg/builtin/#int">int</a>) [][]<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+SplitN slices s into subslices separated by sep and returns a slice of
+the subslices between those separators.
+If sep is empty, SplitN splits after each UTF-8 sequence.
+The count determines the number of subslices to return:
+</p>
+<pre>n &gt; 0: at most n subslices; the last subslice will be the unsplit remainder.
+n == 0: the result is nil (zero subslices)
+n &lt; 0: all subslices
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Title">func <a href="/src/bytes/bytes.go?s=11869:11896#L436">Title</a></h2>
+			<pre>func Title(s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Title returns a copy of s with all Unicode letters that begin words
+mapped to their title case.
+</p>
+<p>
+BUG: The rule Title uses for word boundaries does not handle Unicode punctuation properly.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ToLower">func <a href="/src/bytes/bytes.go?s=9934:9963#L384">ToLower</a></h2>
+			<pre>func ToLower(s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+ToLower returns a copy of the byte slice s with all Unicode letters mapped to their lower case.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ToLowerSpecial">func <a href="/src/bytes/bytes.go?s=10604:10667#L397">ToLowerSpecial</a></h2>
+			<pre>func ToLowerSpecial(_case <a href="/pkg/unicode/">unicode</a>.<a href="/pkg/unicode/#SpecialCase">SpecialCase</a>, s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+ToLowerSpecial returns a copy of the byte slice s with all Unicode letters mapped to their
+lower case, giving priority to the special casing rules.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ToTitle">func <a href="/src/bytes/bytes.go?s=10099:10128#L387">ToTitle</a></h2>
+			<pre>func ToTitle(s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+ToTitle returns a copy of the byte slice s with all Unicode letters mapped to their title case.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ToTitleSpecial">func <a href="/src/bytes/bytes.go?s=10889:10952#L403">ToTitleSpecial</a></h2>
+			<pre>func ToTitleSpecial(_case <a href="/pkg/unicode/">unicode</a>.<a href="/pkg/unicode/#SpecialCase">SpecialCase</a>, s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+ToTitleSpecial returns a copy of the byte slice s with all Unicode letters mapped to their
+title case, giving priority to the special casing rules.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ToUpper">func <a href="/src/bytes/bytes.go?s=9769:9798#L381">ToUpper</a></h2>
+			<pre>func ToUpper(s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+ToUpper returns a copy of the byte slice s with all Unicode letters mapped to their upper case.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="ToUpperSpecial">func <a href="/src/bytes/bytes.go?s=10319:10382#L391">ToUpperSpecial</a></h2>
+			<pre>func ToUpperSpecial(_case <a href="/pkg/unicode/">unicode</a>.<a href="/pkg/unicode/#SpecialCase">SpecialCase</a>, s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+ToUpperSpecial returns a copy of the byte slice s with all Unicode letters mapped to their
+upper case, giving priority to the special casing rules.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Trim">func <a href="/src/bytes/bytes.go?s=15156:15197#L563">Trim</a></h2>
+			<pre>func Trim(s []<a href="/pkg/builtin/#byte">byte</a>, cutset <a href="/pkg/builtin/#string">string</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+Trim returns a subslice of s by slicing off all leading and
+trailing UTF-8-encoded Unicode code points contained in cutset.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimFunc">func <a href="/src/bytes/bytes.go?s=12936:12987#L478">TrimFunc</a></h2>
+			<pre>func TrimFunc(s []<a href="/pkg/builtin/#byte">byte</a>, f func(r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimFunc returns a subslice of s by slicing off all leading and trailing
+UTF-8-encoded Unicode code points c that satisfy f(c).
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimLeft">func <a href="/src/bytes/bytes.go?s=15368:15413#L569">TrimLeft</a></h2>
+			<pre>func TrimLeft(s []<a href="/pkg/builtin/#byte">byte</a>, cutset <a href="/pkg/builtin/#string">string</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimLeft returns a subslice of s by slicing off all leading
+UTF-8-encoded Unicode code points contained in cutset.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimLeftFunc">func <a href="/src/bytes/bytes.go?s=12328:12383#L455">TrimLeftFunc</a></h2>
+			<pre>func TrimLeftFunc(s []<a href="/pkg/builtin/#byte">byte</a>, f func(r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimLeftFunc returns a subslice of s by slicing off all leading UTF-8-encoded
+Unicode code points c that satisfy f(c).
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimPrefix">func <a href="/src/bytes/bytes.go?s=13166:13206#L484">TrimPrefix</a></h2>
+			<pre>func TrimPrefix(s, prefix []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimPrefix returns s without the provided leading prefix string.
+If s doesn&#39;t start with prefix, s is returned unchanged.
+</p>
+
+			<div id="example_TrimPrefix" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	var b = []byte(&#34;Goodbye,, world!&#34;)
+	b = bytes.TrimPrefix(b, []byte(&#34;Goodbye,&#34;))
+	b = bytes.TrimPrefix(b, []byte(&#34;See ya,&#34;))
+	fmt.Printf(&#34;Hello%s&#34;, b)
+}
+</textarea></div>
+				<div class="output"><pre>Hello, world!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+		
+			
+			
+			<h2 id="TrimRight">func <a href="/src/bytes/bytes.go?s=15599:15645#L575">TrimRight</a></h2>
+			<pre>func TrimRight(s []<a href="/pkg/builtin/#byte">byte</a>, cutset <a href="/pkg/builtin/#string">string</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimRight returns a subslice of s by slicing off all trailing
+UTF-8-encoded Unicode code points that are contained in cutset.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimRightFunc">func <a href="/src/bytes/bytes.go?s=12589:12645#L465">TrimRightFunc</a></h2>
+			<pre>func TrimRightFunc(s []<a href="/pkg/builtin/#byte">byte</a>, f func(r <a href="/pkg/builtin/#rune">rune</a>) <a href="/pkg/builtin/#bool">bool</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimRightFunc returns a subslice of s by slicing off all trailing UTF-8
+encoded Unicode code points c that satisfy f(c).
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimSpace">func <a href="/src/bytes/bytes.go?s=15816:15847#L581">TrimSpace</a></h2>
+			<pre>func TrimSpace(s []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimSpace returns a subslice of s by slicing off all leading and
+trailing white space, as defined by Unicode.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="TrimSuffix">func <a href="/src/bytes/bytes.go?s=13404:13444#L493">TrimSuffix</a></h2>
+			<pre>func TrimSuffix(s, suffix []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+TrimSuffix returns s without the provided trailing suffix string.
+If s doesn&#39;t end with suffix, s is returned unchanged.
+</p>
+
+			<div id="example_TrimSuffix" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	var b = []byte(&#34;Hello, goodbye, etc!&#34;)
+	b = bytes.TrimSuffix(b, []byte(&#34;goodbye, etc!&#34;))
+	b = bytes.TrimSuffix(b, []byte(&#34;gopher&#34;))
+	b = append(b, bytes.TrimSuffix([]byte(&#34;world!&#34;), []byte(&#34;x!&#34;))...)
+	os.Stdout.Write(b)
+}
+</textarea></div>
+				<div class="output"><pre>Hello, world!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+
+		
+		
+			
+			
+			<h2 id="Buffer">type <a href="/src/bytes/buffer.go?s=402:854#L7">Buffer</a></h2>
+			<pre>type Buffer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Buffer is a variable-sized buffer of bytes with Read and Write methods.
+The zero value for Buffer is an empty buffer ready to use.
+</p>
+
+
+			
+
+			
+
+			<div id="example_Buffer" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;fmt&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	var b bytes.Buffer // A Buffer needs no initialization.
+	b.Write([]byte(&#34;Hello &#34;))
+	fmt.Fprintf(&amp;b, &#34;world!&#34;)
+	b.WriteTo(os.Stdout)
+}
+</textarea></div>
+				<div class="output"><pre>Hello world!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+<div id="example_Buffer_reader" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (Reader)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (Reader)</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;encoding/base64&#34;
+	&#34;io&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	// A Buffer can turn a string or a []byte into an io.Reader.
+	buf := bytes.NewBufferString(&#34;R29waGVycyBydWxlIQ==&#34;)
+	dec := base64.NewDecoder(base64.StdEncoding, buf)
+	io.Copy(os.Stdout, dec)
+}
+</textarea></div>
+				<div class="output"><pre>Gophers rule!
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+			
+
+			
+				
+				<h3 id="NewBuffer">func <a href="/src/bytes/buffer.go?s=12724:12758#L392">NewBuffer</a></h3>
+				<pre>func NewBuffer(buf []<a href="/pkg/builtin/#byte">byte</a>) *<a href="#Buffer">Buffer</a></pre>
+				<p>
+NewBuffer creates and initializes a new Buffer using buf as its initial
+contents.  It is intended to prepare a Buffer to read existing data.  It
+can also be used to size the internal buffer for writing. To do that,
+buf should have the desired capacity but a length of zero.
+</p>
+<p>
+In most cases, new(Buffer) (or just declaring a Buffer variable) is
+sufficient to initialize a Buffer.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewBufferString">func <a href="/src/bytes/buffer.go?s=13066:13104#L400">NewBufferString</a></h3>
+				<pre>func NewBufferString(s <a href="/pkg/builtin/#string">string</a>) *<a href="#Buffer">Buffer</a></pre>
+				<p>
+NewBufferString creates and initializes a new Buffer using string s as its
+initial contents. It is intended to prepare a buffer to read an existing
+string.
+</p>
+<p>
+In most cases, new(Buffer) (or just declaring a Buffer variable) is
+sufficient to initialize a Buffer.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Buffer.Bytes">func (*Buffer) <a href="/src/bytes/buffer.go?s=1593:1624#L33">Bytes</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Bytes() []<a href="/pkg/builtin/#byte">byte</a></pre>
+				<p>
+Bytes returns a slice of the contents of the unread portion of the buffer;
+len(b.Bytes()) == b.Len().  If the caller changes the contents of the
+returned slice, the contents of the buffer will change provided there
+are no intervening method calls on the Buffer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Grow">func (*Buffer) <a href="/src/bytes/buffer.go?s=3813:3841#L104">Grow</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Grow(n <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+Grow grows the buffer&#39;s capacity, if necessary, to guarantee space for
+another n bytes. After Grow(n), at least n bytes can be written to the
+buffer without another allocation.
+If n is negative, Grow will panic.
+If the buffer can&#39;t grow it will panic with ErrTooLarge.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Len">func (*Buffer) <a href="/src/bytes/buffer.go?s=2032:2058#L47">Len</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Len() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Len returns the number of bytes of the unread portion of the buffer;
+b.Len() == len(b.Bytes()).
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Next">func (*Buffer) <a href="/src/bytes/buffer.go?s=8709:8744#L263">Next</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Next(n <a href="/pkg/builtin/#int">int</a>) []<a href="/pkg/builtin/#byte">byte</a></pre>
+				<p>
+Next returns a slice containing the next n bytes from the buffer,
+advancing the buffer as if the bytes had been returned by Read.
+If there are fewer than n bytes in the buffer, Next returns the entire buffer.
+The slice is only valid until the next call to a read or write method.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Read">func (*Buffer) <a href="/src/bytes/buffer.go?s=8109:8159#L241">Read</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Read(p []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Read reads the next len(p) bytes from the buffer or until the buffer
+is drained.  The return value n is the number of bytes read.  If the
+buffer has no data to return, err is io.EOF (unless len(p) is zero);
+otherwise it is nil.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.ReadByte">func (*Buffer) <a href="/src/bytes/buffer.go?s=9019:9066#L279">ReadByte</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) ReadByte() (c <a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadByte reads and returns the next byte from the buffer.
+If no byte is available, it returns error io.EOF.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.ReadBytes">func (*Buffer) <a href="/src/bytes/buffer.go?s=11238:11301#L352">ReadBytes</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) ReadBytes(delim <a href="/pkg/builtin/#byte">byte</a>) (line []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadBytes reads until the first occurrence of delim in the input,
+returning a slice containing the data up to and including the delimiter.
+If ReadBytes encounters an error before finding a delimiter,
+it returns the data read before the error and the error itself (often io.EOF).
+ReadBytes returns err != nil if and only if the returned data does not end in
+delim.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.ReadFrom">func (*Buffer) <a href="/src/bytes/buffer.go?s=5207:5266#L140">ReadFrom</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) ReadFrom(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) (n <a href="/pkg/builtin/#int64">int64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadFrom reads data from r until EOF and appends it to the buffer, growing
+the buffer as needed. The return value n is the number of bytes read. Any
+error except io.EOF encountered during the read is also returned. If the
+buffer becomes too large, ReadFrom will panic with ErrTooLarge.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.ReadRune">func (*Buffer) <a href="/src/bytes/buffer.go?s=9517:9574#L297">ReadRune</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) ReadRune() (r <a href="/pkg/builtin/#rune">rune</a>, size <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadRune reads and returns the next UTF-8-encoded
+Unicode code point from the buffer.
+If no bytes are available, the error returned is io.EOF.
+If the bytes are an erroneous UTF-8 encoding, it
+consumes one byte and returns U+FFFD, 1.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.ReadString">func (*Buffer) <a href="/src/bytes/buffer.go?s=12195:12259#L380">ReadString</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) ReadString(delim <a href="/pkg/builtin/#byte">byte</a>) (line <a href="/pkg/builtin/#string">string</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadString reads until the first occurrence of delim in the input,
+returning a string containing the data up to and including the delimiter.
+If ReadString encounters an error before finding a delimiter,
+it returns the data read before the error and the error itself (often io.EOF).
+ReadString returns err != nil if and only if the returned data does not end
+in delim.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Reset">func (*Buffer) <a href="/src/bytes/buffer.go?s=2556:2580#L65">Reset</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Reset()</pre>
+				<p>
+Reset resets the buffer so it has no content.
+b.Reset() is the same as b.Truncate(0).
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.String">func (*Buffer) <a href="/src/bytes/buffer.go?s=1787:1819#L37">String</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+String returns the contents of the unread portion of the buffer
+as a string.  If the Buffer is a nil pointer, it returns &#34;&lt;nil&gt;&#34;.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Truncate">func (*Buffer) <a href="/src/bytes/buffer.go?s=2233:2265#L51">Truncate</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Truncate(n <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+Truncate discards all but the first n unread bytes from the buffer.
+It panics if n is negative or greater than the length of the buffer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.UnreadByte">func (*Buffer) <a href="/src/bytes/buffer.go?s=10609:10644#L335">UnreadByte</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) UnreadByte() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+UnreadByte unreads the last byte returned by the most recent
+read operation.  If write has happened since the last read, UnreadByte
+returns an error.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.UnreadRune">func (*Buffer) <a href="/src/bytes/buffer.go?s=10176:10211#L320">UnreadRune</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) UnreadRune() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+UnreadRune unreads the last rune returned by ReadRune.
+If the most recent read or write operation on the buffer was
+not a ReadRune, UnreadRune returns an error.  (In this regard
+it is stricter than UnreadByte, which will unread the last byte
+from any read operation.)
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.Write">func (*Buffer) <a href="/src/bytes/buffer.go?s=4155:4206#L115">Write</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) Write(p []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Write appends the contents of p to the buffer, growing the buffer as
+needed. The return value n is the length of p; err is always nil. If the
+buffer becomes too large, Write will panic with ErrTooLarge.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.WriteByte">func (*Buffer) <a href="/src/bytes/buffer.go?s=7260:7300#L216">WriteByte</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) WriteByte(c <a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+WriteByte appends the byte c to the buffer, growing the buffer as needed.
+The returned error is always nil, but is included to match bufio.Writer&#39;s
+WriteByte. If the buffer becomes too large, WriteByte will panic with
+ErrTooLarge.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.WriteRune">func (*Buffer) <a href="/src/bytes/buffer.go?s=7661:7714#L227">WriteRune</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) WriteRune(r <a href="/pkg/builtin/#rune">rune</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+WriteRune appends the UTF-8 encoding of Unicode code point r to the
+buffer, returning its length and an error, which is always nil but is
+included to match bufio.Writer&#39;s WriteRune. The buffer is grown as needed;
+if it becomes too large, WriteRune will panic with ErrTooLarge.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.WriteString">func (*Buffer) <a href="/src/bytes/buffer.go?s=4513:4570#L124">WriteString</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) WriteString(s <a href="/pkg/builtin/#string">string</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+WriteString appends the contents of s to the buffer, growing the buffer as
+needed. The return value n is the length of s; err is always nil. If the
+buffer becomes too large, WriteString will panic with ErrTooLarge.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Buffer.WriteTo">func (*Buffer) <a href="/src/bytes/buffer.go?s=6512:6570#L188">WriteTo</a></h3>
+				<pre>func (b *<a href="#Buffer">Buffer</a>) WriteTo(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) (n <a href="/pkg/builtin/#int64">int64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+WriteTo writes data to w until the buffer is drained or an error occurs.
+The return value n is the number of bytes written; it always fits into an
+int, but it is int64 to match the io.WriterTo interface. Any error
+encountered during the write is also returned.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/bytes/reader.go?s=440:570#L7">Reader</a></h2>
+			<pre>type Reader struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Reader implements the io.Reader, io.ReaderAt, io.WriterTo, io.Seeker,
+io.ByteScanner, and io.RuneScanner interfaces by reading from
+a byte slice.
+Unlike a Buffer, a Reader is read-only and supports seeking.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="/src/bytes/reader.go?s=2977:3009#L134">NewReader</a></h3>
+				<pre>func NewReader(b []<a href="/pkg/builtin/#byte">byte</a>) *<a href="#Reader">Reader</a></pre>
+				<p>
+NewReader returns a new Reader reading from b.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Reader.Len">func (*Reader) <a href="/src/bytes/reader.go?s=646:672#L15">Len</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Len() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Len returns the number of bytes of the unread portion of the
+slice.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Reader.Read">func (*Reader) <a href="/src/bytes/reader.go?s=756:806#L22">Read</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Read(b []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadAt">func (*Reader) <a href="/src/bytes/reader.go?s=966:1029#L35">ReadAt</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadAt(b []<a href="/pkg/builtin/#byte">byte</a>, off <a href="/pkg/builtin/#int64">int64</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadByte">func (*Reader) <a href="/src/bytes/reader.go?s=1275:1322#L50">ReadByte</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadByte() (b <a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Reader.ReadRune">func (*Reader) <a href="/src/bytes/reader.go?s=1590:1648#L69">ReadRune</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) ReadRune() (ch <a href="/pkg/builtin/#rune">rune</a>, size <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Reader.Seek">func (*Reader) <a href="/src/bytes/reader.go?s=2138:2200#L94">Seek</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) Seek(offset <a href="/pkg/builtin/#int64">int64</a>, whence <a href="/pkg/builtin/#int">int</a>) (<a href="/pkg/builtin/#int64">int64</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Seek implements the io.Seeker interface.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Reader.UnreadByte">func (*Reader) <a href="/src/bytes/reader.go?s=1425:1460#L60">UnreadByte</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) UnreadByte() <a href="/pkg/builtin/#error">error</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Reader.UnreadRune">func (*Reader) <a href="/src/bytes/reader.go?s=1891:1926#L84">UnreadRune</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) UnreadRune() <a href="/pkg/builtin/#error">error</a></pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="Reader.WriteTo">func (*Reader) <a href="/src/bytes/reader.go?s=2588:2646#L115">WriteTo</a></h3>
+				<pre>func (r *<a href="#Reader">Reader</a>) WriteTo(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) (n <a href="/pkg/builtin/#int64">int64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+WriteTo implements the io.WriterTo interface.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

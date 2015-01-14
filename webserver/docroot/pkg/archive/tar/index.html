@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>tar - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package tar</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "archive/tar"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package tar implements access to tar archives.
+It aims to cover most of the variations, including those produced
+by GNU and BSD tars.
+</p>
+<p>
+References:
+</p>
+<pre><a href="http://www.freebsd.org/cgi/man.cgi?query=tar&amp;sektion=5">http://www.freebsd.org/cgi/man.cgi?query=tar&amp;sektion=5</a>
+<a href="http://www.gnu.org/software/tar/manual/html_node/Standard.html">http://www.gnu.org/software/tar/manual/html_node/Standard.html</a>
+<a href="http://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html">http://pubs.opengroup.org/onlinepubs/9699919799/utilities/pax.html</a>
+</pre>
+
+			</div>
+		</div>
+		<div id="example_" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;archive/tar&#34;
+	&#34;bytes&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+	&#34;log&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	// Create a buffer to write our archive to.
+	buf := new(bytes.Buffer)
+
+	// Create a new tar archive.
+	tw := tar.NewWriter(buf)
+
+	// Add some files to the archive.
+	var files = []struct {
+		Name, Body string
+	}{
+		{&#34;readme.txt&#34;, &#34;This archive contains some text files.&#34;},
+		{&#34;gopher.txt&#34;, &#34;Gopher names:\nGeorge\nGeoffrey\nGonzo&#34;},
+		{&#34;todo.txt&#34;, &#34;Get animal handling licence.&#34;},
+	}
+	for _, file := range files {
+		hdr := &amp;tar.Header{
+			Name: file.Name,
+			Size: int64(len(file.Body)),
+		}
+		if err := tw.WriteHeader(hdr); err != nil {
+			log.Fatalln(err)
+		}
+		if _, err := tw.Write([]byte(file.Body)); err != nil {
+			log.Fatalln(err)
+		}
+	}
+	// Make sure to check the error on Close.
+	if err := tw.Close(); err != nil {
+		log.Fatalln(err)
+	}
+
+	// Open the tar archive for reading.
+	r := bytes.NewReader(buf.Bytes())
+	tr := tar.NewReader(r)
+
+	// Iterate through the files in the archive.
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			// end of tar archive
+			break
+		}
+		if err != nil {
+			log.Fatalln(err)
+		}
+		fmt.Printf(&#34;Contents of %s:\n&#34;, hdr.Name)
+		if _, err := io.Copy(os.Stdout, tr); err != nil {
+			log.Fatalln(err)
+		}
+		fmt.Println()
+	}
+
+}
+</textarea></div>
+				<div class="output"><pre>Contents of readme.txt:
+This archive contains some text files.
+Contents of gopher.txt:
+Gopher names:
+George
+Geoffrey
+Gonzo
+Contents of todo.txt:
+Get animal handling licence.
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+			
+				
+				<dd><a href="#Header">type Header</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileInfoHeader">func FileInfoHeader(fi os.FileInfo, link string) (*Header, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Header.FileInfo">func (h *Header) FileInfo() os.FileInfo</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(r io.Reader) *Reader</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Next">func (tr *Reader) Next() (*Header, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Reader.Read">func (tr *Reader) Read(b []byte) (n int, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer) *Writer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (tw *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (tw *Writer) Flush() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Write">func (tw *Writer) Write(b []byte) (n int, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.WriteHeader">func (tw *Writer) WriteHeader(hdr *Header) error</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_">Package</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/archive/tar/common.go">common.go</a>
+			
+				<a href="/src/archive/tar/reader.go">reader.go</a>
+			
+				<a href="/src/archive/tar/stat_atim.go">stat_atim.go</a>
+			
+				<a href="/src/archive/tar/stat_unix.go">stat_unix.go</a>
+			
+				<a href="/src/archive/tar/writer.go">writer.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+
+        <span class="comment">// Types</span>
+        <span id="TypeReg">TypeReg</span>           = &#39;0&#39;    <span class="comment">// regular file</span>
+        <span id="TypeRegA">TypeRegA</span>          = &#39;\x00&#39; <span class="comment">// regular file</span>
+        <span id="TypeLink">TypeLink</span>          = &#39;1&#39;    <span class="comment">// hard link</span>
+        <span id="TypeSymlink">TypeSymlink</span>       = &#39;2&#39;    <span class="comment">// symbolic link</span>
+        <span id="TypeChar">TypeChar</span>          = &#39;3&#39;    <span class="comment">// character device node</span>
+        <span id="TypeBlock">TypeBlock</span>         = &#39;4&#39;    <span class="comment">// block device node</span>
+        <span id="TypeDir">TypeDir</span>           = &#39;5&#39;    <span class="comment">// directory</span>
+        <span id="TypeFifo">TypeFifo</span>          = &#39;6&#39;    <span class="comment">// fifo node</span>
+        <span id="TypeCont">TypeCont</span>          = &#39;7&#39;    <span class="comment">// reserved</span>
+        <span id="TypeXHeader">TypeXHeader</span>       = &#39;x&#39;    <span class="comment">// extended header</span>
+        <span id="TypeXGlobalHeader">TypeXGlobalHeader</span> = &#39;g&#39;    <span class="comment">// global extended header</span>
+        <span id="TypeGNULongName">TypeGNULongName</span>   = &#39;L&#39;    <span class="comment">// Next file has a long name</span>
+        <span id="TypeGNULongLink">TypeGNULongLink</span>   = &#39;K&#39;    <span class="comment">// Next file symlinks to a file w/ a long name</span>
+        <span id="TypeGNUSparse">TypeGNUSparse</span>     = &#39;S&#39;    <span class="comment">// sparse file</span>
+)</pre>
+				
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span id="ErrWriteTooLong">ErrWriteTooLong</span>    = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;archive/tar: write too long&#34;)
+        <span id="ErrFieldTooLong">ErrFieldTooLong</span>    = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;archive/tar: header field too long&#34;)
+        <span id="ErrWriteAfterClose">ErrWriteAfterClose</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;archive/tar: write after close&#34;)
+)</pre>
+				
+			
+				<pre>var (
+        <span id="ErrHeader">ErrHeader</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;archive/tar: invalid tar header&#34;)
+)</pre>
+				
+			
+		
+		
+		
+			
+			
+			<h2 id="Header">type <a href="/src/archive/tar/common.go?s=1401:2114#L36">Header</a></h2>
+			<pre>type Header struct {
+        Name       <a href="/pkg/builtin/#string">string</a>    <span class="comment">// name of header file entry</span>
+        Mode       <a href="/pkg/builtin/#int64">int64</a>     <span class="comment">// permission and mode bits</span>
+        Uid        <a href="/pkg/builtin/#int">int</a>       <span class="comment">// user id of owner</span>
+        Gid        <a href="/pkg/builtin/#int">int</a>       <span class="comment">// group id of owner</span>
+        Size       <a href="/pkg/builtin/#int64">int64</a>     <span class="comment">// length in bytes</span>
+        ModTime    <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a> <span class="comment">// modified time</span>
+        Typeflag   <a href="/pkg/builtin/#byte">byte</a>      <span class="comment">// type of header entry</span>
+        Linkname   <a href="/pkg/builtin/#string">string</a>    <span class="comment">// target name of link</span>
+        Uname      <a href="/pkg/builtin/#string">string</a>    <span class="comment">// user name of owner</span>
+        Gname      <a href="/pkg/builtin/#string">string</a>    <span class="comment">// group name of owner</span>
+        Devmajor   <a href="/pkg/builtin/#int64">int64</a>     <span class="comment">// major number of character or block device</span>
+        Devminor   <a href="/pkg/builtin/#int64">int64</a>     <span class="comment">// minor number of character or block device</span>
+        AccessTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a> <span class="comment">// access time</span>
+        ChangeTime <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a> <span class="comment">// status change time</span>
+        Xattrs     map[<a href="/pkg/builtin/#string">string</a>]<a href="/pkg/builtin/#string">string</a>
+}</pre>
+			<p>
+A Header represents a single header in a tar archive.
+Some fields may not be populated.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="FileInfoHeader">func <a href="/src/archive/tar/common.go?s=5722:5787#L194">FileInfoHeader</a></h3>
+				<pre>func FileInfoHeader(fi <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>, link <a href="/pkg/builtin/#string">string</a>) (*<a href="#Header">Header</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+FileInfoHeader creates a partially-populated Header from fi.
+If fi describes a symlink, FileInfoHeader records link as the link target.
+If fi describes a directory, a slash is appended to the name.
+Because os.FileInfo&#39;s Name method returns only the base name of
+the file it describes, it may be necessary to modify the Name field
+of the returned header to provide the full path name of the file.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Header.FileInfo">func (*Header) <a href="/src/archive/tar/common.go?s=2367:2406#L61">FileInfo</a></h3>
+				<pre>func (h *<a href="#Header">Header</a>) FileInfo() <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a></pre>
+				<p>
+FileInfo returns an os.FileInfo for the Header.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/archive/tar/reader.go?s=680:931#L21">Reader</a></h2>
+			<pre>type Reader struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Reader provides sequential access to the contents of a tar archive.
+A tar archive consists of a sequence of files.
+The Next method advances to the next file in the archive (including the first),
+and then it can be treated as an io.Reader to access the file&#39;s data.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="/src/archive/tar/reader.go?s=2591:2626#L75">NewReader</a></h3>
+				<pre>func NewReader(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) *<a href="#Reader">Reader</a></pre>
+				<p>
+NewReader creates a new Reader reading from r.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Reader.Next">func (*Reader) <a href="/src/archive/tar/reader.go?s=2708:2749#L78">Next</a></h3>
+				<pre>func (tr *<a href="#Reader">Reader</a>) Next() (*<a href="#Header">Header</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Next advances to the next entry in the tar archive.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Reader.Read">func (*Reader) <a href="/src/archive/tar/reader.go?s=20274:20325#L719">Read</a></h3>
+				<pre>func (tr *<a href="#Reader">Reader</a>) Read(b []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Read reads from the current entry in the tar archive.
+It returns 0, io.EOF when it reaches the end of that entry,
+until Next is called to advance to the next entry.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/archive/tar/writer.go?s=959:1519#L24">Writer</a></h2>
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Writer provides sequential writing of a tar archive in POSIX.1 format.
+A tar archive consists of a sequence of files.
+Call WriteHeader to begin a new file, and then call Write to supply that file&#39;s data,
+writing at most hdr.Size bytes in total.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/archive/tar/writer.go?s=1569:1604#L37">NewWriter</a></h3>
+				<pre>func NewWriter(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter creates a new Writer writing to w.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="/src/archive/tar/writer.go?s=11566:11597#L368">Close</a></h3>
+				<pre>func (tw *<a href="#Writer">Writer</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the tar archive, flushing any unwritten
+data to the underlying writer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/archive/tar/writer.go?s=1686:1717#L40">Flush</a></h3>
+				<pre>func (tw *<a href="#Writer">Writer</a>) Flush() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Flush finishes writing the current file (optional).
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Write">func (*Writer) <a href="/src/archive/tar/writer.go?s=11148:11200#L346">Write</a></h3>
+				<pre>func (tw *<a href="#Writer">Writer</a>) Write(b []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Write writes to the current entry in the tar archive.
+Write returns the error ErrWriteTooLong if more than
+hdr.Size bytes are written after WriteHeader.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.WriteHeader">func (*Writer) <a href="/src/archive/tar/writer.go?s=4024:4072#L128">WriteHeader</a></h3>
+				<pre>func (tw *<a href="#Writer">Writer</a>) WriteHeader(hdr *<a href="#Header">Header</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+WriteHeader writes hdr and prepares to accept the file&#39;s contents.
+WriteHeader calls Flush if it is not the first header.
+Calling after a Close will return ErrWriteAfterClose.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

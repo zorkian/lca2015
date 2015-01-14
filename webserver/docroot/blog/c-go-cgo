@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>C? Go? Cgo! - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/gobs-of-data">Gobs of data</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/go-becomes-more-stable">Go becomes more stable</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/c-go-cgo">C? Go? Cgo!</a></h3>
+		<p class="date">17 March 2011</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    Cgo lets Go packages call C code. Given a Go source file written with some special features, cgo outputs Go and C files that can be combined into a single Go package.
+  </p>
+  
+
+  
+  <p>
+    To lead with an example, here&#39;s a Go package that provides two functions - <code>Random</code> and <code>Seed</code> - that wrap C&#39;s <code>random</code> and <code>srandom</code> functions.
+  </p>
+  
+
+  
+  <div class="code"><pre>package rand
+
+/*
+#include &lt;stdlib.h&gt;
+*/
+import &#34;C&#34;
+
+func Random() int {
+    return int(C.random())
+}
+
+func Seed(i int) {
+    C.srandom(C.uint(i))
+}</pre></div>
+  
+
+  
+  <p>
+    Let&#39;s look at what&#39;s happening here, starting with the import statement.
+  </p>
+  
+
+  
+  <p>
+    The <code>rand</code> package imports <code>&#34;C&#34;</code>, but you&#39;ll find there&#39;s no such package in the standard Go library. That&#39;s because <code>C</code> is a &#34;pseudo-package&#34;, a special name interpreted by cgo as a reference to C&#39;s name space.
+  </p>
+  
+
+  
+  <p>
+    The <code>rand</code> package contains four references to the <code>C</code> package: the calls to <code>C.random</code> and <code>C.srandom</code>, the conversion <code>C.uint(i)</code>, and the <code>import</code> statement.
+  </p>
+  
+
+  
+  <p>
+    The <code>Random</code> function calls the standard C library&#39;s <code>random</code> function and returns the result.  In C, <code>random</code> returns a value of the C type <code>long</code>, which cgo represents as the type <code>C.long</code>. It must be converted to a Go type before it can be used by Go code outside this package, using an ordinary Go type conversion:
+  </p>
+  
+
+  
+  <div class="code"><pre>func Random() int {
+    return int(C.random())
+}</pre></div>
+  
+
+  
+  <p>
+    Here&#39;s an equivalent function that uses a temporary variable to illustrate the type conversion more explicitly:
+  </p>
+  
+
+  
+  <div class="code"><pre>func Random() int {
+    var r C.long = C.random()
+    return int(r)
+}</pre></div>
+  
+
+  
+  <p>
+    The <code>Seed</code> function does the reverse, in a way. It takes a regular Go <code>int</code>, converts it to the C <code>unsigned int</code> type, and passes it to the C function <code>srandom</code>.
+  </p>
+  
+
+  
+  <div class="code"><pre>func Seed(i int) {
+    C.srandom(C.uint(i))
+}</pre></div>
+  
+
+  
+  <p>
+    Note that cgo knows the <code>unsigned int</code> type as <code>C.uint</code>; see the <a href="http://golang.org/cmd/cgo" target="_blank">cgo documentation</a> for a complete list of these numeric type names.
+  </p>
+  
+
+  
+  <p>
+    The one detail of this example we haven&#39;t examined yet is the comment above the <code>import</code> statement.
+  </p>
+  
+
+  
+  <div class="code"><pre>/*
+#include &lt;stdlib.h&gt;
+*/
+import &#34;C&#34;</pre></div>
+  
+
+  
+  <p>
+    Cgo recognizes this comment.  Any lines starting with <code>#cgo</code> followed by a space character are removed; these become directives for cgo. The remaining lines are used as a header when compiling the C parts of the package.  In this case those lines are just a single <code>#include</code> statement, but they can be almost any C code.  The <code>#cgo</code> directives are used to provide flags for the compiler and linker when building the C parts of the package.
+  </p>
+  
+
+  
+  <p>
+    There is a limitation: if your program uses any <code>//export</code> directives, then the C code in the comment may only include declarations (<code>extern int f();</code>), not definitions (<code>int f() { return 1; }</code>).  You can use <code>//export</code> directives to make Go functions accessible to C code.
+  </p>
+  
+
+  
+  <p>
+    The <code>#cgo</code> and <code>//export</code> directives are documented in the <a href="http://golang.org/cmd/cgo/" target="_blank">cgo documentation</a>.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">Strings and things</h4>
+  
+  
+  <p>
+    Unlike Go, C doesn&#39;t have an explicit string type. Strings in C are represented by a zero-terminated array of chars.
+  </p>
+  
+
+  
+  <p>
+    Conversion between Go and C strings is done with the <code>C.CString</code>, <code>C.GoString</code>, and <code>C.GoStringN</code> functions. These conversions make a copy of the string data.
+  </p>
+  
+
+  
+  <p>
+    This next example implements a <code>Print</code> function that writes a string to standard output using C&#39;s <code>fputs</code> function from the <code>stdio</code> library:
+  </p>
+  
+
+  
+  <div class="code"><pre>package print
+
+// #include &lt;stdio.h&gt;
+// #include &lt;stdlib.h&gt;
+import &#34;C&#34;
+import &#34;unsafe&#34;
+
+func Print(s string) {
+    cs := C.CString(s)
+    C.fputs(cs, (*C.FILE)(C.stdout))
+    C.free(unsafe.Pointer(cs))
+}</pre></div>
+  
+
+  
+  <p>
+    Memory allocations made by C code are not known to Go&#39;s memory manager. When you create a C string with <code>C.CString</code> (or any C memory allocation) you must remember to free the memory when you&#39;re done with it by calling <code>C.free</code>.
+  </p>
+  
+
+  
+  <p>
+    The call to <code>C.CString</code> returns a pointer to the start of the char array, so before the function exits we convert it to an <a href="http://golang.org/pkg/unsafe/#Pointer" target="_blank"><code>unsafe.Pointer</code></a> and release the memory allocation with <code>C.free</code>. A common idiom in cgo programs is to <a href="http://golang.org/doc/articles/defer_panic_recover.html" target="_blank"><code>defer</code></a> the free immediately after allocating (especially when the code that follows is more complex than a single function call), as in this rewrite of <code>Print</code>:
+  </p>
+  
+
+  
+  <div class="code"><pre>func Print(s string) {
+    cs := C.CString(s)
+    defer C.free(unsafe.Pointer(cs))
+    C.fputs(cs, (*C.FILE)(C.stdout))
+}</pre></div>
+  
+
+
+    
+      
+  <h4 id="TOC_3.">Building cgo packages</h4>
+  
+  
+  <p>
+    To build cgo packages, just use <a href="http://golang.org/cmd/go/#Compile_packages_and_dependencies" target="_blank"><code>go build</code></a> or <a href="http://golang.org/cmd/go/#Compile_and_install_packages_and_dependencies" target="_blank"><code>go install</code></a> as usual. The go tool recognizes the special <code>&#34;C&#34;</code> import and automatically uses cgo for those files.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_4.">More cgo resources</h4>
+  
+  
+  <p>
+    The <a href="http://golang.org/cmd/cgo/" target="_blank">cgo command</a> documentation has more detail about the C pseudo-package and the build process. The <a href="http://golang.org/misc/cgo/" target="_blank">cgo examples</a> in the Go tree demonstrate more advanced concepts.
+  </p>
+  
+
+  
+  <p>
+    For a simple, idiomatic example of a cgo-based package, see Russ Cox&#39;s <a href="http://code.google.com/p/gosqlite/source/browse/sqlite/sqlite.go" target="_blank">gosqlite</a>. Also, the Go Project Dashboard lists <a href="https://godashboard.appspot.com/project?tag=cgo" target="_blank">several other cgo packages</a>.
+  </p>
+  
+
+  
+  <p>
+    Finally, if you&#39;re curious as to how all this works internally, take a look at the introductory comment of the runtime package&#39;s <a href="http://golang.org/src/pkg/runtime/cgocall.c" target="_blank">cgocall.c</a>.
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

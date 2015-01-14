@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Gobs of data - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/c-go-cgo">C? Go? Cgo!</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/gobs-of-data">Gobs of data</a></h3>
+		<p class="date">24 March 2011</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    To transmit a data structure across a network or to store it in a file, it must be encoded and then decoded again. There are many encodings available, of course: <a href="http://www.json.org/" target="_blank">JSON</a>, <a href="http://www.w3.org/XML/" target="_blank">XML</a>, Google&#39;s <a href="http://code.google.com/p/protobuf" target="_blank">protocol buffers</a>, and more. And now there&#39;s another, provided by Go&#39;s <a href="http://golang.org/pkg/encoding/gob/" target="_blank">gob</a> package.
+  </p>
+  
+
+  
+  <p>
+    Why define a new encoding? It&#39;s a lot of work and redundant at that. Why not just use one of the existing formats? Well, for one thing, we do! Go has <a href="http://golang.org/pkg/" target="_blank">packages</a> supporting all the encodings just mentioned (the <a href="http://code.google.com/p/goprotobuf" target="_blank">protocol buffer package</a> is in a separate repository but it&#39;s one of the most frequently downloaded). And for many purposes, including communicating with tools and systems written in other languages, they&#39;re the right choice.
+  </p>
+  
+
+  
+  <p>
+    But for a Go-specific environment, such as communicating between two servers written in Go, there&#39;s an opportunity to build something much easier to use and possibly more efficient.
+  </p>
+  
+
+  
+  <p>
+    Gobs work with the language in a way that an externally-defined, language-independent encoding cannot. At the same time, there are lessons to be learned from the existing systems.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">Goals</h4>
+  
+  
+  <p>
+    The gob package was designed with a number of goals in mind.
+  </p>
+  
+
+  
+  <p>
+    First, and most obvious, it had to be very easy to use. First, because Go has reflection, there is no need for a separate interface definition language or &#34;protocol compiler&#34;. The data structure itself is all the package should need to figure out how to encode and decode it. On the other hand, this approach means that gobs will never work as well with other languages, but that&#39;s OK: gobs are unashamedly Go-centric.
+  </p>
+  
+
+  
+  <p>
+    Efficiency is also important. Textual representations, exemplified by XML and JSON, are too slow to put at the center of an efficient communications network. A binary encoding is necessary.
+  </p>
+  
+
+  
+  <p>
+    Gob streams must be self-describing. Each gob stream, read from the beginning, contains sufficient information that the entire stream can be parsed by an agent that knows nothing a priori about its contents. This property means that you will always be able to decode a gob stream stored in a file, even long after you&#39;ve forgotten what data it represents.
+  </p>
+  
+
+  
+  <p>
+    There were also some things to learn from our experiences with Google protocol buffers.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_3.">Protocol buffer misfeatures</h4>
+  
+  
+  <p>
+    Protocol buffers had a major effect on the design of gobs, but have three features that were deliberately avoided. (Leaving aside the property that protocol buffers aren&#39;t self-describing: if you don&#39;t know the data definition used to encode a protocol buffer, you might not be able to parse it.)
+  </p>
+  
+
+  
+  <p>
+    First, protocol buffers only work on the data type we call a struct in Go. You can&#39;t encode an integer or array at the top level, only a struct with fields inside it. That seems a pointless restriction, at least in Go. If all you want to send is an array of integers, why should you have to put it into a struct first?
+  </p>
+  
+
+  
+  <p>
+    Next, a protocol buffer definition may specify that fields <code>T.x</code> and <code>T.y</code> are required to be present whenever a value of type <code>T</code> is encoded or decoded.  Although such required fields may seem like a good idea, they are costly to implement because the codec must maintain a separate data structure while encoding and decoding, to be able to report when required fields are missing.  They&#39;re also a maintenance problem. Over time, one may want to modify the data definition to remove a required field, but that may cause existing clients of the data to crash. It&#39;s better not to have them in the encoding at all.  (Protocol buffers also have optional fields. But if we don&#39;t have required fields, all fields are optional and that&#39;s that. There will be more to say about optional fields a little later.)
+  </p>
+  
+
+  
+  <p>
+    The third protocol buffer misfeature is default values. If a protocol buffer omits the value for a &#34;defaulted&#34; field, then the decoded structure behaves as if the field were set to that value. This idea works nicely when you have getter and setter methods to control access to the field, but is harder to handle cleanly when the container is just a plain idiomatic struct. Required fields are also tricky to implement: where does one define the default values, what types do they have (is text UTF-8? uninterpreted bytes? how many bits in a float?) and despite the apparent simplicity, there were a number of complications in their design and implementation for protocol buffers. We decided to leave them out of gobs and fall back to Go&#39;s trivial but effective defaulting rule: unless you set something otherwise, it has the &#34;zero value&#34; for that type - and it doesn&#39;t need to be transmitted.
+  </p>
+  
+
+  
+  <p>
+    So gobs end up looking like a sort of generalized, simplified protocol buffer. How do they work?
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_4.">Values</h4>
+  
+  
+  <p>
+    The encoded gob data isn&#39;t about types like <code>int8</code> and <code>uint16</code>. Instead, somewhat analogous to constants in Go, its integer values are abstract, sizeless numbers, either signed or unsigned. When you encode an <code>int8</code>, its value is transmitted as an unsized, variable-length integer. When you encode an <code>int64</code>, its value is also transmitted as an unsized, variable-length integer. (Signed and unsigned are treated distinctly, but the same unsized-ness applies to unsigned values too.) If both have the value 7, the bits sent on the wire will be identical. When the receiver decodes that value, it puts it into the receiver&#39;s variable, which may be of arbitrary integer type. Thus an encoder may send a 7 that came from an <code>int8</code>, but the receiver may store it in an <code>int64</code>. This is fine: the value is an integer and as a long as it fits, everything works. (If it doesn&#39;t fit, an error results.) This decoupling from the size of the variable gives some flexibility to the encoding: we can expand the type of the integer variable as the software evolves, but still be able to decode old data.
+  </p>
+  
+
+  
+  <p>
+    This flexibility also applies to pointers. Before transmission, all pointers are flattened. Values of type <code>int8</code>, <code>*int8</code>, <code>**int8</code>, <code>****int8</code>, etc. are all transmitted as an integer value, which may then be stored in <code>int</code> of any size, or <code>*int</code>, or <code>******int</code>, etc. Again, this allows for flexibility.
+  </p>
+  
+
+  
+  <p>
+    Flexibility also happens because, when decoding a struct, only those fields that are sent by the encoder are stored in the destination. Given the value
+  </p>
+  
+
+  
+  <div class="code"><pre>type T struct{ X, Y, Z int } // Only exported fields are encoded and decoded.
+var t = T{X: 7, Y: 0, Z: 8}</pre></div>
+  
+
+  
+  <p>
+    the encoding of <code>t</code> sends only the 7 and 8. Because it&#39;s zero, the value of <code>Y</code> isn&#39;t even sent; there&#39;s no need to send a zero value.
+  </p>
+  
+
+  
+  <p>
+    The receiver could instead decode the value into this structure:
+  </p>
+  
+
+  
+  <div class="code"><pre>type U struct{ X, Y *int8 } // Note: pointers to int8s
+var u U</pre></div>
+  
+
+  
+  <p>
+    and acquire a value of <code>u</code> with only <code>X</code> set (to the address of an <code>int8</code> variable set to 7); the <code>Z</code> field is ignored - where would you put it? When decoding structs, fields are matched by name and compatible type, and only fields that exist in both are affected. This simple approach finesses the &#34;optional field&#34; problem: as the type <code>T</code> evolves by adding fields, out of date receivers will still function with the part of the type they recognize. Thus gobs provide the important result of optional fields - extensibility - without any additional mechanism or notation.
+  </p>
+  
+
+  
+  <p>
+    From integers we can build all the other types: bytes, strings, arrays, slices, maps, even floats. Floating-point values are represented by their IEEE 754 floating-point bit pattern, stored as an integer, which works fine as long as you know their type, which we always do. By the way, that integer is sent in byte-reversed order because common values of floating-point numbers, such as small integers, have a lot of zeros at the low end that we can avoid transmitting.
+  </p>
+  
+
+  
+  <p>
+    One nice feature of gobs that Go makes possible is that they allow you to define your own encoding by having your type satisfy the <a href="http://golang.org/pkg/encoding/gob/#GobEncoder" target="_blank">GobEncoder</a> and <a href="http://golang.org/pkg/encoding/gob/#GobDecoder" target="_blank">GobDecoder</a> interfaces, in a manner analogous to the <a href="http://golang.org/pkg/encoding/json/" target="_blank">JSON</a> package&#39;s <a href="http://golang.org/pkg/encoding/json/#Marshaler" target="_blank">Marshaler</a> and <a href="http://golang.org/pkg/encoding/json/#Unmarshaler" target="_blank">Unmarshaler</a> and also to the <a href="http://golang.org/pkg/fmt/#Stringer" target="_blank">Stringer</a> interface from <a href="http://golang.org/pkg/fmt/" target="_blank">package fmt</a>. This facility makes it possible to represent special features, enforce constraints, or hide secrets when you transmit data. See the <a href="http://golang.org/pkg/encoding/gob/" target="_blank">documentation</a> for details.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_5.">Types on the wire</h4>
+  
+  
+  <p>
+    The first time you send a given type, the gob package includes in the data stream a description of that type. In fact, what happens is that the encoder is used to encode, in the standard gob encoding format, an internal struct that describes the type and gives it a unique number. (Basic types, plus the layout of the type description structure, are predefined by the software for bootstrapping.) After the type is described, it can be referenced by its type number.
+  </p>
+  
+
+  
+  <p>
+    Thus when we send our first type <code>T</code>, the gob encoder sends a description of <code>T</code> and tags it with a type number, say 127. All values, including the first, are then prefixed by that number, so a stream of <code>T</code> values looks like:
+  </p>
+  
+
+  
+  <div class="code"><pre>(&#34;define type id&#34; 127, definition of type T)(127, T value)(127, T value), ...</pre></div>
+  
+
+  
+  <p>
+    These type numbers make it possible to describe recursive types and send values of those types. Thus gobs can encode types such as trees:
+  </p>
+  
+
+  
+  <div class="code"><pre>type Node struct {
+    Value       int
+    Left, Right *Node
+}</pre></div>
+  
+
+  
+  <p>
+    (It&#39;s an exercise for the reader to discover how the zero-defaulting rule makes this work, even though gobs don&#39;t represent pointers.)
+  </p>
+  
+
+  
+  <p>
+    With the type information, a gob stream is fully self-describing except for the set of bootstrap types, which is a well-defined starting point.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_6.">Compiling a machine</h4>
+  
+  
+  <p>
+    The first time you encode a value of a given type, the gob package builds a little interpreted machine specific to that data type. It uses reflection on the type to construct that machine, but once the machine is built it does not depend on reflection. The machine uses package unsafe and some trickery to convert the data into the encoded bytes at high speed. It could use reflection and avoid unsafe, but would be significantly slower. (A similar high-speed approach is taken by the protocol buffer support for Go, whose design was influenced by the implementation of gobs.) Subsequent values of the same type use the already-compiled machine, so they can be encoded right away.
+  </p>
+  
+
+  
+  <p>
+    Decoding is similar but harder. When you decode a value, the gob package holds a byte slice representing a value of a given encoder-defined type to decode, plus a Go value into which to decode it. The gob package builds a machine for that pair: the gob type sent on the wire crossed with the Go type provided for decoding. Once that decoding machine is built, though, it&#39;s again a reflectionless engine that uses unsafe methods to get maximum speed.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_7.">Use</h4>
+  
+  
+  <p>
+    There&#39;s a lot going on under the hood, but the result is an efficient, easy-to-use encoding system for transmitting data. Here&#39;s a complete example showing differing encoded and decoded types. Note how easy it is to send and receive values; all you need to do is present values and variables to the <a href="http://golang.org/pkg/encoding/gob/" target="_blank">gob package</a> and it does all the work.
+  </p>
+  
+
+  
+  <div class="code"><pre>package main
+
+import (
+    &#34;bytes&#34;
+    &#34;encoding/gob&#34;
+    &#34;fmt&#34;
+    &#34;log&#34;
+)
+
+type P struct {
+    X, Y, Z int
+    Name    string
+}
+
+type Q struct {
+    X, Y *int32
+    Name string
+}
+
+func main() {
+    // Initialize the encoder and decoder.  Normally enc and dec would be
+    // bound to network connections and the encoder and decoder would
+    // run in different processes.
+    var network bytes.Buffer        // Stand-in for a network connection
+    enc := gob.NewEncoder(&amp;network) // Will write to network.
+    dec := gob.NewDecoder(&amp;network) // Will read from network.
+    // Encode (send) the value.
+    err := enc.Encode(P{3, 4, 5, &#34;Pythagoras&#34;})
+    if err != nil {
+        log.Fatal(&#34;encode error:&#34;, err)
+    }
+    // Decode (receive) the value.
+    var q Q
+    err = dec.Decode(&amp;q)
+    if err != nil {
+        log.Fatal(&#34;decode error:&#34;, err)
+    }
+    fmt.Printf(&#34;%q: {%d,%d}\n&#34;, q.Name, *q.X, *q.Y)
+}</pre></div>
+  
+
+  
+  <p>
+    You can compile and run this example code in the <a href="http://play.golang.org/p/_-OJV-rwMq" target="_blank">Go Playground</a>.
+  </p>
+  
+
+  
+  <p>
+    The <a href="http://golang.org/pkg/net/rpc/" target="_blank">rpc package</a> builds on gobs to turn this encode/decode automation into transport for method calls across the network. That&#39;s a subject for another article.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_8.">Details</h4>
+  
+  
+  <p>
+    The <a href="http://golang.org/pkg/encoding/gob/" target="_blank">gob package documentation</a>, especially the file <a href="http://golang.org/src/pkg/encoding/gob/doc.go" target="_blank">doc.go</a>, expands on many of the details described here and includes a full worked example showing how the encoding represents data. If you are interested in the innards of the gob implementation, that&#39;s a good place to start.
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Rob Pike</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+			<li><a href="/third-party-libraries-goprotobuf-and">Third-party libraries: goprotobuf and beyond</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

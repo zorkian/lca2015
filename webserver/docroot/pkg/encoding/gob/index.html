@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>gob - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package gob</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "encoding/gob"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package gob manages streams of gobs - binary values exchanged between an
+Encoder (transmitter) and a Decoder (receiver).  A typical use is transporting
+arguments and results of remote procedure calls (RPCs) such as those provided by
+package &#34;rpc&#34;.
+</p>
+<p>
+The implementation compiles a custom codec for each data type in the stream and
+is most efficient when a single Encoder is used to transmit a stream of values,
+amortizing the cost of compilation.
+</p>
+<h3 id="hdr-Basics">Basics</h3>
+<p>
+A stream of gobs is self-describing.  Each data item in the stream is preceded by
+a specification of its type, expressed in terms of a small set of predefined
+types.  Pointers are not transmitted, but the things they point to are
+transmitted; that is, the values are flattened.  Recursive types work fine, but
+recursive values (data with cycles) are problematic.  This may change.
+</p>
+<p>
+To use gobs, create an Encoder and present it with a series of data items as
+values or addresses that can be dereferenced to values.  The Encoder makes sure
+all type information is sent before it is needed.  At the receive side, a
+Decoder retrieves values from the encoded stream and unpacks them into local
+variables.
+</p>
+<h3 id="hdr-Types_and_Values">Types and Values</h3>
+<p>
+The source and destination values/types need not correspond exactly.  For structs,
+fields (identified by name) that are in the source but absent from the receiving
+variable will be ignored.  Fields that are in the receiving variable but missing
+from the transmitted type or value will be ignored in the destination.  If a field
+with the same name is present in both, their types must be compatible. Both the
+receiver and transmitter will do all necessary indirection and dereferencing to
+convert between gobs and actual Go values.  For instance, a gob type that is
+schematically,
+</p>
+<pre>struct { A, B int }
+</pre>
+<p>
+can be sent from or received into any of these Go types:
+</p>
+<pre>struct { A, B int }	// the same
+*struct { A, B int }	// extra indirection of the struct
+struct { *A, **B int }	// extra indirection of the fields
+struct { A, B int64 }	// different concrete value type; see below
+</pre>
+<p>
+It may also be received into any of these:
+</p>
+<pre>struct { A, B int }	// the same
+struct { B, A int }	// ordering doesn&#39;t matter; matching is by name
+struct { A, B, C int }	// extra field (C) ignored
+struct { B int }	// missing field (A) ignored; data will be dropped
+struct { B, C int }	// missing field (A) ignored; extra field (C) ignored.
+</pre>
+<p>
+Attempting to receive into these types will draw a decode error:
+</p>
+<pre>struct { A int; B uint }	// change of signedness for B
+struct { A int; B float }	// change of type for B
+struct { }			// no field names in common
+struct { C, D int }		// no field names in common
+</pre>
+<p>
+Integers are transmitted two ways: arbitrary precision signed integers or
+arbitrary precision unsigned integers.  There is no int8, int16 etc.
+discrimination in the gob format; there are only signed and unsigned integers.  As
+described below, the transmitter sends the value in a variable-length encoding;
+the receiver accepts the value and stores it in the destination variable.
+Floating-point numbers are always sent using IEEE-754 64-bit precision (see
+below).
+</p>
+<p>
+Signed integers may be received into any signed integer variable: int, int16, etc.;
+unsigned integers may be received into any unsigned integer variable; and floating
+point values may be received into any floating point variable.  However,
+the destination variable must be able to represent the value or the decode
+operation will fail.
+</p>
+<p>
+Structs, arrays and slices are also supported. Structs encode and decode only
+exported fields. Strings and arrays of bytes are supported with a special,
+efficient representation (see below). When a slice is decoded, if the existing
+slice has capacity the slice will be extended in place; if not, a new array is
+allocated. Regardless, the length of the resulting slice reports the number of
+elements decoded.
+</p>
+<p>
+Functions and channels will not be sent in a gob. Attempting to encode such a value
+at top the level will fail. A struct field of chan or func type is treated exactly
+like an unexported field and is ignored.
+</p>
+<p>
+Gob can encode a value of any type implementing the GobEncoder or
+encoding.BinaryMarshaler interfaces by calling the corresponding method,
+in that order of preference.
+</p>
+<p>
+Gob can decode a value of any type implementing the GobDecoder or
+encoding.BinaryUnmarshaler interfaces by calling the corresponding method,
+again in that order of preference.
+</p>
+<h3 id="hdr-Encoding_Details">Encoding Details</h3>
+<p>
+This section documents the encoding, details that are not important for most
+users. Details are presented bottom-up.
+</p>
+<p>
+An unsigned integer is sent one of two ways.  If it is less than 128, it is sent
+as a byte with that value.  Otherwise it is sent as a minimal-length big-endian
+(high byte first) byte stream holding the value, preceded by one byte holding the
+byte count, negated.  Thus 0 is transmitted as (00), 7 is transmitted as (07) and
+256 is transmitted as (FE 01 00).
+</p>
+<p>
+A boolean is encoded within an unsigned integer: 0 for false, 1 for true.
+</p>
+<p>
+A signed integer, i, is encoded within an unsigned integer, u.  Within u, bits 1
+upward contain the value; bit 0 says whether they should be complemented upon
+receipt.  The encode algorithm looks like this:
+</p>
+<pre>uint u;
+if i &lt; 0 {
+	u = (^i &lt;&lt; 1) | 1	// complement i, bit 0 is 1
+} else {
+	u = (i &lt;&lt; 1)	// do not complement i, bit 0 is 0
+}
+encodeUnsigned(u)
+</pre>
+<p>
+The low bit is therefore analogous to a sign bit, but making it the complement bit
+instead guarantees that the largest negative integer is not a special case.  For
+example, -129=^128=(^256&gt;&gt;1) encodes as (FE 01 01).
+</p>
+<p>
+Floating-point numbers are always sent as a representation of a float64 value.
+That value is converted to a uint64 using math.Float64bits.  The uint64 is then
+byte-reversed and sent as a regular unsigned integer.  The byte-reversal means the
+exponent and high-precision part of the mantissa go first.  Since the low bits are
+often zero, this can save encoding bytes.  For instance, 17.0 is encoded in only
+three bytes (FE 31 40).
+</p>
+<p>
+Strings and slices of bytes are sent as an unsigned count followed by that many
+uninterpreted bytes of the value.
+</p>
+<p>
+All other slices and arrays are sent as an unsigned count followed by that many
+elements using the standard gob encoding for their type, recursively.
+</p>
+<p>
+Maps are sent as an unsigned count followed by that many key, element
+pairs. Empty but non-nil maps are sent, so if the sender has allocated
+a map, the receiver will allocate a map even if no elements are
+transmitted.
+</p>
+<p>
+Structs are sent as a sequence of (field number, field value) pairs.  The field
+value is sent using the standard gob encoding for its type, recursively.  If a
+field has the zero value for its type, it is omitted from the transmission.  The
+field number is defined by the type of the encoded struct: the first field of the
+encoded type is field 0, the second is field 1, etc.  When encoding a value, the
+field numbers are delta encoded for efficiency and the fields are always sent in
+order of increasing field number; the deltas are therefore unsigned.  The
+initialization for the delta encoding sets the field number to -1, so an unsigned
+integer field 0 with value 7 is transmitted as unsigned delta = 1, unsigned value
+= 7 or (01 07).  Finally, after all the fields have been sent a terminating mark
+denotes the end of the struct.  That mark is a delta=0 value, which has
+representation (00).
+</p>
+<p>
+Interface types are not checked for compatibility; all interface types are
+treated, for transmission, as members of a single &#34;interface&#34; type, analogous to
+int or []byte - in effect they&#39;re all treated as interface{}.  Interface values
+are transmitted as a string identifying the concrete type being sent (a name
+that must be pre-defined by calling Register), followed by a byte count of the
+length of the following data (so the value can be skipped if it cannot be
+stored), followed by the usual encoding of concrete (dynamic) value stored in
+the interface value.  (A nil interface value is identified by the empty string
+and transmits no value.) Upon receipt, the decoder verifies that the unpacked
+concrete item satisfies the interface of the receiving variable.
+</p>
+<p>
+The representation of types is described below.  When a type is defined on a given
+connection between an Encoder and Decoder, it is assigned a signed integer type
+id.  When Encoder.Encode(v) is called, it makes sure there is an id assigned for
+the type of v and all its elements and then it sends the pair (typeid, encoded-v)
+where typeid is the type id of the encoded type of v and encoded-v is the gob
+encoding of the value v.
+</p>
+<p>
+To define a type, the encoder chooses an unused, positive type id and sends the
+pair (-type id, encoded-type) where encoded-type is the gob encoding of a wireType
+description, constructed from these types:
+</p>
+<pre>type wireType struct {
+	ArrayT  *ArrayType
+	SliceT  *SliceType
+	StructT *StructType
+	MapT    *MapType
+}
+type arrayType struct {
+	CommonType
+	Elem typeId
+	Len  int
+}
+type CommonType struct {
+	Name string // the name of the struct type
+	Id  int    // the id of the type, repeated so it&#39;s inside the type
+}
+type sliceType struct {
+	CommonType
+	Elem typeId
+}
+type structType struct {
+	CommonType
+	Field []*fieldType // the fields of the struct.
+}
+type fieldType struct {
+	Name string // the name of the field.
+	Id   int    // the type id of the field, which must be already defined
+}
+type mapType struct {
+	CommonType
+	Key  typeId
+	Elem typeId
+}
+</pre>
+<p>
+If there are nested type ids, the types for all inner type ids must be defined
+before the top-level type id is used to describe an encoded-v.
+</p>
+<p>
+For simplicity in setup, the connection is defined to understand these types a
+priori, as well as the basic gob types int, uint, etc.  Their ids are:
+</p>
+<pre>bool        1
+int         2
+uint        3
+float       4
+[]byte      5
+string      6
+complex     7
+interface   8
+// gap for reserved ids.
+WireType    16
+ArrayType   17
+CommonType  18
+SliceType   19
+StructType  20
+FieldType   21
+// 22 is slice of fieldType.
+MapType     23
+</pre>
+<p>
+Finally, each message created by a call to Encode is preceded by an encoded
+unsigned integer count of the number of bytes remaining in the message.  After
+the initial type name, interface values are wrapped the same way; in effect, the
+interface value acts like a recursive invocation of Encode.
+</p>
+<p>
+In summary, a gob stream looks like
+</p>
+<pre>(byteCount (-type id, encoding of a wireType)* (type id, encoding of a value))*
+</pre>
+<p>
+where * signifies zero or more repetitions and the type id of a value must
+be predefined or be defined before the value in the stream.
+</p>
+<p>
+See &#34;Gobs of data&#34; for a design discussion of the gob wire format:
+<a href="http://golang.org/doc/articles/gobs_of_data.html">http://golang.org/doc/articles/gobs_of_data.html</a>
+</p>
+
+			</div>
+		</div>
+		<div id="example__basic" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (Basic)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (Basic)</span></p>
+		<p>This example shows the basic usage of the package: Create an encoder,
+transmit some values, receive them with a decoder.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;encoding/gob&#34;
+	&#34;fmt&#34;
+	&#34;log&#34;
+)
+
+type P struct {
+	X, Y, Z int
+	Name    string
+}
+
+type Q struct {
+	X, Y *int32
+	Name string
+}
+
+// This example shows the basic usage of the package: Create an encoder,
+// transmit some values, receive them with a decoder.
+func main() {
+	// Initialize the encoder and decoder.  Normally enc and dec would be
+	// bound to network connections and the encoder and decoder would
+	// run in different processes.
+	var network bytes.Buffer        // Stand-in for a network connection
+	enc := gob.NewEncoder(&amp;network) // Will write to network.
+	dec := gob.NewDecoder(&amp;network) // Will read from network.
+
+	// Encode (send) some values.
+	err := enc.Encode(P{3, 4, 5, &#34;Pythagoras&#34;})
+	if err != nil {
+		log.Fatal(&#34;encode error:&#34;, err)
+	}
+	err = enc.Encode(P{1782, 1841, 1922, &#34;Treehouse&#34;})
+	if err != nil {
+		log.Fatal(&#34;encode error:&#34;, err)
+	}
+
+	// Decode (receive) and print the values.
+	var q Q
+	err = dec.Decode(&amp;q)
+	if err != nil {
+		log.Fatal(&#34;decode error 1:&#34;, err)
+	}
+	fmt.Printf(&#34;%q: {%d, %d}\n&#34;, q.Name, *q.X, *q.Y)
+	err = dec.Decode(&amp;q)
+	if err != nil {
+		log.Fatal(&#34;decode error 2:&#34;, err)
+	}
+	fmt.Printf(&#34;%q: {%d, %d}\n&#34;, q.Name, *q.X, *q.Y)
+
+}
+</textarea></div>
+				<div class="output"><pre>&#34;Pythagoras&#34;: {3, 4}
+&#34;Treehouse&#34;: {1782, 1841}
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+<div id="example__encodeDecode" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (EncodeDecode)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (EncodeDecode)</span></p>
+		<p>This example transmits a value that implements the custom encoding and decoding methods.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;encoding/gob&#34;
+	&#34;fmt&#34;
+	&#34;log&#34;
+)
+
+// The Vector type has unexported fields, which the package cannot access.
+// We therefore write a BinaryMarshal/BinaryUnmarshal method pair to allow us
+// to send and receive the type with the gob package. These interfaces are
+// defined in the &#34;encoding&#34; package.
+// We could equivalently use the locally defined GobEncode/GobDecoder
+// interfaces.
+type Vector struct {
+	x, y, z int
+}
+
+func (v Vector) MarshalBinary() ([]byte, error) {
+	// A simple encoding: plain text.
+	var b bytes.Buffer
+	fmt.Fprintln(&amp;b, v.x, v.y, v.z)
+	return b.Bytes(), nil
+}
+
+// UnmarshalBinary modifies the receiver so it must take a pointer receiver.
+func (v *Vector) UnmarshalBinary(data []byte) error {
+	// A simple encoding: plain text.
+	b := bytes.NewBuffer(data)
+	_, err := fmt.Fscanln(b, &amp;v.x, &amp;v.y, &amp;v.z)
+	return err
+}
+
+// This example transmits a value that implements the custom encoding and decoding methods.
+func main() {
+	var network bytes.Buffer // Stand-in for the network.
+
+	// Create an encoder and send a value.
+	enc := gob.NewEncoder(&amp;network)
+	err := enc.Encode(Vector{3, 4, 5})
+	if err != nil {
+		log.Fatal(&#34;encode:&#34;, err)
+	}
+
+	// Create a decoder and receive a value.
+	dec := gob.NewDecoder(&amp;network)
+	var v Vector
+	err = dec.Decode(&amp;v)
+	if err != nil {
+		log.Fatal(&#34;decode:&#34;, err)
+	}
+	fmt.Println(v)
+
+}
+</textarea></div>
+				<div class="output"><pre>{3 4 5}
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+<div id="example__interface" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (Interface)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (Interface)</span></p>
+		<p>This example shows how to encode an interface value. The key
+distinction from regular types is to register the concrete type that
+implements the interface.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;bytes&#34;
+	&#34;encoding/gob&#34;
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;math&#34;
+)
+
+type Point struct {
+	X, Y int
+}
+
+func (p Point) Hypotenuse() float64 {
+	return math.Hypot(float64(p.X), float64(p.Y))
+}
+
+type Pythagoras interface {
+	Hypotenuse() float64
+}
+
+// This example shows how to encode an interface value. The key
+// distinction from regular types is to register the concrete type that
+// implements the interface.
+func main() {
+	var network bytes.Buffer // Stand-in for the network.
+
+	// We must register the concrete type for the encoder and decoder (which would
+	// normally be on a separate machine from the encoder). On each end, this tells the
+	// engine which concrete type is being sent that implements the interface.
+	gob.Register(Point{})
+
+	// Create an encoder and send some values.
+	enc := gob.NewEncoder(&amp;network)
+	for i := 1; i &lt;= 3; i++ {
+		interfaceEncode(enc, Point{3 * i, 4 * i})
+	}
+
+	// Create a decoder and receive some values.
+	dec := gob.NewDecoder(&amp;network)
+	for i := 1; i &lt;= 3; i++ {
+		result := interfaceDecode(dec)
+		fmt.Println(result.Hypotenuse())
+	}
+
+}
+
+// interfaceEncode encodes the interface value into the encoder.
+func interfaceEncode(enc *gob.Encoder, p Pythagoras) {
+	// The encode will fail unless the concrete type has been
+	// registered. We registered it in the calling function.
+
+	// Pass pointer to interface so Encode sees (and hence sends) a value of
+	// interface type.  If we passed p directly it would see the concrete type instead.
+	// See the blog post, &#34;The Laws of Reflection&#34; for background.
+	err := enc.Encode(&amp;p)
+	if err != nil {
+		log.Fatal(&#34;encode:&#34;, err)
+	}
+}
+
+// interfaceDecode decodes the next interface value from the stream and returns it.
+func interfaceDecode(dec *gob.Decoder) Pythagoras {
+	// The decode will fail unless the concrete type on the wire has been
+	// registered. We registered it in the calling function.
+	var p Pythagoras
+	err := dec.Decode(&amp;p)
+	if err != nil {
+		log.Fatal(&#34;decode:&#34;, err)
+	}
+	return p
+}
+</textarea></div>
+				<div class="output"><pre>5
+10
+15
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Register">func Register(value interface{})</a></dd>
+			
+				
+				<dd><a href="#RegisterName">func RegisterName(name string, value interface{})</a></dd>
+			
+			
+				
+				<dd><a href="#CommonType">type CommonType</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Decoder">type Decoder</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewDecoder">func NewDecoder(r io.Reader) *Decoder</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.Decode">func (dec *Decoder) Decode(e interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Decoder.DecodeValue">func (dec *Decoder) DecodeValue(v reflect.Value) error</a></dd>
+				
+			
+				
+				<dd><a href="#Encoder">type Encoder</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewEncoder">func NewEncoder(w io.Writer) *Encoder</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoder.Encode">func (enc *Encoder) Encode(e interface{}) error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Encoder.EncodeValue">func (enc *Encoder) EncodeValue(value reflect.Value) error</a></dd>
+				
+			
+				
+				<dd><a href="#GobDecoder">type GobDecoder</a></dd>
+				
+				
+			
+				
+				<dd><a href="#GobEncoder">type GobEncoder</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example__basic">Package (Basic)</a></dd>
+			
+			<dd><a class="exampleLink" href="#example__encodeDecode">Package (EncodeDecode)</a></dd>
+			
+			<dd><a class="exampleLink" href="#example__interface">Package (Interface)</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/encoding/gob/dec_helpers.go">dec_helpers.go</a>
+			
+				<a href="/src/encoding/gob/decode.go">decode.go</a>
+			
+				<a href="/src/encoding/gob/decoder.go">decoder.go</a>
+			
+				<a href="/src/encoding/gob/doc.go">doc.go</a>
+			
+				<a href="/src/encoding/gob/enc_helpers.go">enc_helpers.go</a>
+			
+				<a href="/src/encoding/gob/encode.go">encode.go</a>
+			
+				<a href="/src/encoding/gob/encoder.go">encoder.go</a>
+			
+				<a href="/src/encoding/gob/error.go">error.go</a>
+			
+				<a href="/src/encoding/gob/type.go">type.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="Register">func <a href="/src/encoding/gob/type.go?s=25464:25496#L836">Register</a></h2>
+			<pre>func Register(value interface{})</pre>
+			<p>
+Register records a type, identified by a value for that type, under its
+internal type name.  That name will identify the concrete type of a value
+sent or received as an interface variable.  Only types that will be
+transferred as implementations of interface values need to be registered.
+Expecting to be used only during initialization, it panics if the mapping
+between types and names is not a bijection.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="RegisterName">func <a href="/src/encoding/gob/type.go?s=24183:24232#L808">RegisterName</a></h2>
+			<pre>func RegisterName(name <a href="/pkg/builtin/#string">string</a>, value interface{})</pre>
+			<p>
+RegisterName is like Register but uses the provided name rather than the
+type&#39;s default.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="CommonType">type <a href="/src/encoding/gob/type.go?s=7067:7119#L216">CommonType</a></h2>
+			<pre>type CommonType struct {
+        Name <a href="/pkg/builtin/#string">string</a>
+        Id   typeId
+}</pre>
+			<p>
+CommonType holds elements of all types.
+It is a historical artifact, kept for binary compatibility and exported
+only for the benefit of the package&#39;s encoding of type descriptors. It is
+not intended for direct use by clients.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Decoder">type <a href="/src/encoding/gob/decoder.go?s=533:1316#L12">Decoder</a></h2>
+			<pre>type Decoder struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Decoder manages the receipt of type and data information read from the
+remote side of a connection.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewDecoder">func <a href="/src/encoding/gob/decoder.go?s=1473:1510#L27">NewDecoder</a></h3>
+				<pre>func NewDecoder(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) *<a href="#Decoder">Decoder</a></pre>
+				<p>
+NewDecoder returns a new decoder that reads from the io.Reader.
+If r does not also implement io.ByteReader, it will be wrapped in a
+bufio.Reader.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Decoder.Decode">func (*Decoder) <a href="/src/encoding/gob/decoder.go?s=5120:5167#L164">Decode</a></h3>
+				<pre>func (dec *<a href="#Decoder">Decoder</a>) Decode(e interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Decode reads the next value from the input stream and stores
+it in the data represented by the empty interface value.
+If e is nil, the value will be discarded. Otherwise,
+the value underlying e must be a pointer to the
+correct type for the next data item received.
+If the input is at EOF, Decode returns io.EOF and
+does not modify e.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Decoder.DecodeValue">func (*Decoder) <a href="/src/encoding/gob/decoder.go?s=5925:5979#L184">DecodeValue</a></h3>
+				<pre>func (dec *<a href="#Decoder">Decoder</a>) DecodeValue(v <a href="/pkg/reflect/">reflect</a>.<a href="/pkg/reflect/#Value">Value</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+DecodeValue reads the next value from the input stream.
+If v is the zero reflect.Value (v.Kind() == Invalid), DecodeValue discards the value.
+Otherwise, it stores the value into v.  In that case, v must represent
+a non-nil pointer to data or be an assignable reflect.Value (v.CanSet())
+If the input is at EOF, DecodeValue returns io.EOF and
+does not modify v.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Encoder">type <a href="/src/encoding/gob/encoder.go?s=316:786#L5">Encoder</a></h2>
+			<pre>type Encoder struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+An Encoder manages the transmission of type and data information to the
+other side of a connection.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewEncoder">func <a href="/src/encoding/gob/encoder.go?s=1161:1198#L22">NewEncoder</a></h3>
+				<pre>func NewEncoder(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) *<a href="#Encoder">Encoder</a></pre>
+				<p>
+NewEncoder returns a new encoder that will transmit on the io.Writer.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Encoder.Encode">func (*Encoder) <a href="/src/encoding/gob/encoder.go?s=5178:5225#L157">Encode</a></h3>
+				<pre>func (enc *<a href="#Encoder">Encoder</a>) Encode(e interface{}) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Encode transmits the data item represented by the empty interface value,
+guaranteeing that all necessary type information has been transmitted first.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Encoder.EncodeValue">func (*Encoder) <a href="/src/encoding/gob/encoder.go?s=6554:6612#L199">EncodeValue</a></h3>
+				<pre>func (enc *<a href="#Encoder">Encoder</a>) EncodeValue(value <a href="/pkg/reflect/">reflect</a>.<a href="/pkg/reflect/#Value">Value</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+EncodeValue transmits the data item represented by the reflection value,
+guaranteeing that all necessary type information has been transmitted first.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="GobDecoder">type <a href="/src/encoding/gob/type.go?s=23700:23940#L793">GobDecoder</a></h2>
+			<pre>type GobDecoder interface {
+        <span class="comment">// GobDecode overwrites the receiver, which must be a pointer,</span>
+        <span class="comment">// with the value represented by the byte slice, which was written</span>
+        <span class="comment">// by GobEncode, usually for the same concrete type.</span>
+        GobDecode([]<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a>
+}</pre>
+			<p>
+GobDecoder is the interface describing data that provides its own
+routine for decoding transmitted values sent by a GobEncoder.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="GobEncoder">type <a href="/src/encoding/gob/type.go?s=23352:23564#L784">GobEncoder</a></h2>
+			<pre>type GobEncoder interface {
+        <span class="comment">// GobEncode returns a byte slice representing the encoding of the</span>
+        <span class="comment">// receiver for transmission to a GobDecoder, usually of the same</span>
+        <span class="comment">// concrete type.</span>
+        GobEncode() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)
+}</pre>
+			<p>
+GobEncoder is the interface describing data that provides its own
+representation for encoding values for transmission to a GobDecoder.
+A type that implements GobEncoder and GobDecoder has complete
+control over the representation of its data and may therefore
+contain things such as private fields, channels, and functions,
+which are not usually transmissible in gob streams.
+</p>
+<p>
+Note: Since gobs can be stored permanently, It is good design
+to guarantee the encoding used by a GobEncoder is stable as the
+software evolves.  For instance, it might make sense for GobEncode
+to include a version number in the encoding.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Defer, Panic, and Recover - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/go-wins-2010-bossie-award">Go Wins 2010 Bossie Award</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/share-memory-by-communicating">Share Memory By Communicating</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></h3>
+		<p class="date">4 August 2010</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    Go has the usual mechanisms for control flow: if, for, switch, goto.  It also has the go statement to run code in a separate goroutine.  Here I&#39;d like to discuss some of the less common ones: defer, panic, and recover.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    A <b>defer statement</b> pushes a function call onto a list. The list of saved calls is executed after the surrounding function returns. Defer is commonly used to simplify functions that perform various clean-up actions.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    For example, let&#39;s look at a function that opens two files and copies the contents of one file to the other:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func CopyFile(dstName, srcName string) (written int64, err error) {
+    src, err := os.Open(srcName)
+    if err != nil {
+        return
+    }
+
+    dst, err := os.Create(dstName)
+    if err != nil {
+        return
+    }
+
+    written, err = io.Copy(dst, src)
+    dst.Close()
+    src.Close()
+    return
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    This works, but there is a bug. If the call to os.Create fails, the function will return without closing the source file. This can be easily remedied by putting a call to src.Close before the second return statement, but if the function were more complex the problem might not be so easily noticed and resolved. By introducing defer statements we can ensure that the files are always closed:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func CopyFile(dstName, srcName string) (written int64, err error) {
+    src, err := os.Open(srcName)
+    if err != nil {
+        return
+    }
+    defer src.Close()
+
+    dst, err := os.Create(dstName)
+    if err != nil {
+        return
+    }
+    defer dst.Close()
+
+    return io.Copy(dst, src)
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    Defer statements allow us to think about closing each file right after opening it, guaranteeing that, regardless of the number of return statements in the function, the files <i>will</i> be closed.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The behavior of defer statements is straightforward and predictable. There are three simple rules:
+  </p>
+  
+
+      
+        
+  
+  <p>
+    1. <i>A deferred function&#39;s arguments are evaluated when the defer statement is evaluated.</i>
+  </p>
+  
+
+      
+        
+  
+  <p>
+    In this example, the expression &#34;i&#34; is evaluated when the Println call is deferred. The deferred call will print &#34;0&#34; after the function returns.
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func a() {
+    i := 0
+    defer fmt.Println(i)
+    i&#43;&#43;
+    return
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    2. <i>Deferred function calls are executed in Last In First Out order after_the surrounding function returns.</i>
+  </p>
+  
+
+      
+        
+  
+  <p>
+    This function prints &#34;3210&#34;:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func b() {
+    for i := 0; i &lt; 4; i&#43;&#43; {
+        defer fmt.Print(i)
+    }
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    3. <i>Deferred functions may read and assign to the returning function&#39;s named return values.</i>
+  </p>
+  
+
+      
+        
+  
+  <p>
+    In this example, a deferred function increments the return value i <i>after</i> the surrounding function returns. Thus, this function returns 2:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func c() (i int) {
+    defer func() { i&#43;&#43; }()
+    return 1
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    This is convenient for modifying the error return value of a function; we will see an example of this shortly.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    <b>Panic</b> is a built-in function that stops the ordinary flow of control and begins <i>panicking</i>. When the function F calls panic, execution of F stops, any deferred functions in F are executed normally, and then F returns to its caller. To the caller, F then behaves like a call to panic. The process continues up the stack until all functions in the current goroutine have returned, at which point the program crashes. Panics can be initiated by invoking panic directly. They can also be caused by runtime errors, such as out-of-bounds array accesses.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    <b>Recover</b> is a built-in function that regains control of a panicking goroutine. Recover is only useful inside deferred functions. During normal execution, a call to recover will return nil and have no other effect. If the current goroutine is panicking, a call to recover will capture the value given to panic and resume normal execution.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Here&#39;s an example program that demonstrates the mechanics of panic and defer:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>package main
+
+import &#34;fmt&#34;
+
+func main() {
+    f()
+    fmt.Println(&#34;Returned normally from f.&#34;)
+}
+
+func f() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println(&#34;Recovered in f&#34;, r)
+        }
+    }()
+    fmt.Println(&#34;Calling g.&#34;)
+    g(0)
+    fmt.Println(&#34;Returned normally from g.&#34;)
+}
+
+func g(i int) {
+    if i &gt; 3 {
+        fmt.Println(&#34;Panicking!&#34;)
+        panic(fmt.Sprintf(&#34;%v&#34;, i))
+    }
+    defer fmt.Println(&#34;Defer in g&#34;, i)
+    fmt.Println(&#34;Printing in g&#34;, i)
+    g(i &#43; 1)
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    The function g takes the int i, and panics if i is greater than 3, or else it calls itself with the argument i+1. The function f defers a function that calls recover and prints the recovered value (if it is non-nil). Try to picture what the output of this program might be before reading on.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The program will output:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>Calling g.
+Printing in g 0
+Printing in g 1
+Printing in g 2
+Printing in g 3
+Panicking!
+Defer in g 3
+Defer in g 2
+Defer in g 1
+Defer in g 0
+Recovered in f 4
+Returned normally from f.</pre></div>
+  
+
+      
+        
+  
+  <p>
+    If we remove the deferred function from f the panic is not recovered and reaches the top of the goroutine&#39;s call stack, terminating the program. This modified program will output:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>Calling g.
+Printing in g 0
+Printing in g 1
+Printing in g 2
+Printing in g 3
+Panicking!
+Defer in g 3
+Defer in g 2
+Defer in g 1
+Defer in g 0
+panic: 4
+ 
+panic PC=0x2a9cd8
+[stack trace omitted]</pre></div>
+  
+
+      
+        
+  
+  <p>
+    For a real-world example of <b>panic</b> and <b>recover</b>, see the <a href="http://golang.org/pkg/encoding/json/" target="_blank">json package</a> from the Go standard library. It decodes JSON-encoded data with a set of recursive functions. When malformed JSON is encountered, the parser calls panic to unwind the stack to the top-level function call, which recovers from the panic and returns an appropriate error value (see the &#39;error&#39; and &#39;unmarshal&#39; methods of the decodeState type in <a href="http://golang.org/src/pkg/encoding/json/decode.go" target="_blank">decode.go</a>).
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The convention in the Go libraries is that even when a package uses panic internally, its external API still presents explicit error return values.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Other uses of <b>defer</b> (beyond the file.Close example given earlier) include releasing a mutex:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>mu.Lock()
+defer mu.Unlock()</pre></div>
+  
+
+      
+        
+  
+  <p>
+    printing a footer:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>printHeader()
+defer printFooter()</pre></div>
+  
+
+      
+        
+  
+  <p>
+    and more.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    In summary, the defer statement (with or without panic and recover) provides an unusual and powerful mechanism for control flow.  It can be used to model a number of features implemented by special-purpose structures in other programming languages. Try it out.
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

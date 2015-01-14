@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>pe - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package pe</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "debug/pe"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package pe implements access to PE (Microsoft Windows Portable Executable) files.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+			
+				
+				<dd><a href="#COFFSymbol">type COFFSymbol</a></dd>
+				
+				
+			
+				
+				<dd><a href="#DataDirectory">type DataDirectory</a></dd>
+				
+				
+			
+				
+				<dd><a href="#File">type File</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewFile">func NewFile(r io.ReaderAt) (*File, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Open">func Open(name string) (*File, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Close">func (f *File) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.DWARF">func (f *File) DWARF() (*dwarf.Data, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.ImportedLibraries">func (f *File) ImportedLibraries() ([]string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.ImportedSymbols">func (f *File) ImportedSymbols() ([]string, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Section">func (f *File) Section(name string) *Section</a></dd>
+				
+			
+				
+				<dd><a href="#FileHeader">type FileHeader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#FormatError">type FormatError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FormatError.Error">func (e *FormatError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#ImportDirectory">type ImportDirectory</a></dd>
+				
+				
+			
+				
+				<dd><a href="#OptionalHeader32">type OptionalHeader32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#OptionalHeader64">type OptionalHeader64</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Section">type Section</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Section.Data">func (s *Section) Data() ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Section.Open">func (s *Section) Open() io.ReadSeeker</a></dd>
+				
+			
+				
+				<dd><a href="#SectionHeader">type SectionHeader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#SectionHeader32">type SectionHeader32</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Symbol">type Symbol</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/debug/pe/file.go">file.go</a>
+			
+				<a href="/src/debug/pe/pe.go">pe.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="IMAGE_FILE_MACHINE_UNKNOWN">IMAGE_FILE_MACHINE_UNKNOWN</span>   = 0x0
+        <span id="IMAGE_FILE_MACHINE_AM33">IMAGE_FILE_MACHINE_AM33</span>      = 0x1d3
+        <span id="IMAGE_FILE_MACHINE_AMD64">IMAGE_FILE_MACHINE_AMD64</span>     = 0x8664
+        <span id="IMAGE_FILE_MACHINE_ARM">IMAGE_FILE_MACHINE_ARM</span>       = 0x1c0
+        <span id="IMAGE_FILE_MACHINE_EBC">IMAGE_FILE_MACHINE_EBC</span>       = 0xebc
+        <span id="IMAGE_FILE_MACHINE_I386">IMAGE_FILE_MACHINE_I386</span>      = 0x14c
+        <span id="IMAGE_FILE_MACHINE_IA64">IMAGE_FILE_MACHINE_IA64</span>      = 0x200
+        <span id="IMAGE_FILE_MACHINE_M32R">IMAGE_FILE_MACHINE_M32R</span>      = 0x9041
+        <span id="IMAGE_FILE_MACHINE_MIPS16">IMAGE_FILE_MACHINE_MIPS16</span>    = 0x266
+        <span id="IMAGE_FILE_MACHINE_MIPSFPU">IMAGE_FILE_MACHINE_MIPSFPU</span>   = 0x366
+        <span id="IMAGE_FILE_MACHINE_MIPSFPU16">IMAGE_FILE_MACHINE_MIPSFPU16</span> = 0x466
+        <span id="IMAGE_FILE_MACHINE_POWERPC">IMAGE_FILE_MACHINE_POWERPC</span>   = 0x1f0
+        <span id="IMAGE_FILE_MACHINE_POWERPCFP">IMAGE_FILE_MACHINE_POWERPCFP</span> = 0x1f1
+        <span id="IMAGE_FILE_MACHINE_R4000">IMAGE_FILE_MACHINE_R4000</span>     = 0x166
+        <span id="IMAGE_FILE_MACHINE_SH3">IMAGE_FILE_MACHINE_SH3</span>       = 0x1a2
+        <span id="IMAGE_FILE_MACHINE_SH3DSP">IMAGE_FILE_MACHINE_SH3DSP</span>    = 0x1a3
+        <span id="IMAGE_FILE_MACHINE_SH4">IMAGE_FILE_MACHINE_SH4</span>       = 0x1a6
+        <span id="IMAGE_FILE_MACHINE_SH5">IMAGE_FILE_MACHINE_SH5</span>       = 0x1a8
+        <span id="IMAGE_FILE_MACHINE_THUMB">IMAGE_FILE_MACHINE_THUMB</span>     = 0x1c2
+        <span id="IMAGE_FILE_MACHINE_WCEMIPSV2">IMAGE_FILE_MACHINE_WCEMIPSV2</span> = 0x169
+)</pre>
+				
+			
+				<pre>const <span id="COFFSymbolSize">COFFSymbolSize</span> = 18</pre>
+				
+			
+		
+		
+		
+		
+			
+			
+			<h2 id="COFFSymbol">type <a href="/src/debug/pe/pe.go?s=3115:3302#L94">COFFSymbol</a></h2>
+			<pre>type COFFSymbol struct {
+        Name               [8]<a href="/pkg/builtin/#uint8">uint8</a>
+        Value              <a href="/pkg/builtin/#uint32">uint32</a>
+        SectionNumber      <a href="/pkg/builtin/#int16">int16</a>
+        Type               <a href="/pkg/builtin/#uint16">uint16</a>
+        StorageClass       <a href="/pkg/builtin/#uint8">uint8</a>
+        NumberOfAuxSymbols <a href="/pkg/builtin/#uint8">uint8</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="DataDirectory">type <a href="/src/debug/pe/pe.go?s=404:479#L7">DataDirectory</a></h2>
+			<pre>type DataDirectory struct {
+        VirtualAddress <a href="/pkg/builtin/#uint32">uint32</a>
+        Size           <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="File">type <a href="/src/debug/pe/file.go?s=382:564#L9">File</a></h2>
+			<pre>type File struct {
+        <a href="#FileHeader">FileHeader</a>
+        OptionalHeader interface{} <span class="comment">// of type *OptionalHeader32 or *OptionalHeader64</span>
+        Sections       []*<a href="#Section">Section</a>
+        Symbols        []*<a href="#Symbol">Symbol</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A File represents an open PE file.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewFile">func <a href="/src/debug/pe/file.go?s=2892:2934#L123">NewFile</a></h3>
+				<pre>func NewFile(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>) (*<a href="#File">File</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewFile creates a new File for accessing a PE binary in an underlying reader.
+</p>
+
+				
+				
+			
+				
+				<h3 id="Open">func <a href="/src/debug/pe/file.go?s=2215:2252#L91">Open</a></h3>
+				<pre>func Open(name <a href="/pkg/builtin/#string">string</a>) (*<a href="#File">File</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Open opens the named file using os.Open and prepares it for use as a PE binary.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="File.Close">func (*File) <a href="/src/debug/pe/file.go?s=2542:2570#L108">Close</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the File.
+If the File was created using NewFile directly instead of Open,
+Close has no effect.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.DWARF">func (*File) <a href="/src/debug/pe/file.go?s=7724:7767#L287">DWARF</a></h3>
+				<pre>func (f *<a href="#File">File</a>) DWARF() (*<a href="/pkg/debug/dwarf/">dwarf</a>.<a href="/pkg/debug/dwarf/#Data">Data</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+				
+				<h3 id="File.ImportedLibraries">func (*File) <a href="/src/debug/pe/file.go?s=10235:10287#L380">ImportedLibraries</a></h3>
+				<pre>func (f *<a href="#File">File</a>) ImportedLibraries() ([]<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ImportedLibraries returns the names of all libraries
+referred to by the binary f that are expected to be
+linked with the binary at dynamic link time.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.ImportedSymbols">func (*File) <a href="/src/debug/pe/file.go?s=8537:8587#L314">ImportedSymbols</a></h3>
+				<pre>func (f *<a href="#File">File</a>) ImportedSymbols() ([]<a href="/pkg/builtin/#string">string</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ImportedSymbols returns the names of all symbols
+referred to by the binary f that are expected to be
+satisfied by other libraries at dynamic load time.
+It does not return weak symbols.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.Section">func (*File) <a href="/src/debug/pe/file.go?s=7589:7633#L278">Section</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Section(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Section">Section</a></pre>
+				<p>
+Section returns the first section with the given name, or nil if no such
+section exists.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="FileHeader">type <a href="/src/debug/pe/pe.go?s=173:402#L1">FileHeader</a></h2>
+			<pre>type FileHeader struct {
+        Machine              <a href="/pkg/builtin/#uint16">uint16</a>
+        NumberOfSections     <a href="/pkg/builtin/#uint16">uint16</a>
+        TimeDateStamp        <a href="/pkg/builtin/#uint32">uint32</a>
+        PointerToSymbolTable <a href="/pkg/builtin/#uint32">uint32</a>
+        NumberOfSymbols      <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfOptionalHeader <a href="/pkg/builtin/#uint16">uint16</a>
+        Characteristics      <a href="/pkg/builtin/#uint16">uint16</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="FormatError">type <a href="/src/debug/pe/file.go?s=1883:1950#L75">FormatError</a></h2>
+			<pre>type FormatError struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="FormatError.Error">func (*FormatError) <a href="/src/debug/pe/file.go?s=1952:1988#L81">Error</a></h3>
+				<pre>func (e *<a href="#FormatError">FormatError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ImportDirectory">type <a href="/src/debug/pe/file.go?s=1330:1509#L52">ImportDirectory</a></h2>
+			<pre>type ImportDirectory struct {
+        OriginalFirstThunk <a href="/pkg/builtin/#uint32">uint32</a>
+        TimeDateStamp      <a href="/pkg/builtin/#uint32">uint32</a>
+        ForwarderChain     <a href="/pkg/builtin/#uint32">uint32</a>
+        Name               <a href="/pkg/builtin/#uint32">uint32</a>
+        FirstThunk         <a href="/pkg/builtin/#uint32">uint32</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="OptionalHeader32">type <a href="/src/debug/pe/pe.go?s=481:1638#L12">OptionalHeader32</a></h2>
+			<pre>type OptionalHeader32 struct {
+        Magic                       <a href="/pkg/builtin/#uint16">uint16</a>
+        MajorLinkerVersion          <a href="/pkg/builtin/#uint8">uint8</a>
+        MinorLinkerVersion          <a href="/pkg/builtin/#uint8">uint8</a>
+        SizeOfCode                  <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfInitializedData       <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfUninitializedData     <a href="/pkg/builtin/#uint32">uint32</a>
+        AddressOfEntryPoint         <a href="/pkg/builtin/#uint32">uint32</a>
+        BaseOfCode                  <a href="/pkg/builtin/#uint32">uint32</a>
+        BaseOfData                  <a href="/pkg/builtin/#uint32">uint32</a>
+        ImageBase                   <a href="/pkg/builtin/#uint32">uint32</a>
+        SectionAlignment            <a href="/pkg/builtin/#uint32">uint32</a>
+        FileAlignment               <a href="/pkg/builtin/#uint32">uint32</a>
+        MajorOperatingSystemVersion <a href="/pkg/builtin/#uint16">uint16</a>
+        MinorOperatingSystemVersion <a href="/pkg/builtin/#uint16">uint16</a>
+        MajorImageVersion           <a href="/pkg/builtin/#uint16">uint16</a>
+        MinorImageVersion           <a href="/pkg/builtin/#uint16">uint16</a>
+        MajorSubsystemVersion       <a href="/pkg/builtin/#uint16">uint16</a>
+        MinorSubsystemVersion       <a href="/pkg/builtin/#uint16">uint16</a>
+        Win32VersionValue           <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfImage                 <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfHeaders               <a href="/pkg/builtin/#uint32">uint32</a>
+        CheckSum                    <a href="/pkg/builtin/#uint32">uint32</a>
+        Subsystem                   <a href="/pkg/builtin/#uint16">uint16</a>
+        DllCharacteristics          <a href="/pkg/builtin/#uint16">uint16</a>
+        SizeOfStackReserve          <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfStackCommit           <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfHeapReserve           <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfHeapCommit            <a href="/pkg/builtin/#uint32">uint32</a>
+        LoaderFlags                 <a href="/pkg/builtin/#uint32">uint32</a>
+        NumberOfRvaAndSizes         <a href="/pkg/builtin/#uint32">uint32</a>
+        DataDirectory               [16]<a href="#DataDirectory">DataDirectory</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="OptionalHeader64">type <a href="/src/debug/pe/pe.go?s=1640:2761#L46">OptionalHeader64</a></h2>
+			<pre>type OptionalHeader64 struct {
+        Magic                       <a href="/pkg/builtin/#uint16">uint16</a>
+        MajorLinkerVersion          <a href="/pkg/builtin/#uint8">uint8</a>
+        MinorLinkerVersion          <a href="/pkg/builtin/#uint8">uint8</a>
+        SizeOfCode                  <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfInitializedData       <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfUninitializedData     <a href="/pkg/builtin/#uint32">uint32</a>
+        AddressOfEntryPoint         <a href="/pkg/builtin/#uint32">uint32</a>
+        BaseOfCode                  <a href="/pkg/builtin/#uint32">uint32</a>
+        ImageBase                   <a href="/pkg/builtin/#uint64">uint64</a>
+        SectionAlignment            <a href="/pkg/builtin/#uint32">uint32</a>
+        FileAlignment               <a href="/pkg/builtin/#uint32">uint32</a>
+        MajorOperatingSystemVersion <a href="/pkg/builtin/#uint16">uint16</a>
+        MinorOperatingSystemVersion <a href="/pkg/builtin/#uint16">uint16</a>
+        MajorImageVersion           <a href="/pkg/builtin/#uint16">uint16</a>
+        MinorImageVersion           <a href="/pkg/builtin/#uint16">uint16</a>
+        MajorSubsystemVersion       <a href="/pkg/builtin/#uint16">uint16</a>
+        MinorSubsystemVersion       <a href="/pkg/builtin/#uint16">uint16</a>
+        Win32VersionValue           <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfImage                 <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfHeaders               <a href="/pkg/builtin/#uint32">uint32</a>
+        CheckSum                    <a href="/pkg/builtin/#uint32">uint32</a>
+        Subsystem                   <a href="/pkg/builtin/#uint16">uint16</a>
+        DllCharacteristics          <a href="/pkg/builtin/#uint16">uint16</a>
+        SizeOfStackReserve          <a href="/pkg/builtin/#uint64">uint64</a>
+        SizeOfStackCommit           <a href="/pkg/builtin/#uint64">uint64</a>
+        SizeOfHeapReserve           <a href="/pkg/builtin/#uint64">uint64</a>
+        SizeOfHeapCommit            <a href="/pkg/builtin/#uint64">uint64</a>
+        LoaderFlags                 <a href="/pkg/builtin/#uint32">uint32</a>
+        NumberOfRvaAndSizes         <a href="/pkg/builtin/#uint32">uint32</a>
+        DataDirectory               [16]<a href="#DataDirectory">DataDirectory</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Section">type <a href="/src/debug/pe/file.go?s=887:1196#L31">Section</a></h2>
+			<pre>type Section struct {
+        <a href="#SectionHeader">SectionHeader</a>
+
+        <span class="comment">// Embed ReaderAt for ReadAt method.</span>
+        <span class="comment">// Do not embed SectionReader directly</span>
+        <span class="comment">// to avoid having Read and Seek.</span>
+        <span class="comment">// If a client wants Read and Seek it must use</span>
+        <span class="comment">// Open() to avoid fighting over the seek offset</span>
+        <span class="comment">// with other clients.</span>
+        <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Section.Data">func (*Section) <a href="/src/debug/pe/file.go?s=1569:1609#L63">Data</a></h3>
+				<pre>func (s *<a href="#Section">Section</a>) Data() ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Data reads and returns the contents of the PE section.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Section.Open">func (*Section) <a href="/src/debug/pe/file.go?s=1794:1832#L73">Open</a></h3>
+				<pre>func (s *<a href="#Section">Section</a>) Open() <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadSeeker">ReadSeeker</a></pre>
+				<p>
+Open returns a new ReadSeeker reading the PE section.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SectionHeader">type <a href="/src/debug/pe/file.go?s=566:885#L18">SectionHeader</a></h2>
+			<pre>type SectionHeader struct {
+        Name                 <a href="/pkg/builtin/#string">string</a>
+        VirtualSize          <a href="/pkg/builtin/#uint32">uint32</a>
+        VirtualAddress       <a href="/pkg/builtin/#uint32">uint32</a>
+        Size                 <a href="/pkg/builtin/#uint32">uint32</a>
+        Offset               <a href="/pkg/builtin/#uint32">uint32</a>
+        PointerToRelocations <a href="/pkg/builtin/#uint32">uint32</a>
+        PointerToLineNumbers <a href="/pkg/builtin/#uint32">uint32</a>
+        NumberOfRelocations  <a href="/pkg/builtin/#uint16">uint16</a>
+        NumberOfLineNumbers  <a href="/pkg/builtin/#uint16">uint16</a>
+        Characteristics      <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="SectionHeader32">type <a href="/src/debug/pe/pe.go?s=2763:3086#L79">SectionHeader32</a></h2>
+			<pre>type SectionHeader32 struct {
+        Name                 [8]<a href="/pkg/builtin/#uint8">uint8</a>
+        VirtualSize          <a href="/pkg/builtin/#uint32">uint32</a>
+        VirtualAddress       <a href="/pkg/builtin/#uint32">uint32</a>
+        SizeOfRawData        <a href="/pkg/builtin/#uint32">uint32</a>
+        PointerToRawData     <a href="/pkg/builtin/#uint32">uint32</a>
+        PointerToRelocations <a href="/pkg/builtin/#uint32">uint32</a>
+        PointerToLineNumbers <a href="/pkg/builtin/#uint32">uint32</a>
+        NumberOfRelocations  <a href="/pkg/builtin/#uint16">uint16</a>
+        NumberOfLineNumbers  <a href="/pkg/builtin/#uint16">uint16</a>
+        Characteristics      <a href="/pkg/builtin/#uint32">uint32</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Symbol">type <a href="/src/debug/pe/file.go?s=1198:1328#L44">Symbol</a></h2>
+			<pre>type Symbol struct {
+        Name          <a href="/pkg/builtin/#string">string</a>
+        Value         <a href="/pkg/builtin/#uint32">uint32</a>
+        SectionNumber <a href="/pkg/builtin/#int16">int16</a>
+        Type          <a href="/pkg/builtin/#uint16">uint16</a>
+        StorageClass  <a href="/pkg/builtin/#uint8">uint8</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,807 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    
+    
+    <title>SQLInterface · golang/go Wiki · GitHub</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144.png">
+    <meta property="fb:app_id" content="1401488693436528">
+
+      <meta content="@github" name="twitter:site" /><meta content="summary" name="twitter:card" /><meta content="golang/go" name="twitter:title" /><meta content="go - The Go programming language" name="twitter:description" /><meta content="https://avatars1.githubusercontent.com/u/4314092?v=3&amp;s=400" name="twitter:image:src" />
+<meta content="GitHub" property="og:site_name" /><meta content="object" property="og:type" /><meta content="https://avatars1.githubusercontent.com/u/4314092?v=3&amp;s=400" property="og:image" /><meta content="golang/go" property="og:title" /><meta content="https://github.com/golang/go" property="og:url" /><meta content="go - The Go programming language" property="og:description" />
+
+      <meta name="browser-stats-url" content="/_stats">
+    <link rel="assets" href="https://assets-cdn.github.com/">
+    <link rel="conduit-xhr" href="https://ghconduit.com:25035">
+    
+    <meta name="pjax-timeout" content="1000">
+    
+
+    <meta name="msapplication-TileImage" content="/windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_wiki" data-pjax-transient>
+      <meta name="google-analytics" content="UA-3769691-2">
+
+    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="CBB0BC11:386F:A04F04:54B2C58C" name="octolytics-dimension-request_id" />
+    
+    <meta content="Rails, view, wiki#show" name="analytics-event" />
+
+    
+    
+    <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
+
+
+    <meta content="authenticity_token" name="csrf-param" />
+<meta content="JVTzfCKHum/SDQpE2Tm2OCjn6LSETEStMrXzsjxocQUvVau68wd3x3qyHpkuNQxse0Ct9LEuviosNd1YXQBPzQ==" name="csrf-token" />
+
+    <link href="https://assets-cdn.github.com/assets/github-ce76938859542000655959cdfe660df23f4b00ca8e645c02e94b82db13f71206.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="https://assets-cdn.github.com/assets/github2-24197d40569ab7b3fd7178681236002a61c1b8cd5040223c404813c1fea901a6.css" media="all" rel="stylesheet" type="text/css" />
+    
+    
+
+
+    <meta http-equiv="x-pjax-version" content="df46ace3522d1eb59b16d9c11fb78381">
+
+      
+  <meta name="description" content="go - The Go programming language">
+  <meta name="go-import" content="github.com/golang/go git https://github.com/golang/go.git">
+
+  <meta content="4314092" name="octolytics-dimension-user_id" /><meta content="golang" name="octolytics-dimension-user_login" /><meta content="23096959" name="octolytics-dimension-repository_id" /><meta content="golang/go" name="octolytics-dimension-repository_nwo" /><meta content="true" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="23096959" name="octolytics-dimension-repository_network_root_id" /><meta content="golang/go" name="octolytics-dimension-repository_network_root_nwo" />
+  <link href="https://github.com/golang/go/commits/master.atom" rel="alternate" title="Recent Commits to go:master" type="application/atom+xml">
+
+  </head>
+
+
+  <body class="logged_out  env-production  vis-public">
+    <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">Skip to content</a>
+    <div class="wrapper">
+      
+      
+      
+      
+
+
+      
+      <div class="header header-logged-out" role="banner">
+  <div class="container clearfix">
+
+    <a class="header-logo-wordmark" href="https://github.com/" ga-data-click="(Logged out) Header, go to homepage, icon:logo-wordmark">
+      <span class="mega-octicon octicon-logo-github"></span>
+    </a>
+
+    <div class="header-actions" role="navigation">
+        <a class="button primary" href="/join" data-ga-click="(Logged out) Header, clicked Sign up, text:sign-up">Sign up</a>
+      <a class="button" href="/login?return_to=%2Fgolang%2Fgo%2Fwiki%2FSQLInterface" data-ga-click="(Logged out) Header, clicked Sign in, text:sign-in">Sign in</a>
+    </div>
+
+    <div class="site-search repo-scope js-site-search" role="search">
+      <form accept-charset="UTF-8" action="/golang/go/search" class="js-site-search-form" data-global-search-url="/search" data-repo-search-url="/golang/go/search" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+  <input type="text"
+    class="js-site-search-field is-clearable"
+    data-hotkey="s"
+    name="q"
+    placeholder="Search"
+    data-global-scope-placeholder="Search GitHub"
+    data-repo-scope-placeholder="Search"
+    tabindex="1"
+    autocapitalize="off">
+  <div class="scope-badge">This repository</div>
+</form>
+    </div>
+
+      <ul class="header-nav left" role="navigation">
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/explore" data-ga-click="(Logged out) Header, go to explore, text:explore">Explore</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/features" data-ga-click="(Logged out) Header, go to features, text:features">Features</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="https://enterprise.github.com/" data-ga-click="(Logged out) Header, go to enterprise, text:enterprise">Enterprise</a>
+          </li>
+          <li class="header-nav-item">
+            <a class="header-nav-link" href="/blog" data-ga-click="(Logged out) Header, go to blog, text:blog">Blog</a>
+          </li>
+      </ul>
+
+  </div>
+</div>
+
+
+
+      <div id="start-of-content" class="accessibility-aid"></div>
+          <div class="site" itemscope itemtype="http://schema.org/WebPage">
+    <div id="js-flash-container">
+      
+    </div>
+    <div class="pagehead repohead instapaper_ignore readability-menu">
+      <div class="container">
+        
+<ul class="pagehead-actions">
+
+
+  <li>
+      <a href="/login?return_to=%2Fgolang%2Fgo"
+    class="minibutton with-count star-button tooltipped tooltipped-n"
+    aria-label="You must be signed in to star a repository" rel="nofollow">
+    <span class="octicon octicon-star"></span>
+    Star
+  </a>
+
+    <a class="social-count js-social-count" href="/golang/go/stargazers">
+      5,472
+    </a>
+
+  </li>
+
+    <li>
+      <a href="/login?return_to=%2Fgolang%2Fgo"
+        class="minibutton with-count js-toggler-target fork-button tooltipped tooltipped-n"
+        aria-label="You must be signed in to fork a repository" rel="nofollow">
+        <span class="octicon octicon-repo-forked"></span>
+        Fork
+      </a>
+      <a href="/golang/go/network" class="social-count">
+        292
+      </a>
+    </li>
+</ul>
+
+        <h1 itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public">
+          <span class="mega-octicon octicon-repo"></span>
+          <span class="author"><a href="/golang" class="url fn" itemprop="url" rel="author"><span itemprop="title">golang</span></a></span><!--
+       --><span class="path-divider">/</span><!--
+       --><strong><a href="/golang/go" class="js-current-repository" data-pjax="#js-repo-pjax-container">go</a></strong>
+
+          <span class="page-context-loader">
+            <img alt="" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+          </span>
+
+        </h1>
+      </div><!-- /.container -->
+    </div><!-- /.repohead -->
+
+    <div class="container">
+      <div class="repository-with-sidebar repo-container new-discussion-timeline  ">
+        <div class="repository-sidebar clearfix">
+            
+<nav class="sunken-menu repo-nav js-repo-nav js-sidenav-container-pjax js-octicon-loaders"
+     role="navigation"
+     data-pjax="#js-repo-pjax-container"
+     data-issue-count-url="/golang/go/issues/counts">
+  <ul class="sunken-menu-group">
+    <li class="tooltipped tooltipped-w" aria-label="Code">
+      <a href="/golang/go" aria-label="Code" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g c" data-selected-links="repo_source repo_downloads repo_commits repo_releases repo_tags repo_branches /golang/go">
+        <span class="octicon octicon-code"></span> <span class="full-word">Code</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+      <li class="tooltipped tooltipped-w" aria-label="Issues">
+        <a href="/golang/go/issues" aria-label="Issues" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g i" data-selected-links="repo_issues repo_labels repo_milestones /golang/go/issues">
+          <span class="octicon octicon-issue-opened"></span> <span class="full-word">Issues</span>
+          <span class="js-issue-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>      </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Pull Requests">
+      <a href="/golang/go/pulls" aria-label="Pull Requests" class="js-selected-navigation-item sunken-menu-item" data-hotkey="g p" data-selected-links="repo_pulls /golang/go/pulls">
+          <span class="octicon octicon-git-pull-request"></span> <span class="full-word">Pull Requests</span>
+          <span class="js-pull-replace-counter"></span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+
+      <li class="tooltipped tooltipped-w" aria-label="Wiki">
+        <a href="/golang/go/wiki" aria-label="Wiki" class="selected js-selected-navigation-item sunken-menu-item" data-hotkey="g w" data-selected-links="repo_wiki /golang/go/wiki">
+          <span class="octicon octicon-book"></span> <span class="full-word">Wiki</span>
+          <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>      </li>
+  </ul>
+  <div class="sunken-menu-separator"></div>
+  <ul class="sunken-menu-group">
+
+    <li class="tooltipped tooltipped-w" aria-label="Pulse">
+      <a href="/golang/go/pulse" aria-label="Pulse" class="js-selected-navigation-item sunken-menu-item" data-selected-links="pulse /golang/go/pulse">
+        <span class="octicon octicon-pulse"></span> <span class="full-word">Pulse</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+
+    <li class="tooltipped tooltipped-w" aria-label="Graphs">
+      <a href="/golang/go/graphs" aria-label="Graphs" class="js-selected-navigation-item sunken-menu-item" data-selected-links="repo_graphs repo_contributors /golang/go/graphs">
+        <span class="octicon octicon-graph"></span> <span class="full-word">Graphs</span>
+        <img alt="" class="mini-loader" height="16" src="https://assets-cdn.github.com/images/spinners/octocat-spinner-32.gif" width="16" />
+</a>    </li>
+  </ul>
+
+
+</nav>
+
+              <div class="only-with-full-nav">
+                
+  
+<div class="clone-url open"
+  data-protocol-type="http"
+  data-url="/users/set_protocol?protocol_selector=http&amp;protocol_type=clone">
+  <h3><span class="text-emphasized">HTTPS</span> clone URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/golang/go.git" readonly="readonly">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard minibutton zeroclipboard-button" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+  
+<div class="clone-url "
+  data-protocol-type="subversion"
+  data-url="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=clone">
+  <h3><span class="text-emphasized">Subversion</span> checkout URL</h3>
+  <div class="input-group js-zeroclipboard-container">
+    <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+           value="https://github.com/golang/go" readonly="readonly">
+    <span class="input-group-button">
+      <button aria-label="Copy to clipboard" class="js-zeroclipboard minibutton zeroclipboard-button" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+    </span>
+  </div>
+</div>
+
+
+
+<p class="clone-options">You can clone with
+  <a href="#" class="js-clone-selector" data-protocol="http">HTTPS</a> or <a href="#" class="js-clone-selector" data-protocol="subversion">Subversion</a>.
+  <a href="https://help.github.com/articles/which-remote-url-should-i-use" class="help tooltipped tooltipped-n" aria-label="Get help on which URL is right for you.">
+    <span class="octicon octicon-question"></span>
+  </a>
+</p>
+
+
+
+                <a href="/golang/go/archive/master.zip"
+                   class="minibutton sidebar-button"
+                   aria-label="Download the contents of golang/go as a zip file"
+                   title="Download the contents of golang/go as a zip file"
+                   rel="nofollow">
+                  <span class="octicon octicon-cloud-download"></span>
+                  Download ZIP
+                </a>
+              </div>
+        </div><!-- /.repository-sidebar -->
+
+        <div id="js-repo-pjax-container" class="repository-content context-loader-container" data-pjax-container>
+          
+
+<div id="wiki-wrapper" class="wiki-wrapper page">
+<div class="gh-header">
+  <div class="gh-header-show">
+      <div class="gh-header-actions">
+      </div>
+    <h1 class="gh-header-title instapaper_title">SQLInterface</h1>
+      <div class="gh-header-meta">
+        Andrew Gerrand edited this page <time datetime="2014-12-10T00:35:11Z" is="relative-time">Dec 10, 2014</time>
+        &middot;
+        <a href="/golang/go/wiki/SQLInterface/_history" class="history">
+          1 revision
+        </a>
+      </div>
+  </div>
+</div>
+<div id="wiki-content">
+  <div class="wrap has-rightbar">
+
+  <div id="wiki-rightbar">
+    <div class="wiki-pages-box readability-sidebar boxed-group flush js-wiki-pages-box " role="navigation">
+      
+<h3 class="js-wiki-toggle-collapse wiki-auxiliary-content">
+  <span class="octicon octicon-triangle-down caret-expanded"></span>
+  <span class="octicon octicon-triangle-right caret-collapsed"></span>
+  Pages <span class="counter">86</span>
+</h3>
+<div class="boxed-group-inner wiki-auxiliary-content wiki-auxiliary-content-no-bg">
+    <div class="filter-bar">
+      <input type="text" id="wiki-pages-filter" class="filter-input js-filterable-field" placeholder="Find a Page…" tabindex="2">
+    </div>
+
+  <ul class="wiki-pages" data-filterable-for="wiki-pages-filter" data-filterable-type="substring">
+    <li>
+      <strong><a href="/golang/go/wiki/Articles" class="wiki-page-link">Articles</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/Books" class="wiki-page-link">Books</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/BoundingResourceUse" class="wiki-page-link">BoundingResourceUse</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/cgo" class="wiki-page-link">cgo</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/ChromeOS" class="wiki-page-link">ChromeOS</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/CodeReview" class="wiki-page-link">CodeReview</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/CodeReviewComments" class="wiki-page-link">CodeReviewComments</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/Comments" class="wiki-page-link">Comments</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/CommonMistakes" class="wiki-page-link">CommonMistakes</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/Courses" class="wiki-page-link">Courses</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/DashboardBuilders" class="wiki-page-link">DashboardBuilders</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/DesignDocuments" class="wiki-page-link">DesignDocuments</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/Errors" class="wiki-page-link">Errors</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/FreeBSD" class="wiki-page-link">FreeBSD</a></strong>
+    </li>
+    <li>
+      <strong><a href="/golang/go/wiki/GccgoCrossCompilation" class="wiki-page-link">GccgoCrossCompilation</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GcToolchainTricks" class="wiki-page-link">GcToolchainTricks</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GithubCodeLayout" class="wiki-page-link">GithubCodeLayout</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Go1point1Gotchas" class="wiki-page-link">Go1point1Gotchas</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoArm" class="wiki-page-link">GoArm</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoForCPPProgrammers" class="wiki-page-link">GoForCPPProgrammers</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoGetProxyConfig" class="wiki-page-link">GoGetProxyConfig</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoGetTools" class="wiki-page-link">GoGetTools</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GOPATH" class="wiki-page-link">GOPATH</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoStrings" class="wiki-page-link">GoStrings</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoTalks" class="wiki-page-link">GoTalks</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoUserGroups" class="wiki-page-link">GoUserGroups</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoUsers" class="wiki-page-link">GoUsers</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/GoVsGenerics" class="wiki-page-link">GoVsGenerics</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/HandlingIssues" class="wiki-page-link">HandlingIssues</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Hashing" class="wiki-page-link">Hashing</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/heapdump13" class="wiki-page-link">heapdump13</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/heapdump14" class="wiki-page-link">heapdump14</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki" class="wiki-page-link">Home</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/HostedContinuousIntegration" class="wiki-page-link">HostedContinuousIntegration</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/HowToAsk" class="wiki-page-link">HowToAsk</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/HttpFetch" class="wiki-page-link">HttpFetch</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/HttpStaticFiles" class="wiki-page-link">HttpStaticFiles</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/IDEsAndTextEditorPlugins" class="wiki-page-link">IDEsAndTextEditorPlugins</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/InstallFromSource" class="wiki-page-link">InstallFromSource</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/InstallTroubleshooting" class="wiki-page-link">InstallTroubleshooting</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/InterfaceSlice" class="wiki-page-link">InterfaceSlice</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Iota" class="wiki-page-link">Iota</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Learn" class="wiki-page-link">Learn</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/LearnConcurrency" class="wiki-page-link">LearnConcurrency</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/LearnErrorHandling" class="wiki-page-link">LearnErrorHandling</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/LearnServerProgramming" class="wiki-page-link">LearnServerProgramming</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/LearnTesting" class="wiki-page-link">LearnTesting</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/LockOSThread" class="wiki-page-link">LockOSThread</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/MethodSets" class="wiki-page-link">MethodSets</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/MultipleGoRoots" class="wiki-page-link">MultipleGoRoots</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/MutexOrChannel" class="wiki-page-link">MutexOrChannel</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/NativeClient" class="wiki-page-link">NativeClient</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/NetBSD" class="wiki-page-link">NetBSD</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/NonEnglish" class="wiki-page-link">NonEnglish</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/OlderVersions" class="wiki-page-link">OlderVersions</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/OpenBSD" class="wiki-page-link">OpenBSD</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/PackageManagementTools" class="wiki-page-link">PackageManagementTools</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/PackagePublishing" class="wiki-page-link">PackagePublishing</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/PanicAndRecover" class="wiki-page-link">PanicAndRecover</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/PerfDashboard" class="wiki-page-link">PerfDashboard</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/PortingPolicy" class="wiki-page-link">PortingPolicy</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Projects" class="wiki-page-link">Projects</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/ProviderIntegration" class="wiki-page-link">ProviderIntegration</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/RaceDetector" class="wiki-page-link">RaceDetector</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Range" class="wiki-page-link">Range</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/RateLimiting" class="wiki-page-link">RateLimiting</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Rationales" class="wiki-page-link">Rationales</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Screencasts" class="wiki-page-link">Screencasts</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SendingMail" class="wiki-page-link">SendingMail</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SignalHandling" class="wiki-page-link">SignalHandling</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SimultaneousAssignment" class="wiki-page-link">SimultaneousAssignment</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SliceTricks" class="wiki-page-link">SliceTricks</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SQLDrivers" class="wiki-page-link">SQLDrivers</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SQLInterface" class="wiki-page-link">SQLInterface</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Style" class="wiki-page-link">Style</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SubRepositories" class="wiki-page-link">SubRepositories</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/SuccessStories" class="wiki-page-link">SuccessStories</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Switch" class="wiki-page-link">Switch</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/TableDrivenTests" class="wiki-page-link">TableDrivenTests</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Timeouts" class="wiki-page-link">Timeouts</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/Ubuntu" class="wiki-page-link">Ubuntu</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/whygo" class="wiki-page-link">whygo</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/WindowsBuild" class="wiki-page-link">WindowsBuild</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/WindowsCrossCompiling" class="wiki-page-link">WindowsCrossCompiling</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/WindowsDLLs" class="wiki-page-link">WindowsDLLs</a></strong>
+    </li>
+    <li class="wiki-more-pages">
+      <strong><a href="/golang/go/wiki/WindowsSupport" class="wiki-page-link">WindowsSupport</a></strong>
+    </li>
+    <li class="wiki-more-pages-link">
+      <a href="#" class="js-wiki-more-pages-link">
+        Show 71 more pages…
+      </a>
+    </li>
+  </ul>
+</div>
+
+    </div>
+
+
+    <div class="clone-url">
+      <h5>Clone this wiki locally</h5>
+      <div class="input-group js-zeroclipboard-container">
+        <input type="text" class="input-mini input-monospace js-url-field js-zeroclipboard-target"
+               value="https://github.com/golang/go.wiki.git" readonly="readonly">
+        <span class="input-group-button">
+          <button aria-label="Copy to clipboard" class="js-zeroclipboard minibutton zeroclipboard-button" data-copied-hint="Copied!" type="button"><span class="octicon octicon-clippy"></span></button>
+        </span>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div id="wiki-body" class="gollum-markdown-content instapaper_body">
+    <div class="markdown-body">
+      <h1>
+<a id="user-content-introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>The database/sql package provides a generic interface around SQL (or SQL-like) databases. See the <a href="http://golang.org/pkg/database/sql/">official documentation</a> for details.</p>
+
+<p>This page provides example usage patterns.</p>
+
+<h1>
+<a id="user-content-database-driver" class="anchor" href="#database-driver" aria-hidden="true"><span class="octicon octicon-link"></span></a>Database driver</h1>
+
+<p>The database/sql package must be used in conjunction with a database driver.
+See <a href="http://golang.org/s/sqldrivers">http://golang.org/s/sqldrivers</a> for a list of drivers.</p>
+
+<p>The documentation below assumes a driver has been imported.</p>
+
+<h1>
+<a id="user-content-connecting-to-a-database" class="anchor" href="#connecting-to-a-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Connecting to a database</h1>
+
+<p>Open is used to create a database handle:</p>
+
+<pre><code>db, err := sql.Open(driver, dataSourceName)
+</code></pre>
+
+<p>Where driver specifies a database driver and dataSourceName
+specifies database-specific connection information
+such as database name and authentication credentials.</p>
+
+<p>Note that Open does not directly open a database connection: this is deferred until a query is made. To verify that a connection can be made before making a query, use the Ping function.</p>
+
+<p>After use, the database is closed using Close.</p>
+
+<h1>
+<a id="user-content-executing-queries" class="anchor" href="#executing-queries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Executing queries</h1>
+
+<p>Exec is used for queries where no rows are returned:</p>
+
+<pre><code>result, err := db.Exec(
+    "INSERT INTO users (name, age) VALUES (?, ?)",
+    "gopher",
+    27,
+)
+</code></pre>
+
+<p>Where result contains the last insert ID and number of
+rows affected. The availability of these values is dependent on
+the database driver.</p>
+
+<p>Query is used for retrieval:</p>
+
+<pre><code>rows, err := db.Query("SELECT name FROM users WHERE age = ?", age)
+if err != nil {
+    log.Fatal(err)
+}
+for rows.Next() {
+    var name string
+    if err := rows.Scan(&amp;name); err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf("%s is %d\n", name, age)
+}
+if err := rows.Err(); err != nil {
+    log.Fatal(err)
+}
+</code></pre>
+
+<p>QueryRow is used where only a single row is expected:</p>
+
+<pre><code>var age int64
+row := db.QueryRow("SELECT age FROM users WHERE name = ?", name)
+err := row.Scan(&amp;age)
+</code></pre>
+
+<p>Prepared statements can be created with Prepare:</p>
+
+<pre><code>age := 27
+stmt, err := db.Prepare("SELECT name FROM users WHERE age = ?")
+if err != nil {
+    log.Fatal(err)
+}
+rows, err := stmt.Query(age)
+// process rows
+</code></pre>
+
+<p>Exec, Query and QueryRow can be called on statements. After use, a
+statement should be closed with Close.</p>
+
+<h1>
+<a id="user-content-transactions" class="anchor" href="#transactions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Transactions</h1>
+
+<p>Transactions are started with Begin:</p>
+
+<pre><code>tx, err := db.Begin()
+if err != nil {
+    log.Fatal(err)
+}
+</code></pre>
+
+<p>The Exec, Query, QueryRow and Prepare functions already covered can be
+used in a transaction.</p>
+
+<p>A transaction must end with a call to Commit or Rollback.</p>
+
+<h1>
+<a id="user-content-dealing-with-null" class="anchor" href="#dealing-with-null" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dealing with NULL</h1>
+
+<p>If a database column is nullable, one of the types supporting null values should be passed to Scan.</p>
+
+<p>For example, if the name column in the names table is nullable:</p>
+
+<pre><code>var name NullString
+err := db.QueryRow("SELECT name FROM names WHERE id = ?", id).Scan(&amp;name)
+...
+if name.Valid {
+    // use name.String
+} else {
+    // value is NULL
+}
+</code></pre>
+
+<p>Only NullBool, NullFloat64, NullInt64 and NullString are implemented in
+database/sql. Implementations of database-specific null types are left
+to the database driver.</p>
+
+    </div>
+
+  </div>
+  </div>
+</div>
+</div>
+
+
+        </div>
+
+      </div><!-- /.repo-container -->
+      <div class="modal-backdrop"></div>
+    </div><!-- /.container -->
+  </div><!-- /.site -->
+
+
+    </div><!-- /.wrapper -->
+
+      <div class="container">
+  <div class="site-footer" role="contentinfo">
+    <ul class="site-footer-links right">
+      <li><a href="https://status.github.com/">Status</a></li>
+      <li><a href="https://developer.github.com">API</a></li>
+      <li><a href="http://training.github.com">Training</a></li>
+      <li><a href="http://shop.github.com">Shop</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/about">About</a></li>
+
+    </ul>
+
+    <a href="/" aria-label="Homepage">
+      <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+    </a>
+
+    <ul class="site-footer-links">
+      <li>&copy; 2015 <span title="0.05611s from github-fe126-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+        <li><a href="/site/terms">Terms</a></li>
+        <li><a href="/site/privacy">Privacy</a></li>
+        <li><a href="/security">Security</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+  </div><!-- /.site-footer -->
+</div><!-- /.container -->
+
+
+    <div class="fullscreen-overlay js-fullscreen-overlay" id="fullscreen_overlay">
+  <div class="fullscreen-container js-suggester-container">
+    <div class="textarea-wrap">
+      <textarea name="fullscreen-contents" id="fullscreen-contents" class="fullscreen-contents js-fullscreen-contents" placeholder=""></textarea>
+      <div class="suggester-container">
+        <div class="suggester fullscreen-suggester js-suggester js-navigation-container"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fullscreen-sidebar">
+    <a href="#" class="exit-fullscreen js-exit-fullscreen tooltipped tooltipped-w" aria-label="Exit Zen Mode">
+      <span class="mega-octicon octicon-screen-normal"></span>
+    </a>
+    <a href="#" class="theme-switcher js-theme-switcher tooltipped tooltipped-w"
+      aria-label="Switch themes">
+      <span class="octicon octicon-color-mode"></span>
+    </a>
+  </div>
+</div>
+
+
+
+    <div id="ajax-error-message" class="flash flash-error">
+      <span class="octicon octicon-alert"></span>
+      <a href="#" class="octicon octicon-x flash-close js-ajax-error-dismiss" aria-label="Dismiss error"></a>
+      Something went wrong with that request. Please try again.
+    </div>
+
+
+      <script crossorigin="anonymous" src="https://assets-cdn.github.com/assets/frameworks-2a688ea200a50a474783d34f1f46405acbc687c4d17db98b4b2b769b44174d5d.js" type="text/javascript"></script>
+      <script async="async" crossorigin="anonymous" src="https://assets-cdn.github.com/assets/github-7d7db0fa0812858bcfb8940e3c6babccd2e6f6321279090f48129acd6c2aaa3d.js" type="text/javascript"></script>
+      
+        <script crossorigin="anonymous" src="https://assets-cdn.github.com/assets/wiki-9bdadeb969c13b362c729813988236483d4c5abc83f6a436f3af2204e6ffe14f.js" type="text/javascript"></script>
+
+  </body>
+</html>
+

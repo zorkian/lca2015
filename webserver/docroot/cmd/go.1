@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>go - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Command go</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<p>
+Go is a tool for managing Go source code.
+</p>
+<p>
+Usage:
+</p>
+<pre>go command [arguments]
+</pre>
+<p>
+The commands are:
+</p>
+<pre>build       compile packages and dependencies
+clean       remove object files
+env         print Go environment information
+fix         run go tool fix on packages
+fmt         run gofmt on package sources
+generate    generate Go files by processing source
+get         download and install packages and dependencies
+install     compile and install packages and dependencies
+list        list packages
+run         compile and run Go program
+test        test packages
+tool        run specified go tool
+version     print Go version
+vet         run go tool vet on packages
+</pre>
+<p>
+Use &#34;go help [command]&#34; for more information about a command.
+</p>
+<p>
+Additional help topics:
+</p>
+<pre>c           calling between Go and C
+filetype    file types
+gopath      GOPATH environment variable
+importpath  import path syntax
+packages    description of package lists
+testflag    description of testing flags
+testfunc    description of testing functions
+</pre>
+<p>
+Use &#34;go help [topic]&#34; for more information about that topic.
+</p>
+<h3 id="hdr-Compile_packages_and_dependencies">Compile packages and dependencies</h3>
+<p>
+Usage:
+</p>
+<pre>go build [-o output] [-i] [build flags] [packages]
+</pre>
+<p>
+Build compiles the packages named by the import paths,
+along with their dependencies, but it does not install the results.
+</p>
+<p>
+If the arguments are a list of .go files, build treats them as a list
+of source files specifying a single package.
+</p>
+<p>
+When the command line specifies a single main package,
+build writes the resulting executable to output.
+Otherwise build compiles the packages but discards the results,
+serving only as a check that the packages can be built.
+</p>
+<p>
+The -o flag specifies the output file name. If not specified, the
+output file name depends on the arguments and derives from the name
+of the package, such as p.a for package p, unless p is &#39;main&#39;. If
+the package is main and file names are provided, the file name
+derives from the first file name mentioned, such as f1 for &#39;go build
+f1.go f2.go&#39;; with no files provided (&#39;go build&#39;), the output file
+name is the base name of the containing directory.
+</p>
+<p>
+The -i flag installs the packages that are dependencies of the target.
+</p>
+<p>
+The build flags are shared by the build, clean, get, install, list, run,
+and test commands:
+</p>
+<pre>-a
+	force rebuilding of packages that are already up-to-date.
+	In Go releases, does not apply to the standard library.
+-n
+	print the commands but do not run them.
+-p n
+	the number of builds that can be run in parallel.
+	The default is the number of CPUs available.
+-race
+	enable data race detection.
+	Supported only on linux/amd64, freebsd/amd64, darwin/amd64 and windows/amd64.
+-v
+	print the names of packages as they are compiled.
+-work
+	print the name of the temporary work directory and
+	do not delete it when exiting.
+-x
+	print the commands.
+
+-ccflags &#39;arg list&#39;
+	arguments to pass on each 5c, 6c, or 8c compiler invocation.
+-compiler name
+	name of compiler to use, as in runtime.Compiler (gccgo or gc).
+-gccgoflags &#39;arg list&#39;
+	arguments to pass on each gccgo compiler/linker invocation.
+-gcflags &#39;arg list&#39;
+	arguments to pass on each 5g, 6g, or 8g compiler invocation.
+-installsuffix suffix
+	a suffix to use in the name of the package installation directory,
+	in order to keep output separate from default builds.
+	If using the -race flag, the install suffix is automatically set to race
+	or, if set explicitly, has _race appended to it.
+-ldflags &#39;flag list&#39;
+	arguments to pass on each 5l, 6l, or 8l linker invocation.
+-tags &#39;tag list&#39;
+	a list of build tags to consider satisfied during the build.
+	For more information about build tags, see the description of
+	build constraints in the documentation for the go/build package.
+</pre>
+<p>
+The list flags accept a space-separated list of strings. To embed spaces
+in an element in the list, surround it with either single or double quotes.
+</p>
+<p>
+For more about specifying packages, see &#39;go help packages&#39;.
+For more about where packages and binaries are installed,
+run &#39;go help gopath&#39;.  For more about calling between Go and C/C++,
+run &#39;go help c&#39;.
+</p>
+<p>
+See also: go install, go get, go clean.
+</p>
+<h3 id="hdr-Remove_object_files">Remove object files</h3>
+<p>
+Usage:
+</p>
+<pre>go clean [-i] [-r] [-n] [-x] [build flags] [packages]
+</pre>
+<p>
+Clean removes object files from package source directories.
+The go command builds most objects in a temporary directory,
+so go clean is mainly concerned with object files left by other
+tools or by manual invocations of go build.
+</p>
+<p>
+Specifically, clean removes the following files from each of the
+source directories corresponding to the import paths:
+</p>
+<pre>_obj/            old object directory, left from Makefiles
+_test/           old test directory, left from Makefiles
+_testmain.go     old gotest file, left from Makefiles
+test.out         old test log, left from Makefiles
+build.out        old test log, left from Makefiles
+*.[568ao]        object files, left from Makefiles
+
+DIR(.exe)        from go build
+DIR.test(.exe)   from go test -c
+MAINFILE(.exe)   from go build MAINFILE.go
+*.so             from SWIG
+</pre>
+<p>
+In the list, DIR represents the final path element of the
+directory, and MAINFILE is the base name of any Go source
+file in the directory that is not included when building
+the package.
+</p>
+<p>
+The -i flag causes clean to remove the corresponding installed
+archive or binary (what &#39;go install&#39; would create).
+</p>
+<p>
+The -n flag causes clean to print the remove commands it would execute,
+but not run them.
+</p>
+<p>
+The -r flag causes clean to be applied recursively to all the
+dependencies of the packages named by the import paths.
+</p>
+<p>
+The -x flag causes clean to print remove commands as it executes them.
+</p>
+<p>
+For more about build flags, see &#39;go help build&#39;.
+</p>
+<p>
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<h3 id="hdr-Print_Go_environment_information">Print Go environment information</h3>
+<p>
+Usage:
+</p>
+<pre>go env [var ...]
+</pre>
+<p>
+Env prints Go environment information.
+</p>
+<p>
+By default env prints information as a shell script
+(on Windows, a batch file).  If one or more variable
+names is given as arguments,  env prints the value of
+each named variable on its own line.
+</p>
+<h3 id="hdr-Run_go_tool_fix_on_packages">Run go tool fix on packages</h3>
+<p>
+Usage:
+</p>
+<pre>go fix [packages]
+</pre>
+<p>
+Fix runs the Go fix command on the packages named by the import paths.
+</p>
+<p>
+For more about fix, see &#39;godoc fix&#39;.
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<p>
+To run fix with specific options, run &#39;go tool fix&#39;.
+</p>
+<p>
+See also: go fmt, go vet.
+</p>
+<h3 id="hdr-Run_gofmt_on_package_sources">Run gofmt on package sources</h3>
+<p>
+Usage:
+</p>
+<pre>go fmt [-n] [-x] [packages]
+</pre>
+<p>
+Fmt runs the command &#39;gofmt -l -w&#39; on the packages named
+by the import paths.  It prints the names of the files that are modified.
+</p>
+<p>
+For more about gofmt, see &#39;godoc gofmt&#39;.
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<p>
+The -n flag prints commands that would be executed.
+The -x flag prints commands as they are executed.
+</p>
+<p>
+To run gofmt with specific options, run gofmt itself.
+</p>
+<p>
+See also: go fix, go vet.
+</p>
+<h3 id="hdr-Generate_Go_files_by_processing_source">Generate Go files by processing source</h3>
+<p>
+Usage:
+</p>
+<pre>go generate [-run regexp] [file.go... | packages]
+</pre>
+<p>
+Generate runs commands described by directives within existing
+files. Those commands can run any process but the intent is to
+create or update Go source files, for instance by running yacc.
+</p>
+<p>
+Go generate is never run automatically by go build, go get, go test,
+and so on. It must be run explicitly.
+</p>
+<p>
+Go generate scans the file for directives, which are lines of
+the form,
+</p>
+<pre>//go:generate command argument...
+</pre>
+<p>
+(note: no leading spaces and no space in &#34;//go&#34;) where command
+is the generator to be run, corresponding to an executable file
+that can be run locally. It must either be in the shell path
+(gofmt), a fully qualified path (/usr/you/bin/mytool), or a
+command alias, described below.
+</p>
+<p>
+Note that go generate does not parse the file, so lines that look
+like directives in comments or multiline strings will be treated
+as directives.
+</p>
+<p>
+The arguments to the directive are space-separated tokens or
+double-quoted strings passed to the generator as individual
+arguments when it is run.
+</p>
+<p>
+Quoted strings use Go syntax and are evaluated before execution; a
+quoted string appears as a single argument to the generator.
+</p>
+<p>
+Go generate sets several variables when it runs the generator:
+</p>
+<pre>$GOARCH
+	The execution architecture (arm, amd64, etc.)
+$GOOS
+	The execution operating system (linux, windows, etc.)
+$GOFILE
+	The base name of the file.
+$GOPACKAGE
+	The name of the package of the file containing the directive.
+</pre>
+<p>
+Other than variable substitution and quoted-string evaluation, no
+special processing such as &#34;globbing&#34; is performed on the command
+line.
+</p>
+<p>
+As a last step before running the command, any invocations of any
+environment variables with alphanumeric names, such as $GOFILE or
+$HOME, are expanded throughout the command line. The syntax for
+variable expansion is $NAME on all operating systems.  Due to the
+order of evaluation, variables are expanded even inside quoted
+strings. If the variable NAME is not set, $NAME expands to the
+empty string.
+</p>
+<p>
+A directive of the form,
+</p>
+<pre>//go:generate -command xxx args...
+</pre>
+<p>
+specifies, for the remainder of this source file only, that the
+string xxx represents the command identified by the arguments. This
+can be used to create aliases or to handle multiword generators.
+For example,
+</p>
+<pre>//go:generate -command yacc go tool yacc
+</pre>
+<p>
+specifies that the command &#34;yacc&#34; represents the generator
+&#34;go tool yacc&#34;.
+</p>
+<p>
+Generate processes packages in the order given on the command line,
+one at a time. If the command line lists .go files, they are treated
+as a single package. Within a package, generate processes the
+source files in a package in file name order, one at a time. Within
+a source file, generate runs generators in the order they appear
+in the file, one at a time.
+</p>
+<p>
+If any generator returns an error exit status, &#34;go generate&#34; skips
+all further processing for that package.
+</p>
+<p>
+The generator is run in the package&#39;s source directory.
+</p>
+<p>
+Go generate accepts one specific flag:
+</p>
+<pre>-run=&#34;&#34;
+	if non-empty, specifies a regular expression to
+	select directives whose command matches the expression.
+</pre>
+<p>
+It also accepts the standard build flags -v, -n, and -x.
+The -v flag prints the names of packages and files as they are
+processed.
+The -n flag prints commands that would be executed.
+The -x flag prints commands as they are executed.
+</p>
+<p>
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<h3 id="hdr-Download_and_install_packages_and_dependencies">Download and install packages and dependencies</h3>
+<p>
+Usage:
+</p>
+<pre>go get [-d] [-f] [-fix] [-t] [-u] [build flags] [packages]
+</pre>
+<p>
+Get downloads and installs the packages named by the import paths,
+along with their dependencies.
+</p>
+<p>
+The -d flag instructs get to stop after downloading the packages; that is,
+it instructs get not to install the packages.
+</p>
+<p>
+The -f flag, valid only when -u is set, forces get -u not to verify that
+each package has been checked out from the source control repository
+implied by its import path. This can be useful if the source is a local fork
+of the original.
+</p>
+<p>
+The -fix flag instructs get to run the fix tool on the downloaded packages
+before resolving dependencies or building the code.
+</p>
+<p>
+The -t flag instructs get to also download the packages required to build
+the tests for the specified packages.
+</p>
+<p>
+The -u flag instructs get to use the network to update the named packages
+and their dependencies.  By default, get uses the network to check out
+missing packages but does not use it to look for updates to existing packages.
+</p>
+<p>
+Get also accepts build flags to control the installation. See &#39;go help build&#39;.
+</p>
+<p>
+When checking out or updating a package, get looks for a branch or tag
+that matches the locally installed version of Go. The most important
+rule is that if the local installation is running version &#34;go1&#34;, get
+searches for a branch or tag named &#34;go1&#34;. If no such version exists it
+retrieves the most recent version of the package.
+</p>
+<p>
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<p>
+For more about how &#39;go get&#39; finds source code to
+download, see &#39;go help importpath&#39;.
+</p>
+<p>
+See also: go build, go install, go clean.
+</p>
+<h3 id="hdr-Compile_and_install_packages_and_dependencies">Compile and install packages and dependencies</h3>
+<p>
+Usage:
+</p>
+<pre>go install [build flags] [packages]
+</pre>
+<p>
+Install compiles and installs the packages named by the import paths,
+along with their dependencies.
+</p>
+<p>
+For more about the build flags, see &#39;go help build&#39;.
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<p>
+See also: go build, go get, go clean.
+</p>
+<h3 id="hdr-List_packages">List packages</h3>
+<p>
+Usage:
+</p>
+<pre>go list [-e] [-f format] [-json] [build flags] [packages]
+</pre>
+<p>
+List lists the packages named by the import paths, one per line.
+</p>
+<p>
+The default output shows the package import path:
+</p>
+<pre>code.google.com/p/google-api-go-client/books/v1
+code.google.com/p/goauth2/oauth
+code.google.com/p/sqlite
+</pre>
+<p>
+The -f flag specifies an alternate format for the list, using the
+syntax of package template.  The default output is equivalent to -f
+&#39;{{.ImportPath}}&#39;. The struct being passed to the template is:
+</p>
+<pre>type Package struct {
+    Dir           string // directory containing package sources
+    ImportPath    string // import path of package in dir
+    ImportComment string // path in import comment on package statement
+    Name          string // package name
+    Doc           string // package documentation string
+    Target        string // install path
+    Goroot        bool   // is this package in the Go root?
+    Standard      bool   // is this package part of the standard Go library?
+    Stale         bool   // would &#39;go install&#39; do anything for this package?
+    Root          string // Go root or Go path dir containing this package
+
+    // Source files
+    GoFiles        []string // .go source files (excluding CgoFiles, TestGoFiles, XTestGoFiles)
+    CgoFiles       []string // .go sources files that import &#34;C&#34;
+    IgnoredGoFiles []string // .go sources ignored due to build constraints
+    CFiles         []string // .c source files
+    CXXFiles       []string // .cc, .cxx and .cpp source files
+    MFiles         []string // .m source files
+    HFiles         []string // .h, .hh, .hpp and .hxx source files
+    SFiles         []string // .s source files
+    SwigFiles      []string // .swig files
+    SwigCXXFiles   []string // .swigcxx files
+    SysoFiles      []string // .syso object files to add to archive
+
+    // Cgo directives
+    CgoCFLAGS    []string // cgo: flags for C compiler
+    CgoCPPFLAGS  []string // cgo: flags for C preprocessor
+    CgoCXXFLAGS  []string // cgo: flags for C++ compiler
+    CgoLDFLAGS   []string // cgo: flags for linker
+    CgoPkgConfig []string // cgo: pkg-config names
+
+    // Dependency information
+    Imports []string // import paths used by this package
+    Deps    []string // all (recursively) imported dependencies
+
+    // Error information
+    Incomplete bool            // this package or a dependency has an error
+    Error      *PackageError   // error loading package
+    DepsErrors []*PackageError // errors loading dependencies
+
+    TestGoFiles  []string // _test.go files in package
+    TestImports  []string // imports from TestGoFiles
+    XTestGoFiles []string // _test.go files outside package
+    XTestImports []string // imports from XTestGoFiles
+}
+</pre>
+<p>
+The template function &#34;join&#34; calls strings.Join.
+</p>
+<p>
+The template function &#34;context&#34; returns the build context, defined as:
+</p>
+<pre>type Context struct {
+	GOARCH        string   // target architecture
+	GOOS          string   // target operating system
+	GOROOT        string   // Go root
+	GOPATH        string   // Go path
+	CgoEnabled    bool     // whether cgo can be used
+	UseAllFiles   bool     // use files regardless of +build lines, file names
+	Compiler      string   // compiler to assume when computing target paths
+	BuildTags     []string // build constraints to match in +build lines
+	ReleaseTags   []string // releases the current release is compatible with
+	InstallSuffix string   // suffix to use in the name of the install dir
+}
+</pre>
+<p>
+For more information about the meaning of these fields see the documentation
+for the go/build package&#39;s Context type.
+</p>
+<p>
+The -json flag causes the package data to be printed in JSON format
+instead of using the template format.
+</p>
+<p>
+The -e flag changes the handling of erroneous packages, those that
+cannot be found or are malformed.  By default, the list command
+prints an error to standard error for each erroneous package and
+omits the packages from consideration during the usual printing.
+With the -e flag, the list command never prints errors to standard
+error and instead processes the erroneous packages with the usual
+printing.  Erroneous packages will have a non-empty ImportPath and
+a non-nil Error field; other information may or may not be missing
+(zeroed).
+</p>
+<p>
+For more about build flags, see &#39;go help build&#39;.
+</p>
+<p>
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<h3 id="hdr-Compile_and_run_Go_program">Compile and run Go program</h3>
+<p>
+Usage:
+</p>
+<pre>go run [build flags] [-exec xprog] gofiles... [arguments...]
+</pre>
+<p>
+Run compiles and runs the main package comprising the named Go source files.
+A Go source file is defined to be a file ending in a literal &#34;.go&#34; suffix.
+</p>
+<p>
+By default, &#39;go run&#39; runs the compiled binary directly: &#39;a.out arguments...&#39;.
+If the -exec flag is given, &#39;go run&#39; invokes the binary using xprog: &#39;xprog a.out arguments...&#39;.
+If the -exec flag is not given, GOOS or GOARCH is different from the system
+default, and a program named go_$GOOS_$GOARCH_exec can be found
+on the current search path, &#39;go run&#39; invokes the binary using that program,
+for example &#39;go_nacl_386_exec a.out arguments...&#39;. This allows execution of
+cross-compiled programs when a simulator or other execution method is
+available.
+</p>
+<p>
+For more about build flags, see &#39;go help build&#39;.
+</p>
+<p>
+See also: go build.
+</p>
+<h3 id="hdr-Test_packages">Test packages</h3>
+<p>
+Usage:
+</p>
+<pre>go test [-c] [-i] [build and test flags] [packages] [flags for test binary]
+</pre>
+<p>
+&#39;Go test&#39; automates testing the packages named by the import paths.
+It prints a summary of the test results in the format:
+</p>
+<pre>ok   archive/tar   0.011s
+FAIL archive/zip   0.022s
+ok   compress/gzip 0.033s
+...
+</pre>
+<p>
+followed by detailed output for each failed package.
+</p>
+<p>
+&#39;Go test&#39; recompiles each package along with any files with names matching
+the file pattern &#34;*_test.go&#34;.
+Files whose names begin with &#34;_&#34; (including &#34;_test.go&#34;) or &#34;.&#34; are ignored.
+These additional files can contain test functions, benchmark functions, and
+example functions.  See &#39;go help testfunc&#39; for more.
+Each listed package causes the execution of a separate test binary.
+</p>
+<p>
+Test files that declare a package with the suffix &#34;_test&#34; will be compiled as a
+separate package, and then linked and run with the main test binary.
+</p>
+<p>
+By default, go test needs no arguments.  It compiles and tests the package
+with source in the current directory, including tests, and runs the tests.
+</p>
+<p>
+The package is built in a temporary directory so it does not interfere with the
+non-test installation.
+</p>
+<p>
+In addition to the build flags, the flags handled by &#39;go test&#39; itself are:
+</p>
+<pre>-c
+	Compile the test binary to pkg.test but do not run it
+	(where pkg is the last element of the package&#39;s import path).
+	The file name can be changed with the -o flag.
+
+-exec xprog
+    Run the test binary using xprog. The behavior is the same as
+    in &#39;go run&#39;. See &#39;go help run&#39; for details.
+
+-i
+    Install packages that are dependencies of the test.
+    Do not run the test.
+
+-o file
+	Compile the test binary to the named file.
+	The test still runs (unless -c or -i is specified).
+</pre>
+<p>
+The test binary also accepts flags that control execution of the test; these
+flags are also accessible by &#39;go test&#39;.  See &#39;go help testflag&#39; for details.
+</p>
+<p>
+If the test binary needs any other flags, they should be presented after the
+package names. The go tool treats as a flag the first argument that begins with
+a minus sign that it does not recognize itself; that argument and all subsequent
+arguments are passed as arguments to the test binary.
+</p>
+<p>
+For more about build flags, see &#39;go help build&#39;.
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<p>
+See also: go build, go vet.
+</p>
+<h3 id="hdr-Run_specified_go_tool">Run specified go tool</h3>
+<p>
+Usage:
+</p>
+<pre>go tool [-n] command [args...]
+</pre>
+<p>
+Tool runs the go tool command identified by the arguments.
+With no arguments it prints the list of known tools.
+</p>
+<p>
+The -n flag causes tool to print the command that would be
+executed but not execute it.
+</p>
+<p>
+For more about each tool command, see &#39;go tool command -h&#39;.
+</p>
+<h3 id="hdr-Print_Go_version">Print Go version</h3>
+<p>
+Usage:
+</p>
+<pre>go version
+</pre>
+<p>
+Version prints the Go version, as reported by runtime.Version.
+</p>
+<h3 id="hdr-Run_go_tool_vet_on_packages">Run go tool vet on packages</h3>
+<p>
+Usage:
+</p>
+<pre>go vet [-n] [-x] [packages]
+</pre>
+<p>
+Vet runs the Go vet command on the packages named by the import paths.
+</p>
+<p>
+For more about vet, see &#39;godoc golang.org/x/tools/cmd/vet&#39;.
+For more about specifying packages, see &#39;go help packages&#39;.
+</p>
+<p>
+To run the vet tool with specific options, run &#39;go tool vet&#39;.
+</p>
+<p>
+The -n flag prints commands that would be executed.
+The -x flag prints commands as they are executed.
+</p>
+<p>
+See also: go fmt, go fix.
+</p>
+<h3 id="hdr-Calling_between_Go_and_C">Calling between Go and C</h3>
+<p>
+There are two different ways to call between Go and C/C++ code.
+</p>
+<p>
+The first is the cgo tool, which is part of the Go distribution.  For
+information on how to use it see the cgo documentation (godoc cmd/cgo).
+</p>
+<p>
+The second is the SWIG program, which is a general tool for
+interfacing between languages.  For information on SWIG see
+<a href="http://swig.org/">http://swig.org/</a>.  When running go build, any file with a .swig
+extension will be passed to SWIG.  Any file with a .swigcxx extension
+will be passed to SWIG with the -c++ option.
+</p>
+<p>
+When either cgo or SWIG is used, go build will pass any .c, .m, .s,
+or .S files to the C compiler, and any .cc, .cpp, .cxx files to the C++
+compiler.  The CC or CXX environment variables may be set to determine
+the C or C++ compiler, respectively, to use.
+</p>
+<h3 id="hdr-File_types">File types</h3>
+<p>
+The go command examines the contents of a restricted set of files
+in each directory. It identifies which files to examine based on
+the extension of the file name. These extensions are:
+</p>
+<pre>.go
+	Go source files.
+.c, .h
+	C source files.
+	If the package uses cgo, these will be compiled with the
+	OS-native compiler (typically gcc); otherwise they will be
+	compiled with the Go-specific support compiler,
+	5c, 6c, or 8c, etc. as appropriate.
+.cc, .cpp, .cxx, .hh, .hpp, .hxx
+	C++ source files. Only useful with cgo or SWIG, and always
+	compiled with the OS-native compiler.
+.m
+	Objective-C source files. Only useful with cgo, and always
+	compiled with the OS-native compiler.
+.s, .S
+	Assembler source files.
+	If the package uses cgo, these will be assembled with the
+	OS-native assembler (typically gcc (sic)); otherwise they
+	will be assembled with the Go-specific support assembler,
+	5a, 6a, or 8a, etc., as appropriate.
+.swig, .swigcxx
+	SWIG definition files.
+.syso
+	System object files.
+</pre>
+<p>
+Files of each of these types except .syso may contain build
+constraints, but the go command stops scanning for build constraints
+at the first item in the file that is not a blank line or //-style
+line comment.
+</p>
+<h3 id="hdr-GOPATH_environment_variable">GOPATH environment variable</h3>
+<p>
+The Go path is used to resolve import statements.
+It is implemented by and documented in the go/build package.
+</p>
+<p>
+The GOPATH environment variable lists places to look for Go code.
+On Unix, the value is a colon-separated string.
+On Windows, the value is a semicolon-separated string.
+On Plan 9, the value is a list.
+</p>
+<p>
+GOPATH must be set to get, build and install packages outside the
+standard Go tree.
+</p>
+<p>
+Each directory listed in GOPATH must have a prescribed structure:
+</p>
+<p>
+The src/ directory holds source code.  The path below &#39;src&#39;
+determines the import path or executable name.
+</p>
+<p>
+The pkg/ directory holds installed package objects.
+As in the Go tree, each target operating system and
+architecture pair has its own subdirectory of pkg
+(pkg/GOOS_GOARCH).
+</p>
+<p>
+If DIR is a directory listed in the GOPATH, a package with
+source in DIR/src/foo/bar can be imported as &#34;foo/bar&#34; and
+has its compiled form installed to &#34;DIR/pkg/GOOS_GOARCH/foo/bar.a&#34;.
+</p>
+<p>
+The bin/ directory holds compiled commands.
+Each command is named for its source directory, but only
+the final element, not the entire path.  That is, the
+command with source in DIR/src/foo/quux is installed into
+DIR/bin/quux, not DIR/bin/foo/quux.  The foo/ is stripped
+so that you can add DIR/bin to your PATH to get at the
+installed commands.  If the GOBIN environment variable is
+set, commands are installed to the directory it names instead
+of DIR/bin.
+</p>
+<p>
+Here&#39;s an example directory layout:
+</p>
+<pre>GOPATH=/home/user/gocode
+
+/home/user/gocode/
+    src/
+        foo/
+            bar/               (go code in package bar)
+                x.go
+            quux/              (go code in package main)
+                y.go
+    bin/
+        quux                   (installed command)
+    pkg/
+        linux_amd64/
+            foo/
+                bar.a          (installed package object)
+</pre>
+<p>
+Go searches each directory listed in GOPATH to find source code,
+but new packages are always downloaded into the first directory
+in the list.
+</p>
+<h3 id="hdr-Import_path_syntax">Import path syntax</h3>
+<p>
+An import path (see &#39;go help packages&#39;) denotes a package
+stored in the local file system.  In general, an import path denotes
+either a standard package (such as &#34;unicode/utf8&#34;) or a package
+found in one of the work spaces (see &#39;go help gopath&#39;).
+</p>
+<h3 id="hdr-Relative_import_paths">Relative import paths</h3>
+<p>
+An import path beginning with ./ or ../ is called a relative path.
+The toolchain supports relative import paths as a shortcut in two ways.
+</p>
+<p>
+First, a relative path can be used as a shorthand on the command line.
+If you are working in the directory containing the code imported as
+&#34;unicode&#34; and want to run the tests for &#34;unicode/utf8&#34;, you can type
+&#34;go test ./utf8&#34; instead of needing to specify the full path.
+Similarly, in the reverse situation, &#34;go test ..&#34; will test &#34;unicode&#34; from
+the &#34;unicode/utf8&#34; directory. Relative patterns are also allowed, like
+&#34;go test ./...&#34; to test all subdirectories. See &#39;go help packages&#39; for details
+on the pattern syntax.
+</p>
+<p>
+Second, if you are compiling a Go program not in a work space,
+you can use a relative path in an import statement in that program
+to refer to nearby code also not in a work space.
+This makes it easy to experiment with small multipackage programs
+outside of the usual work spaces, but such programs cannot be
+installed with &#34;go install&#34; (there is no work space in which to install them),
+so they are rebuilt from scratch each time they are built.
+To avoid ambiguity, Go programs cannot use relative import paths
+within a work space.
+</p>
+<h3 id="hdr-Remote_import_paths">Remote import paths</h3>
+<p>
+Certain import paths also
+describe how to obtain the source code for the package using
+a revision control system.
+</p>
+<p>
+A few common code hosting sites have special syntax:
+</p>
+<pre>Bitbucket (Git, Mercurial)
+
+	import &#34;bitbucket.org/user/project&#34;
+	import &#34;bitbucket.org/user/project/sub/directory&#34;
+
+GitHub (Git)
+
+	import &#34;github.com/user/project&#34;
+	import &#34;github.com/user/project/sub/directory&#34;
+
+Google Code Project Hosting (Git, Mercurial, Subversion)
+
+	import &#34;code.google.com/p/project&#34;
+	import &#34;code.google.com/p/project/sub/directory&#34;
+
+	import &#34;code.google.com/p/project.subrepository&#34;
+	import &#34;code.google.com/p/project.subrepository/sub/directory&#34;
+
+Launchpad (Bazaar)
+
+	import &#34;launchpad.net/project&#34;
+	import &#34;launchpad.net/project/series&#34;
+	import &#34;launchpad.net/project/series/sub/directory&#34;
+
+	import &#34;launchpad.net/~user/project/branch&#34;
+	import &#34;launchpad.net/~user/project/branch/sub/directory&#34;
+
+IBM DevOps Services (Git)
+
+	import &#34;hub.jazz.net/git/user/project&#34;
+	import &#34;hub.jazz.net/git/user/project/sub/directory&#34;
+</pre>
+<p>
+For code hosted on other servers, import paths may either be qualified
+with the version control type, or the go tool can dynamically fetch
+the import path over https/http and discover where the code resides
+from a &lt;meta&gt; tag in the HTML.
+</p>
+<p>
+To declare the code location, an import path of the form
+</p>
+<pre>repository.vcs/path
+</pre>
+<p>
+specifies the given repository, with or without the .vcs suffix,
+using the named version control system, and then the path inside
+that repository.  The supported version control systems are:
+</p>
+<pre>Bazaar      .bzr
+Git         .git
+Mercurial   .hg
+Subversion  .svn
+</pre>
+<p>
+For example,
+</p>
+<pre>import &#34;example.org/user/foo.hg&#34;
+</pre>
+<p>
+denotes the root directory of the Mercurial repository at
+example.org/user/foo or foo.hg, and
+</p>
+<pre>import &#34;example.org/repo.git/foo/bar&#34;
+</pre>
+<p>
+denotes the foo/bar directory of the Git repository at
+example.org/repo or repo.git.
+</p>
+<p>
+When a version control system supports multiple protocols,
+each is tried in turn when downloading.  For example, a Git
+download tries git://, then https://, then http://.
+</p>
+<p>
+If the import path is not a known code hosting site and also lacks a
+version control qualifier, the go tool attempts to fetch the import
+over https/http and looks for a &lt;meta&gt; tag in the document&#39;s HTML
+&lt;head&gt;.
+</p>
+<p>
+The meta tag has the form:
+</p>
+<pre>&lt;meta name=&#34;go-import&#34; content=&#34;import-prefix vcs repo-root&#34;&gt;
+</pre>
+<p>
+The import-prefix is the import path corresponding to the repository
+root. It must be a prefix or an exact match of the package being
+fetched with &#34;go get&#34;. If it&#39;s not an exact match, another http
+request is made at the prefix to verify the &lt;meta&gt; tags match.
+</p>
+<p>
+The vcs is one of &#34;git&#34;, &#34;hg&#34;, &#34;svn&#34;, etc,
+</p>
+<p>
+The repo-root is the root of the version control system
+containing a scheme and not containing a .vcs qualifier.
+</p>
+<p>
+For example,
+</p>
+<pre>import &#34;example.org/pkg/foo&#34;
+</pre>
+<p>
+will result in the following request(s):
+</p>
+<pre><a href="https://example.org/pkg/foo?go-get=1">https://example.org/pkg/foo?go-get=1</a> (preferred)
+<a href="http://example.org/pkg/foo?go-get=1">http://example.org/pkg/foo?go-get=1</a>  (fallback)
+</pre>
+<p>
+If that page contains the meta tag
+</p>
+<pre>&lt;meta name=&#34;go-import&#34; content=&#34;example.org git <a href="https://code.org/r/p/exproj">https://code.org/r/p/exproj</a>&#34;&gt;
+</pre>
+<p>
+the go tool will verify that <a href="https://example.org/?go-get=1">https://example.org/?go-get=1</a> contains the
+same meta tag and then git clone <a href="https://code.org/r/p/exproj">https://code.org/r/p/exproj</a> into
+GOPATH/src/example.org.
+</p>
+<p>
+New downloaded packages are written to the first directory
+listed in the GOPATH environment variable (see &#39;go help gopath&#39;).
+</p>
+<p>
+The go command attempts to download the version of the
+package appropriate for the Go release being used.
+Run &#39;go help get&#39; for more.
+</p>
+<h3 id="hdr-Import_path_checking">Import path checking</h3>
+<p>
+When the custom import path feature described above redirects to a
+known code hosting site, each of the resulting packages has two possible
+import paths, using the custom domain or the known hosting site.
+</p>
+<p>
+A package statement is said to have an &#34;import comment&#34; if it is immediately
+followed (before the next newline) by a comment of one of these two forms:
+</p>
+<pre>package math // import &#34;path&#34;
+package math /* import &#34;path&#34; * /
+</pre>
+<p>
+The go command will refuse to install a package with an import comment
+unless it is being referred to by that import path. In this way, import comments
+let package authors make sure the custom import path is used and not a
+direct path to the underlying code hosting site.
+</p>
+<p>
+See <a href="https://golang.org/s/go14customimport">https://golang.org/s/go14customimport</a> for details.
+</p>
+<h3 id="hdr-Description_of_package_lists">Description of package lists</h3>
+<p>
+Many commands apply to a set of packages:
+</p>
+<pre>go action [packages]
+</pre>
+<p>
+Usually, [packages] is a list of import paths.
+</p>
+<p>
+An import path that is a rooted path or that begins with
+a . or .. element is interpreted as a file system path and
+denotes the package in that directory.
+</p>
+<p>
+Otherwise, the import path P denotes the package found in
+the directory DIR/src/P for some DIR listed in the GOPATH
+environment variable (see &#39;go help gopath&#39;).
+</p>
+<p>
+If no import paths are given, the action applies to the
+package in the current directory.
+</p>
+<p>
+There are three reserved names for paths that should not be used
+for packages to be built with the go tool:
+</p>
+<p>
+- &#34;main&#34; denotes the top-level package in a stand-alone executable.
+</p>
+<p>
+- &#34;all&#34; expands to all package directories found in all the GOPATH
+trees. For example, &#39;go list all&#39; lists all the packages on the local
+system.
+</p>
+<p>
+- &#34;std&#34; is like all but expands to just the packages in the standard
+Go library.
+</p>
+<p>
+An import path is a pattern if it includes one or more &#34;...&#34; wildcards,
+each of which can match any string, including the empty string and
+strings containing slashes.  Such a pattern expands to all package
+directories found in the GOPATH trees with names matching the
+patterns.  As a special case, x/... matches x as well as x&#39;s subdirectories.
+For example, net/... expands to net and packages in its subdirectories.
+</p>
+<p>
+An import path can also name a package to be downloaded from
+a remote repository.  Run &#39;go help importpath&#39; for details.
+</p>
+<p>
+Every package in a program must have a unique import path.
+By convention, this is arranged by starting each path with a
+unique prefix that belongs to you.  For example, paths used
+internally at Google all begin with &#39;google&#39;, and paths
+denoting remote repositories begin with the path to the code,
+such as &#39;code.google.com/p/project&#39;.
+</p>
+<p>
+As a special case, if the package list is a list of .go files from a
+single directory, the command is applied to a single synthesized
+package made up of exactly those files, ignoring any build constraints
+in those files and ignoring any other files in the directory.
+</p>
+<p>
+Directory and file names that begin with &#34;.&#34; or &#34;_&#34; are ignored
+by the go tool, as are directories named &#34;testdata&#34;.
+</p>
+<h3 id="hdr-Description_of_testing_flags">Description of testing flags</h3>
+<p>
+The &#39;go test&#39; command takes both flags that apply to &#39;go test&#39; itself
+and flags that apply to the resulting test binary.
+</p>
+<p>
+Several of the flags control profiling and write an execution profile
+suitable for &#34;go tool pprof&#34;; run &#34;go tool pprof help&#34; for more
+information.  The --alloc_space, --alloc_objects, and --show_bytes
+options of pprof control how the information is presented.
+</p>
+<p>
+The following flags are recognized by the &#39;go test&#39; command and
+control the execution of any test:
+</p>
+<pre>-bench regexp
+    Run benchmarks matching the regular expression.
+    By default, no benchmarks run. To run all benchmarks,
+    use &#39;-bench .&#39; or &#39;-bench=.&#39;.
+
+-benchmem
+    Print memory allocation statistics for benchmarks.
+
+-benchtime t
+    Run enough iterations of each benchmark to take t, specified
+    as a time.Duration (for example, -benchtime 1h30s).
+    The default is 1 second (1s).
+
+-blockprofile block.out
+    Write a goroutine blocking profile to the specified file
+    when all tests are complete.
+    Writes test binary as -c would.
+
+-blockprofilerate n
+    Control the detail provided in goroutine blocking profiles by
+    calling runtime.SetBlockProfileRate with n.
+    See &#39;godoc runtime SetBlockProfileRate&#39;.
+    The profiler aims to sample, on average, one blocking event every
+    n nanoseconds the program spends blocked.  By default,
+    if -test.blockprofile is set without this flag, all blocking events
+    are recorded, equivalent to -test.blockprofilerate=1.
+
+-cover
+    Enable coverage analysis.
+
+-covermode set,count,atomic
+    Set the mode for coverage analysis for the package[s]
+    being tested. The default is &#34;set&#34; unless -race is enabled,
+    in which case it is &#34;atomic&#34;.
+    The values:
+	set: bool: does this statement run?
+	count: int: how many times does this statement run?
+	atomic: int: count, but correct in multithreaded tests;
+		significantly more expensive.
+    Sets -cover.
+
+-coverpkg pkg1,pkg2,pkg3
+    Apply coverage analysis in each test to the given list of packages.
+    The default is for each test to analyze only the package being tested.
+    Packages are specified as import paths.
+    Sets -cover.
+
+-coverprofile cover.out
+    Write a coverage profile to the file after all tests have passed.
+    Sets -cover.
+
+-cpu 1,2,4
+    Specify a list of GOMAXPROCS values for which the tests or
+    benchmarks should be executed.  The default is the current value
+    of GOMAXPROCS.
+
+-cpuprofile cpu.out
+    Write a CPU profile to the specified file before exiting.
+    Writes test binary as -c would.
+
+-memprofile mem.out
+    Write a memory profile to the file after all tests have passed.
+    Writes test binary as -c would.
+
+-memprofilerate n
+    Enable more precise (and expensive) memory profiles by setting
+    runtime.MemProfileRate.  See &#39;godoc runtime MemProfileRate&#39;.
+    To profile all memory allocations, use -test.memprofilerate=1
+    and pass --alloc_space flag to the pprof tool.
+
+-outputdir directory
+    Place output files from profiling in the specified directory,
+    by default the directory in which &#34;go test&#34; is running.
+
+-parallel n
+    Allow parallel execution of test functions that call t.Parallel.
+    The value of this flag is the maximum number of tests to run
+    simultaneously; by default, it is set to the value of GOMAXPROCS.
+
+-run regexp
+    Run only those tests and examples matching the regular
+    expression.
+
+-short
+    Tell long-running tests to shorten their run time.
+    It is off by default but set during all.bash so that installing
+    the Go tree can run a sanity check but not spend time running
+    exhaustive tests.
+
+-timeout t
+    If a test runs longer than t, panic.
+
+-v
+    Verbose output: log all tests as they are run. Also print all
+    text from Log and Logf calls even if the test succeeds.
+</pre>
+<p>
+The test binary, called pkg.test where pkg is the name of the
+directory containing the package sources, can be invoked directly
+after building it with &#39;go test -c&#39;. When invoking the test binary
+directly, each of the standard flag names must be prefixed with &#39;test.&#39;,
+as in -test.run=TestMyFunc or -test.v.
+</p>
+<p>
+When running &#39;go test&#39;, flags not listed above are passed through
+unaltered. For instance, the command
+</p>
+<pre>go test -x -v -cpuprofile=prof.out -dir=testdata -update
+</pre>
+<p>
+will compile the test binary and then run it as
+</p>
+<pre>pkg.test -test.v -test.cpuprofile=prof.out -dir=testdata -update
+</pre>
+<p>
+The test flags that generate profiles (other than for coverage) also
+leave the test binary in pkg.test for use when analyzing the profiles.
+</p>
+<p>
+Flags not recognized by &#39;go test&#39; must be placed after any specified packages.
+</p>
+<h3 id="hdr-Description_of_testing_functions">Description of testing functions</h3>
+<p>
+The &#39;go test&#39; command expects to find test, benchmark, and example functions
+in the &#34;*_test.go&#34; files corresponding to the package under test.
+</p>
+<p>
+A test function is one named TestXXX (where XXX is any alphanumeric string
+not starting with a lower case letter) and should have the signature,
+</p>
+<pre>func TestXXX(t *testing.T) { ... }
+</pre>
+<p>
+A benchmark function is one named BenchmarkXXX and should have the signature,
+</p>
+<pre>func BenchmarkXXX(b *testing.B) { ... }
+</pre>
+<p>
+An example function is similar to a test function but, instead of using
+*testing.T to report success or failure, prints output to os.Stdout.
+That output is compared against the function&#39;s &#34;Output:&#34; comment, which
+must be the last comment in the function body (see example below). An
+example with no such comment, or with no text after &#34;Output:&#34; is compiled
+but not executed.
+</p>
+<p>
+Godoc displays the body of ExampleXXX to demonstrate the use
+of the function, constant, or variable XXX.  An example of a method M with
+receiver type T or *T is named ExampleT_M.  There may be multiple examples
+for a given function, constant, or variable, distinguished by a trailing _xxx,
+where xxx is a suffix not beginning with an upper case letter.
+</p>
+<p>
+Here is an example of an example:
+</p>
+<pre>func ExamplePrintln() {
+	Println(&#34;The output of\nthis example.&#34;)
+	// Output: The output of
+	// this example.
+}
+</pre>
+<p>
+The entire test file is presented as the example when it contains a single
+example function, at least one other function, type, variable, or constant
+declaration, and no test or benchmark functions.
+</p>
+<p>
+See the documentation of the testing package for more information.
+</p>
+
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

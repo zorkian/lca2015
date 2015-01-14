@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>Generating arbitrary text: a Markov chain algorithm - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Codewalk: Generating arbitrary text: a Markov chain algorithm</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2010 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+
+<style type='text/css'>@import "/doc/codewalk/codewalk.css";</style>
+<script type="text/javascript" src="/doc/codewalk/codewalk.js"></script>
+
+<div id="codewalk-main">
+  <div class="left" id="code-column">
+    <div id='sizer'></div>
+    <div id="code-area">
+      <div id="code-header" align="center">
+        <a id="code-popout-link" href="" target="_blank">
+          <img title="View code in new window" alt="Pop Out Code" src="/doc/codewalk/popout.png" style="display: block; float: right;"/>
+        </a>
+        <select id="code-selector">
+          
+          <option value="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go">doc/codewalk/markov.go</option>
+          
+        </select>
+      </div>
+      <div id="code">
+        <iframe class="code-display" name="code-display" id="code-display"></iframe>
+      </div>
+    </div>
+    <div id="code-options" class="setting">
+      <span>code on <a id="set-code-left" class="selected" href="#">left</a> &bull; <a id="set-code-right" href="#">right</a></span>
+      <span>code width <span id="code-column-width">70%</span></span>
+      <span>filepaths <a id="show-filepaths" class="selected" href="#">shown</a> &bull; <a id="hide-filepaths" href="#">hidden</a></span>
+    </div>
+  </div>
+  <div class="right" id="comment-column">
+    <div id="comment-area">
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=6&amp;hi=44#mark" target="code-display"></a>
+        <div class="comment-title">Introduction</div>
+        <div class="comment-text">
+	
+        
+	This codewalk describes a program that generates random text using
+	a Markov chain algorithm. The package comment describes the algorithm
+	and the operation of the program. Please read it before continuing.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:6,44</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=77&amp;hi=77#mark" target="code-display"></a>
+        <div class="comment-title">Modeling Markov chains</div>
+        <div class="comment-text">
+	
+        
+	A chain consists of a prefix and a suffix. Each prefix is a set
+	number of words, while a suffix is a single word.
+	A prefix can have an arbitrary number of suffixes.
+	To model this data, we use a <code>map[string][]string</code>.
+	Each map key is a prefix (a <code>string</code>) and its values are
+	lists of suffixes (a slice of strings, <code>[]string</code>).
+	<br/><br/>
+	Here is the example table from the package comment
+	as modeled by this data structure:
+	<pre>
+map[string][]string{
+	" ":          {"I"},
+	" I":         {"am"},
+	"I am":       {"a", "not"},
+	"a free":     {"man!"},
+	"am a":       {"free"},
+	"am not":     {"a"},
+	"a number!":  {"I"},
+	"number! I":  {"am"},
+	"not a":      {"number!"},
+}</pre>
+	While each prefix consists of multiple words, we
+	store prefixes in the map as a single <code>string</code>.
+	It would seem more natural to store the prefix as a
+	<code>[]string</code>, but we can't do this with a map because the
+	key type of a map must implement equality (and slices do not).
+	<br/><br/>
+	Therefore, in most of our code we will model prefixes as a
+	<code>[]string</code> and join the strings together with a space
+	to generate the map key:
+	<pre>
+Prefix               Map key
+
+[]string{"", ""}     " "
+[]string{"", "I"}    " I"
+[]string{"I", "am"}  "I am"
+</pre>
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:77</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=76&amp;hi=79#mark" target="code-display"></a>
+        <div class="comment-title">The Chain struct</div>
+        <div class="comment-text">
+	
+        
+	The complete state of the chain table consists of the table itself and
+	the word length of the prefixes. The <code>Chain</code> struct stores
+	this data.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:76,79</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=82&amp;hi=84#mark" target="code-display"></a>
+        <div class="comment-title">The NewChain constructor function</div>
+        <div class="comment-text">
+	
+        
+	The <code>Chain</code> struct has two unexported fields (those that
+	do not begin with an upper case character), and so we write a
+	<code>NewChain</code> constructor function that initializes the
+	<code>chain</code> map with <code>make</code> and sets the
+	<code>prefixLen</code> field.
+	<br/><br/>
+	This is constructor function is not strictly necessary as this entire
+	program is within a single package (<code>main</code>) and therefore
+	there is little practical difference between exported and unexported
+	fields. We could just as easily write out the contents of this function
+	when we want to construct a new Chain.
+	But using these unexported fields is good practice; it clearly denotes
+	that only methods of Chain and its constructor function should access
+	those fields. Also, structuring <code>Chain</code> like this means we
+	could easily move it into its own package at some later date.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:82,84</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=60&amp;hi=60#mark" target="code-display"></a>
+        <div class="comment-title">The Prefix type</div>
+        <div class="comment-text">
+	
+        
+	Since we'll be working with prefixes often, we define a
+	<code>Prefix</code> type with the concrete type <code>[]string</code>.
+	Defining a named type clearly allows us to be explicit when we are
+	working with a prefix instead of just a <code>[]string</code>.
+	Also, in Go we can define methods on any named type (not just structs),
+	so we can add methods that operate on <code>Prefix</code> if we need to.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:60</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=63&amp;hi=65#mark" target="code-display"></a>
+        <div class="comment-title">The String method</div>
+        <div class="comment-text">
+	
+        
+	The first method we define on <code>Prefix</code> is
+	<code>String</code>. It returns a <code>string</code> representation
+	of a <code>Prefix</code> by joining the slice elements together with
+	spaces. We will use this method to generate keys when working with
+	the chain map.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:63,65</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=88&amp;hi=100#mark" target="code-display"></a>
+        <div class="comment-title">Building the chain</div>
+        <div class="comment-text">
+	
+        
+	The <code>Build</code> method reads text from an <code>io.Reader</code>
+	and parses it into prefixes and suffixes that are stored in the
+	<code>Chain</code>.
+	<br/><br/>
+	The <code><a href="/pkg/io/#Reader">io.Reader</a></code> is an
+	interface type that is widely used by the standard library and
+	other Go code. Our code uses the
+	<code><a href="/pkg/fmt/#Fscan">fmt.Fscan</a></code> function, which
+	reads space-separated values from an <code>io.Reader</code>.
+	<br/><br/>
+	The <code>Build</code> method returns once the <code>Reader</code>'s
+	<code>Read</code> method returns <code>io.EOF</code> (end of file)
+	or some other read error occurs.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:88,100</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=89&amp;hi=89#mark" target="code-display"></a>
+        <div class="comment-title">Buffering the input</div>
+        <div class="comment-text">
+	
+        
+	This function does many small reads, which can be inefficient for some
+	<code>Readers</code>. For efficiency we wrap the provided
+	<code>io.Reader</code> with
+	<code><a href="/pkg/bufio/">bufio.NewReader</a></code> to create a
+	new <code>io.Reader</code> that provides buffering.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:89</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=90&amp;hi=90#mark" target="code-display"></a>
+        <div class="comment-title">The Prefix variable</div>
+        <div class="comment-text">
+	
+        
+	At the top of the function we make a <code>Prefix</code> slice
+	<code>p</code> using the <code>Chain</code>'s <code>prefixLen</code>
+	field as its length.
+	We'll use this variable to hold the current prefix and mutate it with
+	each new word we encounter.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:90</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=92&amp;hi=95#mark" target="code-display"></a>
+        <div class="comment-title">Scanning words</div>
+        <div class="comment-text">
+	
+        
+	In our loop we read words from the <code>Reader</code> into a
+	<code>string</code> variable <code>s</code> using
+	<code>fmt.Fscan</code>. Since <code>Fscan</code> uses space to
+	separate each input value, each call will yield just one word
+	(including punctuation), which is exactly what we need.
+	<br/><br/>
+	<code>Fscan</code> returns an error if it encounters a read error
+	(<code>io.EOF</code>, for example) or if it can't scan the requested
+	value (in our case, a single string). In either case we just want to
+	stop scanning, so we <code>break</code> out of the loop.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:92,95</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=96&amp;hi=97#mark" target="code-display"></a>
+        <div class="comment-title">Adding a prefix and suffix to the chain</div>
+        <div class="comment-text">
+	
+        
+	The word stored in <code>s</code> is a new suffix. We add the new
+	prefix/suffix combination to the <code>chain</code> map by computing
+	the map key with <code>p.String</code> and appending the suffix
+	to the slice stored under that key.
+	<br/><br/>
+	The built-in <code>append</code> function appends elements to a slice
+	and allocates new storage when necessary. When the provided slice is
+	<code>nil</code>, <code>append</code> allocates a new slice.
+	This behavior conveniently ties in with the semantics of our map:
+	retrieving an unset key returns the zero value of the value type and
+	the zero value of <code>[]string</code> is <code>nil</code>.
+	When our program encounters a new prefix (yielding a <code>nil</code>
+	value in the map) <code>append</code> will allocate a new slice.
+	<br/><br/>
+	For more information about the <code>append</code> function and slices
+	in general see the
+	<a href="/doc/articles/slices_usage_and_internals.html">Slices: usage and internals</a> article.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:96,97</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=98&amp;hi=98#mark" target="code-display"></a>
+        <div class="comment-title">Pushing the suffix onto the prefix</div>
+        <div class="comment-text">
+	
+        
+	Before reading the next word our algorithm requires us to drop the
+	first word from the prefix and push the current suffix onto the prefix.
+	<br/><br/>
+	When in this state
+	<pre>
+p == Prefix{"I", "am"}
+s == "not" </pre>
+	the new value for <code>p</code> would be
+	<pre>
+p == Prefix{"am", "not"}</pre>
+	This operation is also required during text generation so we put
+	the code to perform this mutation of the slice inside a method on
+	<code>Prefix</code> named <code>Shift</code>.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:98</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=68&amp;hi=71#mark" target="code-display"></a>
+        <div class="comment-title">The Shift method</div>
+        <div class="comment-text">
+	
+        
+	The <code>Shift</code> method uses the built-in <code>copy</code>
+	function to copy the last len(p)-1 elements of <code>p</code> to
+	the start of the slice, effectively moving the elements
+	one index to the left (if you consider zero as the leftmost index).
+	<pre>
+p := Prefix{"I", "am"}
+copy(p, p[1:])
+// p == Prefix{"am", "am"}</pre>
+	We then assign the provided <code>word</code> to the last index
+	of the slice:
+	<pre>
+// suffix == "not"
+p[len(p)-1] = suffix
+// p == Prefix{"am", "not"}</pre>
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:68,71</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=103&amp;hi=116#mark" target="code-display"></a>
+        <div class="comment-title">Generating text</div>
+        <div class="comment-text">
+	
+        
+	The <code>Generate</code> method is similar to <code>Build</code>
+	except that instead of reading words from a <code>Reader</code>
+	and storing them in a map, it reads words from the map and
+	appends them to a slice (<code>words</code>).
+	<br/><br/>
+	<code>Generate</code> uses a conditional for loop to generate
+	up to <code>n</code> words.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:103,116</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=107&amp;hi=110#mark" target="code-display"></a>
+        <div class="comment-title">Getting potential suffixes</div>
+        <div class="comment-text">
+	
+        
+	At each iteration of the loop we retrieve a list of potential suffixes
+	for the current prefix. We access the <code>chain</code> map at key
+	<code>p.String()</code> and assign its contents to <code>choices</code>.
+	<br/><br/>
+	If <code>len(choices)</code> is zero we break out of the loop as there
+	are no potential suffixes for that prefix.
+	This test also works if the key isn't present in the map at all:
+	in that case, <code>choices</code> will be <code>nil</code> and the
+	length of a <code>nil</code> slice is zero.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:107,110</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=111&amp;hi=113#mark" target="code-display"></a>
+        <div class="comment-title">Choosing a suffix at random</div>
+        <div class="comment-text">
+	
+        
+	To choose a suffix we use the
+	<code><a href="/pkg/math/rand/#Intn">rand.Intn</a></code> function.
+	It returns a random integer up to (but not including) the provided
+	value. Passing in <code>len(choices)</code> gives us a random index
+	into the full length of the list.
+	<br/><br/>
+	We use that index to pick our new suffix, assign it to
+	<code>next</code> and append it to the <code>words</code> slice.
+	<br/><br/>
+	Next, we <code>Shift</code> the new suffix onto the prefix just as
+	we did in the <code>Build</code> method.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:111,113</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=115&amp;hi=115#mark" target="code-display"></a>
+        <div class="comment-title">Returning the generated text</div>
+        <div class="comment-text">
+	
+        
+	Before returning the generated text as a string, we use the
+	<code>strings.Join</code> function to join the elements of
+	the <code>words</code> slice together, separated by spaces.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:115</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=119&amp;hi=121#mark" target="code-display"></a>
+        <div class="comment-title">Command-line flags</div>
+        <div class="comment-text">
+	
+        
+	To make it easy to tweak the prefix and generated text lengths we
+	use the <code><a href="/pkg/flag/">flag</a></code> package to parse
+	command-line flags.
+	<br/><br/>
+	These calls to <code>flag.Int</code> register new flags with the
+	<code>flag</code> package. The arguments to <code>Int</code> are the
+	flag name, its default value, and a description. The <code>Int</code>
+	function returns a pointer to an integer that will contain the
+	user-supplied value (or the default value if the flag was omitted on
+	the command-line).
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:119,121</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=123&amp;hi=124#mark" target="code-display"></a>
+        <div class="comment-title">Program set up</div>
+        <div class="comment-text">
+	
+        
+	The <code>main</code> function begins by parsing the command-line
+	flags with <code>flag.Parse</code> and seeding the <code>rand</code>
+	package's random number generator with the current time.
+	<br/><br/>
+	If the command-line flags provided by the user are invalid the
+	<code>flag.Parse</code> function will print an informative usage
+	message and terminate the program.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:123,124</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=126&amp;hi=127#mark" target="code-display"></a>
+        <div class="comment-title">Creating and building a new Chain</div>
+        <div class="comment-text">
+	
+        
+	To create the new <code>Chain</code> we call <code>NewChain</code>
+	with the value of the <code>prefix</code> flag.
+	<br/><br/>
+	To build the chain we call <code>Build</code> with
+	<code>os.Stdin</code> (which implements <code>io.Reader</code>) so
+	that it will read its input from standard input.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:126,127</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=128&amp;hi=129#mark" target="code-display"></a>
+        <div class="comment-title">Generating and printing text</div>
+        <div class="comment-text">
+	
+        
+	Finally, to generate text we call <code>Generate</code> with
+	the value of the <code>words</code> flag and assigning the result
+	to the variable <code>text</code>.
+	<br/><br/>
+	Then we call <code>fmt.Println</code> to write the text to standard
+	output, followed by a carriage return.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go:128,129</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=0&amp;hi=0#mark" target="code-display"></a>
+        <div class="comment-title">Using this program</div>
+        <div class="comment-text">
+	
+        
+	To use this program, first build it with the
+	<a href="/cmd/go/">go</a> command:
+	<pre>
+$ go build markov.go</pre>
+	And then execute it while piping in some input text:
+	<pre>
+$ echo "a man a plan a canal panama" \
+	| ./markov -prefix=1
+a plan a man a plan a canal panama</pre>
+	Here's a transcript of generating some text using the Go distribution's
+	README file as source material:
+	<pre>
+$ ./markov -words=10 &lt; $GOROOT/README
+This is the source code repository for the Go source
+$ ./markov -prefix=1 -words=10 &lt; $GOROOT/README
+This is the go directory (the one containing this README).
+$ ./markov -prefix=1 -words=10 &lt; $GOROOT/README
+This is the variable if you have just untarred a</pre>
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fmarkov.go&amp;lo=0&amp;hi=0#mark" target="code-display"></a>
+        <div class="comment-title">An exercise for the reader</div>
+        <div class="comment-text">
+	
+        
+	The <code>Generate</code> function does a lot of allocations when it
+	builds the <code>words</code> slice. As an exercise, modify it to
+	take an <code>io.Writer</code> to which it incrementally writes the
+	generated text with <code>Fprint</code>.
+	Aside from being more efficient this makes <code>Generate</code>
+	more symmetrical to <code>Build</code>.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/markov.go</span></div>
+      </div>
+      
+    </div>
+    <div id="comment-options" class="setting">
+      <a id="prev-comment" href="#"><span class="hotkey">p</span>revious step</a>
+      &bull;
+      <a id="next-comment" href="#"><span class="hotkey">n</span>ext step</a>
+    </div>
+  </div>
+</div>
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>zip - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package zip</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "archive/zip"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package zip provides support for reading and writing ZIP archives.
+</p>
+<p>
+See: <a href="http://www.pkware.com/documents/casestudies/APPNOTE.TXT">http://www.pkware.com/documents/casestudies/APPNOTE.TXT</a>
+</p>
+<p>
+This package does not support disk spanning.
+</p>
+<p>
+A note about ZIP64:
+</p>
+<p>
+To be backwards compatible the FileHeader has both 32 and 64 bit Size
+fields. The 64 bit fields will always contain the correct value and
+for normal archives both fields will be the same. For files requiring
+the ZIP64 format the 32 bit fields will be 0xffffffff and the 64 bit
+fields must be used instead.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#RegisterCompressor">func RegisterCompressor(method uint16, comp Compressor)</a></dd>
+			
+				
+				<dd><a href="#RegisterDecompressor">func RegisterDecompressor(method uint16, d Decompressor)</a></dd>
+			
+			
+				
+				<dd><a href="#Compressor">type Compressor</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Decompressor">type Decompressor</a></dd>
+				
+				
+			
+				
+				<dd><a href="#File">type File</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.DataOffset">func (f *File) DataOffset() (offset int64, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#File.Open">func (f *File) Open() (rc io.ReadCloser, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#FileHeader">type FileHeader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileInfoHeader">func FileInfoHeader(fi os.FileInfo) (*FileHeader, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.FileInfo">func (h *FileHeader) FileInfo() os.FileInfo</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.ModTime">func (h *FileHeader) ModTime() time.Time</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.Mode">func (h *FileHeader) Mode() (mode os.FileMode)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.SetModTime">func (h *FileHeader) SetModTime(t time.Time)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#FileHeader.SetMode">func (h *FileHeader) SetMode(mode os.FileMode)</a></dd>
+				
+			
+				
+				<dd><a href="#ReadCloser">type ReadCloser</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#OpenReader">func OpenReader(name string) (*ReadCloser, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ReadCloser.Close">func (rc *ReadCloser) Close() error</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewReader">func NewReader(r io.ReaderAt, size int64) (*Reader, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer) *Writer</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (w *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Create">func (w *Writer) Create(name string) (io.Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.CreateHeader">func (w *Writer) CreateHeader(fh *FileHeader) (io.Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (w *Writer) Flush() error</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_Reader">Reader</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_Writer">Writer</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/archive/zip/reader.go">reader.go</a>
+			
+				<a href="/src/archive/zip/register.go">register.go</a>
+			
+				<a href="/src/archive/zip/struct.go">struct.go</a>
+			
+				<a href="/src/archive/zip/writer.go">writer.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="Store">Store</span>   <a href="/pkg/builtin/#uint16">uint16</a> = 0
+        <span id="Deflate">Deflate</span> <a href="/pkg/builtin/#uint16">uint16</a> = 8
+)</pre>
+				<p>
+Compression methods.
+</p>
+
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var (
+        <span id="ErrFormat">ErrFormat</span>    = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;zip: not a valid zip file&#34;)
+        <span id="ErrAlgorithm">ErrAlgorithm</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;zip: unsupported compression algorithm&#34;)
+        <span id="ErrChecksum">ErrChecksum</span>  = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;zip: checksum error&#34;)
+)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="RegisterCompressor">func <a href="/src/archive/zip/register.go?s=2252:2307#L80">RegisterCompressor</a></h2>
+			<pre>func RegisterCompressor(method <a href="/pkg/builtin/#uint16">uint16</a>, comp <a href="#Compressor">Compressor</a>)</pre>
+			<p>
+RegisterCompressor registers custom compressors for a specified method ID.
+The common methods Store and Deflate are built in.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="RegisterDecompressor">func <a href="/src/archive/zip/register.go?s=1913:1969#L68">RegisterDecompressor</a></h2>
+			<pre>func RegisterDecompressor(method <a href="/pkg/builtin/#uint16">uint16</a>, d <a href="#Decompressor">Decompressor</a>)</pre>
+			<p>
+RegisterDecompressor allows custom decompressors for a specified method ID.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Compressor">type <a href="/src/archive/zip/register.go?s=367:422#L7">Compressor</a></h2>
+			<pre>type Compressor func(<a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#WriteCloser">WriteCloser</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+A Compressor returns a compressing writer, writing to the
+provided writer. On Close, any pending data should be flushed.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Decompressor">type <a href="/src/archive/zip/register.go?s=689:736#L13">Decompressor</a></h2>
+			<pre>type Decompressor func(<a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadCloser">ReadCloser</a></pre>
+			<p>
+Decompressor is a function that wraps a Reader with a decompressing Reader.
+The decompressed ReadCloser is returned to callers who open files from
+within the archive.  These callers are responsible for closing this reader
+when they&#39;re finished reading.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="File">type <a href="/src/archive/zip/reader.go?s=567:665#L24">File</a></h2>
+			<pre>type File struct {
+        <a href="#FileHeader">FileHeader</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="File.DataOffset">func (*File) <a href="/src/archive/zip/reader.go?s=2790:2843#L112">DataOffset</a></h3>
+				<pre>func (f *<a href="#File">File</a>) DataOffset() (offset <a href="/pkg/builtin/#int64">int64</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+DataOffset returns the offset of the file&#39;s possibly-compressed
+data, relative to the beginning of the zip file.
+</p>
+<p>
+Most callers should instead use Open, which transparently
+decompresses data and verifies checksums.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="File.Open">func (*File) <a href="/src/archive/zip/reader.go?s=3076:3127#L122">Open</a></h3>
+				<pre>func (f *<a href="#File">File</a>) Open() (rc <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadCloser">ReadCloser</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Open returns a ReadCloser that provides access to the File&#39;s contents.
+Multiple files may be read concurrently.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="FileHeader">type <a href="/src/archive/zip/struct.go?s=2049:2786#L60">FileHeader</a></h2>
+			<pre>type FileHeader struct {
+        <span class="comment">// Name is the name of the file.</span>
+        <span class="comment">// It must be a relative path: it must not start with a drive</span>
+        <span class="comment">// letter (e.g. C:) or leading slash, and only forward slashes</span>
+        <span class="comment">// are allowed.</span>
+        Name <a href="/pkg/builtin/#string">string</a>
+
+        CreatorVersion     <a href="/pkg/builtin/#uint16">uint16</a>
+        ReaderVersion      <a href="/pkg/builtin/#uint16">uint16</a>
+        Flags              <a href="/pkg/builtin/#uint16">uint16</a>
+        Method             <a href="/pkg/builtin/#uint16">uint16</a>
+        ModifiedTime       <a href="/pkg/builtin/#uint16">uint16</a> <span class="comment">// MS-DOS time</span>
+        ModifiedDate       <a href="/pkg/builtin/#uint16">uint16</a> <span class="comment">// MS-DOS date</span>
+        CRC32              <a href="/pkg/builtin/#uint32">uint32</a>
+        CompressedSize     <a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// deprecated; use CompressedSize64</span>
+        UncompressedSize   <a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// deprecated; use UncompressedSize64</span>
+        CompressedSize64   <a href="/pkg/builtin/#uint64">uint64</a>
+        UncompressedSize64 <a href="/pkg/builtin/#uint64">uint64</a>
+        Extra              []<a href="/pkg/builtin/#byte">byte</a>
+        ExternalAttrs      <a href="/pkg/builtin/#uint32">uint32</a> <span class="comment">// Meaning depends on CreatorVersion</span>
+        Comment            <a href="/pkg/builtin/#string">string</a>
+}</pre>
+			<p>
+FileHeader describes a file within a zip file.
+See the zip spec for details.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="FileInfoHeader">func <a href="/src/archive/zip/struct.go?s=3807:3863#L110">FileInfoHeader</a></h3>
+				<pre>func FileInfoHeader(fi <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a>) (*<a href="#FileHeader">FileHeader</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+FileInfoHeader creates a partially-populated FileHeader from an
+os.FileInfo.
+Because os.FileInfo&#39;s Name method returns only the base name of
+the file it describes, it may be necessary to modify the Name field
+of the returned header to provide the full path name of the file.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="FileHeader.FileInfo">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=2843:2886#L84">FileInfo</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) FileInfo() <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileInfo">FileInfo</a></pre>
+				<p>
+FileInfo returns an os.FileInfo for the FileHeader.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.ModTime">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=5496:5536#L169">ModTime</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) ModTime() <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a></pre>
+				<p>
+ModTime returns the modification time in UTC.
+The resolution is 2s.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.Mode">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=6255:6301#L199">Mode</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) Mode() (mode <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileMode">FileMode</a>)</pre>
+				<p>
+Mode returns the permission and mode bits for the FileHeader.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.SetModTime">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=5709:5753#L175">SetModTime</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) SetModTime(t <a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>)</pre>
+				<p>
+SetModTime sets the ModifiedTime and ModifiedDate fields to the given time in UTC.
+The resolution is 2s.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="FileHeader.SetMode">func (*FileHeader) <a href="/src/archive/zip/struct.go?s=6676:6722#L213">SetMode</a></h3>
+				<pre>func (h *<a href="#FileHeader">FileHeader</a>) SetMode(mode <a href="/pkg/os/">os</a>.<a href="/pkg/os/#FileMode">FileMode</a>)</pre>
+				<p>
+SetMode changes the permission and mode bits for the FileHeader.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ReadCloser">type <a href="/src/archive/zip/reader.go?s=519:565#L19">ReadCloser</a></h2>
+			<pre>type ReadCloser struct {
+        <a href="#Reader">Reader</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="OpenReader">func <a href="/src/archive/zip/reader.go?s=817:866#L36">OpenReader</a></h3>
+				<pre>func OpenReader(name <a href="/pkg/builtin/#string">string</a>) (*<a href="#ReadCloser">ReadCloser</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+OpenReader will open the Zip file specified by name and return a ReadCloser.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="ReadCloser.Close">func (*ReadCloser) <a href="/src/archive/zip/reader.go?s=2500:2535#L103">Close</a></h3>
+				<pre>func (rc *<a href="#ReadCloser">ReadCloser</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the Zip file, rendering it unusable for I/O.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/archive/zip/reader.go?s=441:517#L13">Reader</a></h2>
+			<pre>type Reader struct {
+        File    []*<a href="#File">File</a>
+        Comment <a href="/pkg/builtin/#string">string</a>
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			
+
+			
+
+			
+
+			<div id="example_Reader" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code"><span class="comment">// Open a zip archive for reading.</span>
+    r, err := zip.OpenReader(&#34;testdata/readme.zip&#34;)
+    if err != nil {
+            log.Fatal(err)
+    }
+    defer r.Close()
+
+    <span class="comment">// Iterate through the files in the archive,</span>
+    <span class="comment">// printing some of their contents.</span>
+    for _, f := range r.File {
+            fmt.Printf(&#34;Contents of %s:\n&#34;, f.Name)
+            rc, err := f.Open()
+            if err != nil {
+                    log.Fatal(err)
+            }
+            _, err = io.CopyN(os.Stdout, rc, 68)
+            if err != nil {
+                    log.Fatal(err)
+            }
+            rc.Close()
+            fmt.Println()
+    }
+    <span class="comment"></pre>
+			
+			<p>Output:</p>
+			<pre class="output">Contents of README:
+This is the source code repository for the Go programming language.
+</pre>
+			
+		
+	</div>
+</div>
+
+			
+			
+
+			
+				
+				<h3 id="NewReader">func <a href="/src/archive/zip/reader.go?s=1234:1292#L57">NewReader</a></h3>
+				<pre>func NewReader(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReaderAt">ReaderAt</a>, size <a href="/pkg/builtin/#int64">int64</a>) (*<a href="#Reader">Reader</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewReader returns a new Reader reading from r, which is assumed to
+have the given size in bytes.
+</p>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/archive/zip/writer.go?s=379:473#L10">Writer</a></h2>
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+Writer implements a zip file writer.
+</p>
+
+
+			
+
+			
+
+			<div id="example_Writer" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<p>Code:</p>
+			<pre class="code">
+    <span class="comment">// Create a buffer to write our archive to.</span>
+    buf := new(bytes.Buffer)
+
+    <span class="comment">// Create a new zip archive.</span>
+    w := zip.NewWriter(buf)
+
+    <span class="comment">// Add some files to the archive.</span>
+    var files = []struct {
+            Name, Body string
+    }{
+            {&#34;readme.txt&#34;, &#34;This archive contains some text files.&#34;},
+            {&#34;gopher.txt&#34;, &#34;Gopher names:\nGeorge\nGeoffrey\nGonzo&#34;},
+            {&#34;todo.txt&#34;, &#34;Get animal handling licence.\nWrite more examples.&#34;},
+    }
+    for _, file := range files {
+            f, err := w.Create(file.Name)
+            if err != nil {
+                    log.Fatal(err)
+            }
+            _, err = f.Write([]byte(file.Body))
+            if err != nil {
+                    log.Fatal(err)
+            }
+    }
+
+    <span class="comment">// Make sure to check the error on Close.</span>
+    err := w.Close()
+    if err != nil {
+            log.Fatal(err)
+    }
+</pre>
+			
+		
+	</div>
+</div>
+
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/archive/zip/writer.go?s=586:621#L23">NewWriter</a></h3>
+				<pre>func NewWriter(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) *<a href="#Writer">Writer</a></pre>
+				<p>
+NewWriter returns a new Writer writing a zip file to w.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="/src/archive/zip/writer.go?s=1024:1054#L35">Close</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close finishes writing the zip file by writing the central directory.
+It does not (and can not) close the underlying writer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Create">func (*Writer) <a href="/src/archive/zip/writer.go?s=5316:5371#L166">Create</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Create(name <a href="/pkg/builtin/#string">string</a>) (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Create adds a file to the zip file using the provided name.
+It returns a Writer to which the file contents should be written.
+The name must be a relative path: it must not start with a drive
+letter (e.g. C:) or leading slash, and only forward slashes are
+allowed.
+The file&#39;s contents must be written to the io.Writer before the next
+call to Create, CreateHeader, or Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.CreateHeader">func (*Writer) <a href="/src/archive/zip/writer.go?s=5754:5818#L179">CreateHeader</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) CreateHeader(fh *<a href="#FileHeader">FileHeader</a>) (<a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+CreateHeader adds a file to the zip file using the provided FileHeader
+for the file metadata.
+It returns a Writer to which the file contents should be written.
+The file&#39;s contents must be written to the io.Writer before the next
+call to Create, CreateHeader, or Close.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/archive/zip/writer.go?s=818:848#L29">Flush</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Flush() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Flush flushes any buffered data to the underlying writer.
+Calling Flush is not normally necessary; calling Close is sufficient.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

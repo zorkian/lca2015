@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>flate - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package flate</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "compress/flate"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package flate implements the DEFLATE compressed data format, described in
+RFC 1951.  The gzip and zlib packages implement access to DEFLATE-based file
+formats.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+			
+				
+				<dd><a href="#NewReader">func NewReader(r io.Reader) io.ReadCloser</a></dd>
+			
+				
+				<dd><a href="#NewReaderDict">func NewReaderDict(r io.Reader, dict []byte) io.ReadCloser</a></dd>
+			
+			
+				
+				<dd><a href="#CorruptInputError">type CorruptInputError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#CorruptInputError.Error">func (e CorruptInputError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#InternalError">type InternalError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#InternalError.Error">func (e InternalError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#ReadError">type ReadError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ReadError.Error">func (e *ReadError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Reader">type Reader</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Resetter">type Resetter</a></dd>
+				
+				
+			
+				
+				<dd><a href="#WriteError">type WriteError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#WriteError.Error">func (e *WriteError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#Writer">type Writer</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriter">func NewWriter(w io.Writer, level int) (*Writer, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewWriterDict">func NewWriterDict(w io.Writer, level int, dict []byte) (*Writer, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Close">func (w *Writer) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Flush">func (w *Writer) Flush() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Reset">func (w *Writer) Reset(dst io.Writer)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Writer.Write">func (w *Writer) Write(data []byte) (n int, err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/compress/flate/copy.go">copy.go</a>
+			
+				<a href="/src/compress/flate/deflate.go">deflate.go</a>
+			
+				<a href="/src/compress/flate/fixedhuff.go">fixedhuff.go</a>
+			
+				<a href="/src/compress/flate/huffman_bit_writer.go">huffman_bit_writer.go</a>
+			
+				<a href="/src/compress/flate/huffman_code.go">huffman_code.go</a>
+			
+				<a href="/src/compress/flate/inflate.go">inflate.go</a>
+			
+				<a href="/src/compress/flate/reverse_bits.go">reverse_bits.go</a>
+			
+				<a href="/src/compress/flate/token.go">token.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span id="NoCompression">NoCompression</span> = 0
+        <span id="BestSpeed">BestSpeed</span>     = 1
+
+        <span id="BestCompression">BestCompression</span>    = 9
+        <span id="DefaultCompression">DefaultCompression</span> = -1
+)</pre>
+				
+			
+		
+		
+		
+			
+			
+			<h2 id="NewReader">func <a href="/src/compress/flate/inflate.go?s=16043:16084#L703">NewReader</a></h2>
+			<pre>func NewReader(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadCloser">ReadCloser</a></pre>
+			<p>
+NewReader returns a new ReadCloser that can be used
+to read the uncompressed version of r.
+If r does not also implement io.ByteReader,
+the decompressor may read more data than necessary from r.
+It is the caller&#39;s responsibility to call Close on the ReadCloser
+when finished reading.
+</p>
+<p>
+The ReadCloser returned by NewReader also implements Resetter.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="NewReaderDict">func <a href="/src/compress/flate/inflate.go?s=16649:16707#L720">NewReaderDict</a></h2>
+			<pre>func NewReaderDict(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, dict []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ReadCloser">ReadCloser</a></pre>
+			<p>
+NewReaderDict is like NewReader but initializes the reader
+with a preset dictionary.  The returned Reader behaves as if
+the uncompressed data stream started with the given dictionary,
+which has already been read.  NewReaderDict is typically used
+to read data compressed by NewWriterDict.
+</p>
+<p>
+The ReadCloser returned by NewReader also implements Resetter.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="CorruptInputError">type <a href="/src/compress/flate/inflate.go?s=764:792#L18">CorruptInputError</a></h2>
+			<pre>type CorruptInputError <a href="/pkg/builtin/#int64">int64</a></pre>
+			<p>
+A CorruptInputError reports the presence of corrupt input at a given offset.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="CorruptInputError.Error">func (CorruptInputError) <a href="/src/compress/flate/inflate.go?s=794:835#L20">Error</a></h3>
+				<pre>func (e <a href="#CorruptInputError">CorruptInputError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="InternalError">type <a href="/src/compress/flate/inflate.go?s=984:1009#L25">InternalError</a></h2>
+			<pre>type InternalError <a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+An InternalError reports an error in the flate code itself.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="InternalError.Error">func (InternalError) <a href="/src/compress/flate/inflate.go?s=1011:1048#L27">Error</a></h3>
+				<pre>func (e <a href="#InternalError">InternalError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="ReadError">type <a href="/src/compress/flate/inflate.go?s=1164:1290#L30">ReadError</a></h2>
+			<pre>type ReadError struct {
+        Offset <a href="/pkg/builtin/#int64">int64</a> <span class="comment">// byte offset where error occurred</span>
+        Err    <a href="/pkg/builtin/#error">error</a> <span class="comment">// error returned by underlying Read</span>
+}</pre>
+			<p>
+A ReadError reports an error encountered while reading input.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ReadError.Error">func (*ReadError) <a href="/src/compress/flate/inflate.go?s=1292:1326#L35">Error</a></h3>
+				<pre>func (e *<a href="#ReadError">ReadError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Reader">type <a href="/src/compress/flate/inflate.go?s=5717:5768#L182">Reader</a></h2>
+			<pre>type Reader interface {
+        <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>
+        <a href="/pkg/io/">io</a>.<a href="/pkg/io/#ByteReader">ByteReader</a>
+}</pre>
+			<p>
+The actual read interface needed by NewReader.
+If the passed in io.Reader does not also have ReadByte,
+the NewReader will introduce its own buffering.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Resetter">type <a href="/src/compress/flate/inflate.go?s=1948:2133#L52">Resetter</a></h2>
+			<pre>type Resetter interface {
+        <span class="comment">// Reset discards any buffered data and resets the Resetter as if it was</span>
+        <span class="comment">// newly initialized with the given reader.</span>
+        Reset(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, dict []<a href="/pkg/builtin/#byte">byte</a>) <a href="/pkg/builtin/#error">error</a>
+}</pre>
+			<p>
+Resetter resets a ReadCloser returned by NewReader or NewReaderDict to
+to switch to a new underlying Reader. This permits reusing a ReadCloser
+instead of allocating a new one.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="WriteError">type <a href="/src/compress/flate/inflate.go?s=1495:1623#L40">WriteError</a></h2>
+			<pre>type WriteError struct {
+        Offset <a href="/pkg/builtin/#int64">int64</a> <span class="comment">// byte offset where error occurred</span>
+        Err    <a href="/pkg/builtin/#error">error</a> <span class="comment">// error returned by underlying Write</span>
+}</pre>
+			<p>
+A WriteError reports an error encountered while writing output.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="WriteError.Error">func (*WriteError) <a href="/src/compress/flate/inflate.go?s=1625:1660#L45">Error</a></h3>
+				<pre>func (e *<a href="#WriteError">WriteError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Writer">type <a href="/src/compress/flate/deflate.go?s=13951:14003#L516">Writer</a></h2>
+			<pre>type Writer struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Writer takes data written to it and writes the compressed
+form of that data to an underlying writer (see NewWriter).
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewWriter">func <a href="/src/compress/flate/deflate.go?s=12835:12890#L475">NewWriter</a></h3>
+				<pre>func NewWriter(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, level <a href="/pkg/builtin/#int">int</a>) (*<a href="#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewWriter returns a new Writer compressing data at the given level.
+Following zlib, levels range from 1 (BestSpeed) to 9 (BestCompression);
+higher levels typically run slower but compress more. Level 0
+(NoCompression) does not attempt any compression; it only adds the
+necessary DEFLATE framing. Level -1 (DefaultCompression) uses the default
+compression level.
+</p>
+<p>
+If level is in the range [-1, 9] then the error returned will be nil.
+Otherwise the error returned will be non-nil.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewWriterDict">func <a href="/src/compress/flate/deflate.go?s=13324:13396#L489">NewWriterDict</a></h3>
+				<pre>func NewWriterDict(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, level <a href="/pkg/builtin/#int">int</a>, dict []<a href="/pkg/builtin/#byte">byte</a>) (*<a href="#Writer">Writer</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewWriterDict is like NewWriter but initializes the new
+Writer with a preset dictionary.  The returned Writer behaves
+as if the dictionary had been written to it without producing
+any compressed output.  The compressed data written to w
+can only be decompressed by a Reader initialized with the
+same dictionary.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Writer.Close">func (*Writer) <a href="/src/compress/flate/deflate.go?s=14797:14827#L541">Close</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close flushes and closes the writer.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Flush">func (*Writer) <a href="/src/compress/flate/deflate.go?s=14616:14646#L534">Flush</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Flush() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Flush flushes any pending compressed data to the underlying writer.
+It is useful mainly in compressed network protocols, to ensure that
+a remote reader has enough data to reconstruct a packet.
+Flush does not return until the data has been written.
+If the underlying writer returns an error, Flush returns that error.
+</p>
+<p>
+In the terminology of the zlib library, Flush is equivalent to Z_SYNC_FLUSH.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Reset">func (*Writer) <a href="/src/compress/flate/deflate.go?s=15010:15047#L548">Reset</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Reset(dst <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>)</pre>
+				<p>
+Reset discards the writer&#39;s state and makes it equivalent to
+the result of NewWriter or NewWriterDict called with dst
+and w&#39;s level and dictionary.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Writer.Write">func (*Writer) <a href="/src/compress/flate/deflate.go?s=14117:14171#L523">Write</a></h3>
+				<pre>func (w *<a href="#Writer">Writer</a>) Write(data []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Write writes data to w, which will eventually write the
+compressed form of data to its underlying writer.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

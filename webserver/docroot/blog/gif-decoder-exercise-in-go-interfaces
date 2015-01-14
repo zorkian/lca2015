@@ -1,0 +1,509 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>A GIF decoder: an exercise in Go interfaces - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/spotlight-on-external-go-libraries">Spotlight on external Go libraries</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/go-at-google-io-2011-videos">Go at Google I/O 2011: videos</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></h3>
+		<p class="date">25 May 2011</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    At the Google I/O conference in San Francisco on May 10, 2011, we announced that the Go language is now available on Google App Engine.  Go is the first language to be made available on App Engine that compiles directly to machine code, which makes it a good choice for CPU-intensive tasks such as image manipulation.
+  </p>
+  
+
+  
+  <p>
+    In that vein, we demonstrated a program called <a href="http://moustach-io.appspot.com/" target="_blank">Moustachio</a> that makes it easy to improve a picture such as this one:
+  </p>
+  
+
+<div class="image">
+  <img src="gif-decoder-exercise-in-go-interfaces_image00.jpg">
+</div>
+
+  
+  <p>
+    by adding a moustache and sharing the result:
+  </p>
+  
+
+<div class="image">
+  <img src="gif-decoder-exercise-in-go-interfaces_image02.jpg">
+</div>
+
+  
+  <p>
+    All the graphical processing, including rendering the antialiased moustache, is done by a Go program running on App Engine. (The source is available at <a href="http://code.google.com/p/appengine-go/source/browse/example/moustachio/" target="_blank">the appengine-go project</a>.)
+  </p>
+  
+
+  
+  <p>
+    Although most images on the web—at least those likely to be moustachioed—are JPEGs, there are countless other formats floating around, and it seemed reasonable for Moustachio to accept uploaded images in a few of them. JPEG and PNG decoders already existed in the Go image library, but the venerable GIF format was not represented, so we decided to write a GIF decoder in time for the announcement. That decoder contains a few pieces that demonstrate how Go&#39;s interfaces make some problems easier to solve. The rest of this blog post describes a couple of instances.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">The GIF format</h4>
+  
+  
+  <p>
+    First, a quick tour of the GIF format.  A GIF image file is <i>paletted</i>, that is, each pixel value is an index into a fixed color map that is included in the file. The GIF format dates from a time when there were usually no more than 8 bits per pixel on the display, and a color map was used to convert the limited set of values into the RGB (red, green, blue) triples needed to light the screen. (This is in contrast to a JPEG, for example, which has no color map because the encoding represents the distinct color signals separately.)
+  </p>
+  
+
+  
+  <p>
+    A GIF image can contain anywhere from 1 to 8 bits per pixel, inclusive, but 8 bits per pixel is the most common.
+  </p>
+  
+
+  
+  <p>
+    Simplifying somewhat, a GIF file contains a header defining the pixel depth and image dimensions, a color map (256 RGB triples for an 8-bit image), and then the pixel data.  The pixel data is stored as a one-dimensional bit stream, compressed using the LZW algorithm, which is quite effective for computer-generated graphics although not so good for photographic imagery. The compressed data is then broken into length-delimited blocks with a one-byte count (0-255) followed by that many bytes:
+  </p>
+  
+
+<div class="image">
+  <img src="gif-decoder-exercise-in-go-interfaces_image03.gif">
+</div>
+
+
+    
+      
+  <h4 id="TOC_3.">Deblocking the pixel data</h4>
+  
+  
+  <p>
+    To decode GIF pixel data in Go, we can use the LZW decompressor from the <code>compress/lzw</code> package. It has a NewReader function that returns an object that, as <a href="http://golang.org/pkg/compress/lzw/#NewReader" target="_blank">the documentation</a> says, &#34;satisfies reads by decompressing the data read from r&#34;:
+  </p>
+  
+
+  
+  <div class="code"><pre>func NewReader(r io.Reader, order Order, litWidth int) io.ReadCloser</pre></div>
+  
+
+  
+  <p>
+    Here <code>order</code> defines the bit-packing order and <code>litWidth</code> is the word size in bits, which for a GIF file corresponds to the pixel depth, typically 8.
+  </p>
+  
+
+  
+  <p>
+    But we can&#39;t just give <code>NewReader</code> the input file as its first argument because the decompressor needs a stream of bytes but the GIF data is a stream of blocks that must be unpacked. To address this problem, we can wrap the input <code>io.Reader</code> with some code to deblock it, and make that code again implement <code>Reader</code>. In other words, we put the deblocking code into the <code>Read</code> method of a new type, which we call <code>blockReader</code>.
+  </p>
+  
+
+  
+  <p>
+    Here&#39;s the data structure for a <code>blockReader</code>.
+  </p>
+  
+
+  
+  <div class="code"><pre>type blockReader struct {
+   r     reader    // Input source; implements io.Reader and io.ByteReader.
+   slice []byte    // Buffer of unread data.
+   tmp   [256]byte // Storage for slice.
+}</pre></div>
+  
+
+  
+  <p>
+    The reader, <code>r</code>, will be the source of the image data, perhaps a file or HTTP connection.  The <code>slice</code> and <code>tmp</code> fields will be used to manage the deblocking. Here&#39;s the <code>Read</code> method in its entirety. It&#39;s a nice example of the use of slices and arrays in Go.
+  </p>
+  
+
+  
+  <div class="code"><pre>1  func (b *blockReader) Read(p []byte) (int, os.Error) {
+2      if len(p) == 0 {
+3          return 0, nil
+4      }
+5      if len(b.slice) == 0 {
+6          blockLen, err := b.r.ReadByte()
+7          if err != nil {
+8              return 0, err
+9          }
+10          if blockLen == 0 {
+11              return 0, os.EOF
+12          }
+13          b.slice = b.tmp[0:blockLen]
+14          if _, err = io.ReadFull(b.r, b.slice); err != nil {
+15              return 0, err
+16          }
+17      }
+18      n := copy(p, b.slice)
+19      b.slice = b.slice[n:]
+20      return n, nil
+21  }</pre></div>
+  
+
+  
+  <p>
+    Lines 2-4 are just a sanity check: if there&#39;s no place to put data, return zero.  That should never happen, but it&#39;s good to be safe.
+  </p>
+  
+
+  
+  <p>
+    Line 5 asks if there&#39;s data left over from a previous call by checking the length of <code>b.slice</code>.  If there isn&#39;t, the slice will have length zero and we need to read the next block from <code>r</code>.
+  </p>
+  
+
+  
+  <p>
+    A GIF block starts with a byte count, read on line 6.  If the count is zero, GIF defines this to be a terminating block, so we return <code>EOF</code> on line 11.
+  </p>
+  
+
+  
+  <p>
+    Now we know we should read <code>blockLen</code> bytes, so we point <code>b.slice</code> to the first <code>blockLen</code> bytes of <code>b.tmp</code> and then use the helper function <code>io.ReadFull</code> to read that many bytes.  That function will return an error if it can&#39;t read exactly that many bytes, which should never happen.  Otherwise we have <code>blockLen</code> bytes ready to read.
+  </p>
+  
+
+  
+  <p>
+    Lines 18-19 copy the data from <code>b.slice</code> to the caller&#39;s buffer. We are implementing <code>Read</code>, not <code>ReadFull</code>, so we are allowed to return fewer than the requested number of bytes.  That makes it easy: we just copy the data from <code>b.slice</code> to the caller&#39;s buffer (<code>p</code>), and the return value from copy is the number of bytes transferred.  Then we reslice <code>b.slice</code> to drop the first <code>n</code> bytes, ready for the next call.
+  </p>
+  
+
+  
+  <p>
+    It&#39;s a nice technique in Go programming to couple a slice (<code>b.slice</code>) to an array (<code>b.tmp</code>).  In this case, it means <code>blockReader</code> type&#39;s <code>Read</code> method never does any allocations. It also means we don&#39;t need to keep a count around (it&#39;s implicit in the slice length), and the built-in <code>copy</code> function guarantees we never copy more than we should. (For more about slices, see <a href="http://blog.golang.org/2011/01/go-slices-usage-and-internals.html" target="_blank">this post from the Go Blog</a>.)
+  </p>
+  
+
+  
+  <p>
+    Given the <code>blockReader</code> type, we can unblock the image data stream just by wrapping the input reader, say a file, like this:
+  </p>
+  
+
+  
+  <div class="code"><pre>deblockingReader := &amp;blockReader{r: imageFile}</pre></div>
+  
+
+  
+  <p>
+    This wrapping turns a block-delimited GIF image stream into a simple stream of bytes accessible by calls to the <code>Read</code> method of the <code>blockReader</code>.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_4.">Connecting the pieces</h4>
+  
+  
+  <p>
+    With <code>blockReader</code> implemented and the LZW compressor available from the library, we have all the pieces we need to decode the image data stream.  We stitch them together with this thunderclap, straight from the code:
+  </p>
+  
+
+  
+  <div class="code"><pre>lzwr := lzw.NewReader(&amp;blockReader{r: d.r}, lzw.LSB, int(litWidth))
+if _, err = io.ReadFull(lzwr, m.Pix); err != nil {
+   break
+}</pre></div>
+  
+
+  
+  <p>
+    That&#39;s it.
+  </p>
+  
+
+  
+  <p>
+    The first line creates a <code>blockReader</code> and passes it to <code>lzw.NewReader</code> to create a decompressor.  Here <code>d.r</code> is the <code>io.Reader</code> holding the image data, <code>lzw.LSB</code> defines the byte order in the LZW decompressor, and <code>litWidth</code> is the pixel depth.
+  </p>
+  
+
+  
+  <p>
+    Given the decompressor, the second line calls <code>io.ReadFull</code> to decompress the data and store it in the image, <code>m.Pix</code>. When <code>ReadFull</code> returns, the image data is decompressed and stored in the image, <code>m</code>, ready to be displayed.
+  </p>
+  
+
+  
+  <p>
+    This code worked first time. Really.
+  </p>
+  
+
+  
+  <p>
+    We could avoid the temporary variable <code>lzwr</code> by placing the <code>NewReader</code> call into the argument list for <code>ReadFull</code>, just as we built the <code>blockReader</code> inside the call to <code>NewReader</code>, but that might be packing too much into a single line of code.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_5.">Conclusion</h4>
+  
+  
+  <p>
+    Go&#39;s interfaces make it easy to construct software by assembling piece parts like this to restructure data.  In this example, we implemented GIF decoding by chaining together a deblocker and a decompressor using the <code>io.Reader</code> interface, analogous to a type-safe Unix pipeline. Also, we wrote the deblocker as an (implicit) implementation of a <code>Reader</code> interface, which then required no extra declaration or boilerplate to fit it into the processing pipeline. It&#39;s hard to implement this decoder so compactly yet cleanly and safely in most languages, but the interface mechanism plus a few conventions make it almost natural in Go.
+  </p>
+  
+
+  
+  <p>
+    That deserves another picture, a GIF this time:
+  </p>
+  
+
+<div class="image">
+  <img src="gif-decoder-exercise-in-go-interfaces_image01.gif">
+</div>
+
+  
+  <p>
+    The GIF format is defined at <a href="http://www.w3.org/Graphics/GIF/spec-gif89a.txt" target="_blank">http://www.w3.org/Graphics/GIF/spec-gif89a.txt</a>.
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Rob Pike</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/gopher">The Go Gopher</a></li>
+		
+			<li><a href="/race-detector">Introducing the Go Race Detector</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/go-programming-language-turns-two">The Go Programming Language turns two</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/go-at-google-io-2011-videos">Go at Google I/O 2011: videos</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>cipher - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package cipher</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "crypto/cipher"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package cipher implements standard block cipher modes that can be wrapped
+around low-level block cipher implementations.
+See <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/current_modes.html">http://csrc.nist.gov/groups/ST/toolkit/BCM/current_modes.html</a>
+and NIST Special Publication 800-38A.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+			
+				
+				<dd><a href="#AEAD">type AEAD</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewGCM">func NewGCM(cipher Block) (AEAD, error)</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Block">type Block</a></dd>
+				
+				
+			
+				
+				<dd><a href="#BlockMode">type BlockMode</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewCBCDecrypter">func NewCBCDecrypter(b Block, iv []byte) BlockMode</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewCBCEncrypter">func NewCBCEncrypter(b Block, iv []byte) BlockMode</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Stream">type Stream</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewCFBDecrypter">func NewCFBDecrypter(block Block, iv []byte) Stream</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewCFBEncrypter">func NewCFBEncrypter(block Block, iv []byte) Stream</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewCTR">func NewCTR(block Block, iv []byte) Stream</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewOFB">func NewOFB(b Block, iv []byte) Stream</a></dd>
+				
+				
+			
+				
+				<dd><a href="#StreamReader">type StreamReader</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StreamReader.Read">func (r StreamReader) Read(dst []byte) (n int, err error)</a></dd>
+				
+			
+				
+				<dd><a href="#StreamWriter">type StreamWriter</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StreamWriter.Close">func (w StreamWriter) Close() error</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StreamWriter.Write">func (w StreamWriter) Write(src []byte) (n int, err error)</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example_NewCBCDecrypter">NewCBCDecrypter</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewCBCEncrypter">NewCBCEncrypter</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewCFBDecrypter">NewCFBDecrypter</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewCFBEncrypter">NewCFBEncrypter</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewCTR">NewCTR</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_NewOFB">NewOFB</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_StreamReader">StreamReader</a></dd>
+			
+			<dd><a class="exampleLink" href="#example_StreamWriter">StreamWriter</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/crypto/cipher/cbc.go">cbc.go</a>
+			
+				<a href="/src/crypto/cipher/cfb.go">cfb.go</a>
+			
+				<a href="/src/crypto/cipher/cipher.go">cipher.go</a>
+			
+				<a href="/src/crypto/cipher/ctr.go">ctr.go</a>
+			
+				<a href="/src/crypto/cipher/gcm.go">gcm.go</a>
+			
+				<a href="/src/crypto/cipher/io.go">io.go</a>
+			
+				<a href="/src/crypto/cipher/ofb.go">ofb.go</a>
+			
+				<a href="/src/crypto/cipher/xor.go">xor.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+		
+			
+			
+			<h2 id="AEAD">type <a href="/src/crypto/cipher/gcm.go?s=300:1316#L4">AEAD</a></h2>
+			<pre>type AEAD interface {
+        <span class="comment">// NonceSize returns the size of the nonce that must be passed to Seal</span>
+        <span class="comment">// and Open.</span>
+        NonceSize() <a href="/pkg/builtin/#int">int</a>
+
+        <span class="comment">// Overhead returns the maximum difference between the lengths of a</span>
+        <span class="comment">// plaintext and ciphertext.</span>
+        Overhead() <a href="/pkg/builtin/#int">int</a>
+
+        <span class="comment">// Seal encrypts and authenticates plaintext, authenticates the</span>
+        <span class="comment">// additional data and appends the result to dst, returning the updated</span>
+        <span class="comment">// slice. The nonce must be NonceSize() bytes long and unique for all</span>
+        <span class="comment">// time, for a given key.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The plaintext and dst may alias exactly or not at all.</span>
+        Seal(dst, nonce, plaintext, data []<a href="/pkg/builtin/#byte">byte</a>) []<a href="/pkg/builtin/#byte">byte</a>
+
+        <span class="comment">// Open decrypts and authenticates ciphertext, authenticates the</span>
+        <span class="comment">// additional data and, if successful, appends the resulting plaintext</span>
+        <span class="comment">// to dst, returning the updated slice. The nonce must be NonceSize()</span>
+        <span class="comment">// bytes long and both it and the additional data must match the</span>
+        <span class="comment">// value passed to Seal.</span>
+        <span class="comment">//</span>
+        <span class="comment">// The ciphertext and dst may alias exactly or not at all.</span>
+        Open(dst, nonce, ciphertext, data []<a href="/pkg/builtin/#byte">byte</a>) ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)
+}</pre>
+			<p>
+AEAD is a cipher mode providing authenticated encryption with associated
+data.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewGCM">func <a href="/src/crypto/cipher/gcm.go?s=2253:2292#L52">NewGCM</a></h3>
+				<pre>func NewGCM(cipher <a href="#Block">Block</a>) (<a href="#AEAD">AEAD</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+NewGCM returns the given 128-bit, block cipher wrapped in Galois Counter Mode.
+</p>
+
+				
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Block">type <a href="/src/crypto/cipher/cipher.go?s=637:979#L5">Block</a></h2>
+			<pre>type Block interface {
+        <span class="comment">// BlockSize returns the cipher&#39;s block size.</span>
+        BlockSize() <a href="/pkg/builtin/#int">int</a>
+
+        <span class="comment">// Encrypt encrypts the first block in src into dst.</span>
+        <span class="comment">// Dst and src may point at the same memory.</span>
+        Encrypt(dst, src []<a href="/pkg/builtin/#byte">byte</a>)
+
+        <span class="comment">// Decrypt decrypts the first block in src into dst.</span>
+        <span class="comment">// Dst and src may point at the same memory.</span>
+        Decrypt(dst, src []<a href="/pkg/builtin/#byte">byte</a>)
+}</pre>
+			<p>
+A Block represents an implementation of block cipher
+using a given key.  It provides the capability to encrypt
+or decrypt individual blocks.  The mode implementations
+extend that capability to streams of blocks.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="BlockMode">type <a href="/src/crypto/cipher/cipher.go?s=1308:1592#L27">BlockMode</a></h2>
+			<pre>type BlockMode interface {
+        <span class="comment">// BlockSize returns the mode&#39;s block size.</span>
+        BlockSize() <a href="/pkg/builtin/#int">int</a>
+
+        <span class="comment">// CryptBlocks encrypts or decrypts a number of blocks. The length of</span>
+        <span class="comment">// src must be a multiple of the block size. Dst and src may point to</span>
+        <span class="comment">// the same memory.</span>
+        CryptBlocks(dst, src []<a href="/pkg/builtin/#byte">byte</a>)
+}</pre>
+			<p>
+A BlockMode represents a block cipher running in a block-based mode (CBC,
+ECB etc).
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewCBCDecrypter">func <a href="/src/crypto/cipher/cbc.go?s=2098:2148#L71">NewCBCDecrypter</a></h3>
+				<pre>func NewCBCDecrypter(b <a href="#Block">Block</a>, iv []<a href="/pkg/builtin/#byte">byte</a>) <a href="#BlockMode">BlockMode</a></pre>
+				<p>
+NewCBCDecrypter returns a BlockMode which decrypts in cipher block chaining
+mode, using the given Block. The length of iv must be the same as the
+Block&#39;s block size and must match the iv used to encrypt the data.
+</p>
+
+				<div id="example_NewCBCDecrypter" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;encoding/hex&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+	ciphertext, _ := hex.DecodeString(&#34;f363f3ccdcb12bb883abf484ba77d9cd7d32b5baecb3d4b1b3e0e4beffdb3ded&#34;)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+	// include it at the beginning of the ciphertext.
+	if len(ciphertext) &lt; aes.BlockSize {
+		panic(&#34;ciphertext too short&#34;)
+	}
+	iv := ciphertext[:aes.BlockSize]
+	ciphertext = ciphertext[aes.BlockSize:]
+
+	// CBC mode always works in whole blocks.
+	if len(ciphertext)%aes.BlockSize != 0 {
+		panic(&#34;ciphertext is not a multiple of the block size&#34;)
+	}
+
+	mode := cipher.NewCBCDecrypter(block, iv)
+
+	// CryptBlocks can work in-place if the two arguments are the same.
+	mode.CryptBlocks(ciphertext, ciphertext)
+
+	// If the original plaintext lengths are not a multiple of the block
+	// size, padding would have to be added when encrypting, which would be
+	// removed at this point. For an example, see
+	// https://tools.ietf.org/html/rfc5246#section-6.2.3.2. However, it&#39;s
+	// critical to note that ciphertexts must be authenticated (i.e. by
+	// using crypto/hmac) before being decrypted in order to avoid creating
+	// a padding oracle.
+
+	fmt.Printf(&#34;%s\n&#34;, ciphertext)
+}
+</textarea></div>
+				<div class="output"><pre>exampleplaintext
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="NewCBCEncrypter">func <a href="/src/crypto/cipher/cbc.go?s=849:899#L25">NewCBCEncrypter</a></h3>
+				<pre>func NewCBCEncrypter(b <a href="#Block">Block</a>, iv []<a href="/pkg/builtin/#byte">byte</a>) <a href="#BlockMode">BlockMode</a></pre>
+				<p>
+NewCBCEncrypter returns a BlockMode which encrypts in cipher block chaining
+mode, using the given Block. The length of iv must be the same as the
+Block&#39;s block size.
+</p>
+
+				<div id="example_NewCBCEncrypter" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;crypto/rand&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+	plaintext := []byte(&#34;exampleplaintext&#34;)
+
+	// CBC mode works on blocks so plaintexts may need to be padded to the
+	// next whole block. For an example of such padding, see
+	// https://tools.ietf.org/html/rfc5246#section-6.2.3.2. Here we&#39;ll
+	// assume that the plaintext is already of the correct length.
+	if len(plaintext)%aes.BlockSize != 0 {
+		panic(&#34;plaintext is not a multiple of the block size&#34;)
+	}
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+	// include it at the beginning of the ciphertext.
+	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
+	iv := ciphertext[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+
+	mode := cipher.NewCBCEncrypter(block, iv)
+	mode.CryptBlocks(ciphertext[aes.BlockSize:], plaintext)
+
+	// It&#39;s important to remember that ciphertexts must be authenticated
+	// (i.e. by using crypto/hmac) as well as being encrypted in order to
+	// be secure.
+
+	fmt.Printf(&#34;%x\n&#34;, ciphertext)
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="Stream">type <a href="/src/crypto/cipher/cipher.go?s=1021:1216#L19">Stream</a></h2>
+			<pre>type Stream interface {
+        <span class="comment">// XORKeyStream XORs each byte in the given slice with a byte from the</span>
+        <span class="comment">// cipher&#39;s key stream. Dst and src may point to the same memory.</span>
+        XORKeyStream(dst, src []<a href="/pkg/builtin/#byte">byte</a>)
+}</pre>
+			<p>
+A Stream represents a stream cipher.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="NewCFBDecrypter">func <a href="/src/crypto/cipher/cfb.go?s=1265:1316#L42">NewCFBDecrypter</a></h3>
+				<pre>func NewCFBDecrypter(block <a href="#Block">Block</a>, iv []<a href="/pkg/builtin/#byte">byte</a>) <a href="#Stream">Stream</a></pre>
+				<p>
+NewCFBDecrypter returns a Stream which decrypts with cipher feedback mode,
+using the given Block. The iv must be the same length as the Block&#39;s block
+size.
+</p>
+
+				<div id="example_NewCFBDecrypter" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;encoding/hex&#34;
+	&#34;fmt&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+	ciphertext, _ := hex.DecodeString(&#34;22277966616d9bc47177bd02603d08c9a67d5380d0fe8cf3b44438dff7b9&#34;)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+	// include it at the beginning of the ciphertext.
+	if len(ciphertext) &lt; aes.BlockSize {
+		panic(&#34;ciphertext too short&#34;)
+	}
+	iv := ciphertext[:aes.BlockSize]
+	ciphertext = ciphertext[aes.BlockSize:]
+
+	stream := cipher.NewCFBDecrypter(block, iv)
+
+	// XORKeyStream can work in-place if the two arguments are the same.
+	stream.XORKeyStream(ciphertext, ciphertext)
+	fmt.Printf(&#34;%s&#34;, ciphertext)
+}
+</textarea></div>
+				<div class="output"><pre>some plaintext
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="NewCFBEncrypter">func <a href="/src/crypto/cipher/cfb.go?s=1010:1061#L35">NewCFBEncrypter</a></h3>
+				<pre>func NewCFBEncrypter(block <a href="#Block">Block</a>, iv []<a href="/pkg/builtin/#byte">byte</a>) <a href="#Stream">Stream</a></pre>
+				<p>
+NewCFBEncrypter returns a Stream which encrypts with cipher feedback mode,
+using the given Block. The iv must be the same length as the Block&#39;s block
+size.
+</p>
+
+				<div id="example_NewCFBEncrypter" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;crypto/rand&#34;
+	&#34;io&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+	plaintext := []byte(&#34;some plaintext&#34;)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+	// include it at the beginning of the ciphertext.
+	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
+	iv := ciphertext[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+
+	stream := cipher.NewCFBEncrypter(block, iv)
+	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
+
+	// It&#39;s important to remember that ciphertexts must be authenticated
+	// (i.e. by using crypto/hmac) as well as being encrypted in order to
+	// be secure.
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="NewCTR">func <a href="/src/crypto/cipher/ctr.go?s=663:705#L16">NewCTR</a></h3>
+				<pre>func NewCTR(block <a href="#Block">Block</a>, iv []<a href="/pkg/builtin/#byte">byte</a>) <a href="#Stream">Stream</a></pre>
+				<p>
+NewCTR returns a Stream which encrypts/decrypts using the given Block in
+counter mode. The length of iv must be the same as the Block&#39;s block size.
+</p>
+
+				<div id="example_NewCTR" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;crypto/rand&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+	plaintext := []byte(&#34;some plaintext&#34;)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+	// include it at the beginning of the ciphertext.
+	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
+	iv := ciphertext[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+
+	stream := cipher.NewCTR(block, iv)
+	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
+
+	// It&#39;s important to remember that ciphertexts must be authenticated
+	// (i.e. by using crypto/hmac) as well as being encrypted in order to
+	// be secure.
+
+	// CTR mode is the same for both encryption and decryption, so we can
+	// also decrypt that ciphertext with NewCTR.
+
+	plaintext2 := make([]byte, len(plaintext))
+	stream = cipher.NewCTR(block, iv)
+	stream.XORKeyStream(plaintext2, ciphertext[aes.BlockSize:])
+
+	fmt.Printf(&#34;%s\n&#34;, plaintext2)
+}
+</textarea></div>
+				<div class="output"><pre>some plaintext
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+				
+				<h3 id="NewOFB">func <a href="/src/crypto/cipher/ofb.go?s=469:507#L9">NewOFB</a></h3>
+				<pre>func NewOFB(b <a href="#Block">Block</a>, iv []<a href="/pkg/builtin/#byte">byte</a>) <a href="#Stream">Stream</a></pre>
+				<p>
+NewOFB returns a Stream that encrypts or decrypts using the block cipher b
+in output feedback mode. The initialization vector iv&#39;s length must be equal
+to b&#39;s block size.
+</p>
+
+				<div id="example_NewOFB" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;crypto/rand&#34;
+	&#34;fmt&#34;
+	&#34;io&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+	plaintext := []byte(&#34;some plaintext&#34;)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// The IV needs to be unique, but not secure. Therefore it&#39;s common to
+	// include it at the beginning of the ciphertext.
+	ciphertext := make([]byte, aes.BlockSize+len(plaintext))
+	iv := ciphertext[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		panic(err)
+	}
+
+	stream := cipher.NewOFB(block, iv)
+	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
+
+	// It&#39;s important to remember that ciphertexts must be authenticated
+	// (i.e. by using crypto/hmac) as well as being encrypted in order to
+	// be secure.
+
+	// OFB mode is the same for both encryption and decryption, so we can
+	// also decrypt that ciphertext with NewOFB.
+
+	plaintext2 := make([]byte, len(plaintext))
+	stream = cipher.NewOFB(block, iv)
+	stream.XORKeyStream(plaintext2, ciphertext[aes.BlockSize:])
+
+	fmt.Printf(&#34;%s\n&#34;, plaintext2)
+}
+</textarea></div>
+				<div class="output"><pre>some plaintext
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+				
+			
+
+			
+		
+			
+			
+			<h2 id="StreamReader">type <a href="/src/crypto/cipher/io.go?s=426:477#L4">StreamReader</a></h2>
+			<pre>type StreamReader struct {
+        S <a href="#Stream">Stream</a>
+        R <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>
+}</pre>
+			<p>
+StreamReader wraps a Stream into an io.Reader. It calls XORKeyStream
+to process each slice of data which passes through.
+</p>
+
+
+			
+
+			
+
+			<div id="example_StreamReader" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;io&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+
+	inFile, err := os.Open(&#34;encrypted-file&#34;)
+	if err != nil {
+		panic(err)
+	}
+	defer inFile.Close()
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// If the key is unique for each ciphertext, then it&#39;s ok to use a zero
+	// IV.
+	var iv [aes.BlockSize]byte
+	stream := cipher.NewOFB(block, iv[:])
+
+	outFile, err := os.OpenFile(&#34;decrypted-file&#34;, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		panic(err)
+	}
+	defer outFile.Close()
+
+	reader := &amp;cipher.StreamReader{S: stream, R: inFile}
+	// Copy the input file to the output file, decrypting as we go.
+	if _, err := io.Copy(outFile, reader); err != nil {
+		panic(err)
+	}
+
+	// Note that this example is simplistic in that it omits any
+	// authentication of the encrypted data. If you were actually to use
+	// StreamReader in this manner, an attacker could flip arbitrary bits in
+	// the output.
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+			
+
+			
+
+			
+				
+				<h3 id="StreamReader.Read">func (StreamReader) <a href="/src/crypto/cipher/io.go?s=479:536#L9">Read</a></h3>
+				<pre>func (r <a href="#StreamReader">StreamReader</a>) Read(dst []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="StreamWriter">type <a href="/src/crypto/cipher/io.go?s=934:1010#L20">StreamWriter</a></h2>
+			<pre>type StreamWriter struct {
+        S   <a href="#Stream">Stream</a>
+        W   <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>
+        Err <a href="/pkg/builtin/#error">error</a> <span class="comment">// unused</span>
+}</pre>
+			<p>
+StreamWriter wraps a Stream into an io.Writer. It calls XORKeyStream
+to process each slice of data which passes through. If any Write call
+returns short then the StreamWriter is out of sync and must be discarded.
+A StreamWriter has no internal buffering; Close does not need
+to be called to flush write data.
+</p>
+
+
+			
+
+			
+
+			<div id="example_StreamWriter" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example</span></p>
+		
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">package main
+
+import (
+	&#34;crypto/aes&#34;
+	&#34;crypto/cipher&#34;
+	&#34;io&#34;
+	&#34;os&#34;
+)
+
+func main() {
+	key := []byte(&#34;example key 1234&#34;)
+
+	inFile, err := os.Open(&#34;plaintext-file&#34;)
+	if err != nil {
+		panic(err)
+	}
+	defer inFile.Close()
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	// If the key is unique for each ciphertext, then it&#39;s ok to use a zero
+	// IV.
+	var iv [aes.BlockSize]byte
+	stream := cipher.NewOFB(block, iv[:])
+
+	outFile, err := os.OpenFile(&#34;encrypted-file&#34;, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		panic(err)
+	}
+	defer outFile.Close()
+
+	writer := &amp;cipher.StreamWriter{S: stream, W: outFile}
+	// Copy the input file to the output file, encrypting as we go.
+	if _, err := io.Copy(writer, inFile); err != nil {
+		panic(err)
+	}
+
+	// Note that this example is simplistic in that it omits any
+	// authentication of the encrypted data. If you were actually to use
+	// StreamReader in this manner, an attacker could flip arbitrary bits in
+	// the decrypted result.
+}
+</textarea></div>
+				<div class="output"><pre></pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+			
+			
+
+			
+
+			
+				
+				<h3 id="StreamWriter.Close">func (StreamWriter) <a href="/src/crypto/cipher/io.go?s=1395:1430#L40">Close</a></h3>
+				<pre>func (w <a href="#StreamWriter">StreamWriter</a>) Close() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Close closes the underlying Writer and returns its Close return value, if the Writer
+is also an io.Closer. Otherwise it returns nil.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="StreamWriter.Write">func (StreamWriter) <a href="/src/crypto/cipher/io.go?s=1012:1070#L26">Write</a></h3>
+				<pre>func (w <a href="#StreamWriter">StreamWriter</a>) Write(src []<a href="/pkg/builtin/#byte">byte</a>) (n <a href="/pkg/builtin/#int">int</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

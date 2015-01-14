@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>heap - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package heap</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "container/heap"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package heap provides heap operations for any type that implements
+heap.Interface. A heap is a tree with the property that each node is the
+minimum-valued node in its subtree.
+</p>
+<p>
+The minimum element in the tree is the root, at index 0.
+</p>
+<p>
+A heap is a common way to implement a priority queue. To build a priority
+queue, implement the Heap interface with the (negative) priority as the
+ordering for the Less method, so Push adds items while Pop removes the
+highest-priority item from the queue. The Examples include such an
+implementation; the file example_pq_test.go has the complete source.
+</p>
+
+			</div>
+		</div>
+		<div id="example__intHeap" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (IntHeap)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (IntHeap)</span></p>
+		<p>This example inserts several ints into an IntHeap, checks the minimum,
+and removes them in order of priority.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">// This example demonstrates an integer heap built using the heap interface.
+package main
+
+import (
+	&#34;container/heap&#34;
+	&#34;fmt&#34;
+)
+
+// An IntHeap is a min-heap of ints.
+type IntHeap []int
+
+func (h IntHeap) Len() int           { return len(h) }
+func (h IntHeap) Less(i, j int) bool { return h[i] &lt; h[j] }
+func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *IntHeap) Push(x interface{}) {
+	// Push and Pop use pointer receivers because they modify the slice&#39;s length,
+	// not just its contents.
+	*h = append(*h, x.(int))
+}
+
+func (h *IntHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+// This example inserts several ints into an IntHeap, checks the minimum,
+// and removes them in order of priority.
+func main() {
+	h := &amp;IntHeap{2, 1, 5}
+	heap.Init(h)
+	heap.Push(h, 3)
+	fmt.Printf(&#34;minimum: %d\n&#34;, (*h)[0])
+	for h.Len() &gt; 0 {
+		fmt.Printf(&#34;%d &#34;, heap.Pop(h))
+	}
+}
+</textarea></div>
+				<div class="output"><pre>minimum: 1
+1 2 3 5
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+<div id="example__priorityQueue" class="toggle">
+	<div class="collapsed">
+		<p class="exampleHeading toggleButton">▹ <span class="text">Example (PriorityQueue)</span></p>
+	</div>
+	<div class="expanded">
+		<p class="exampleHeading toggleButton">▾ <span class="text">Example (PriorityQueue)</span></p>
+		<p>This example creates a PriorityQueue with some items, adds and manipulates an item,
+and then removes the items in priority order.
+</p>
+		
+		
+			<div class="play">
+				<div class="input"><textarea class="code">// This example demonstrates a priority queue built using the heap interface.
+package main
+
+import (
+	&#34;container/heap&#34;
+	&#34;fmt&#34;
+)
+
+// An Item is something we manage in a priority queue.
+type Item struct {
+	value    string // The value of the item; arbitrary.
+	priority int    // The priority of the item in the queue.
+	// The index is needed by update and is maintained by the heap.Interface methods.
+	index int // The index of the item in the heap.
+}
+
+// A PriorityQueue implements heap.Interface and holds Items.
+type PriorityQueue []*Item
+
+func (pq PriorityQueue) Len() int { return len(pq) }
+
+func (pq PriorityQueue) Less(i, j int) bool {
+	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
+	return pq[i].priority &gt; pq[j].priority
+}
+
+func (pq PriorityQueue) Swap(i, j int) {
+	pq[i], pq[j] = pq[j], pq[i]
+	pq[i].index = i
+	pq[j].index = j
+}
+
+func (pq *PriorityQueue) Push(x interface{}) {
+	n := len(*pq)
+	item := x.(*Item)
+	item.index = n
+	*pq = append(*pq, item)
+}
+
+func (pq *PriorityQueue) Pop() interface{} {
+	old := *pq
+	n := len(old)
+	item := old[n-1]
+	item.index = -1 // for safety
+	*pq = old[0 : n-1]
+	return item
+}
+
+// update modifies the priority and value of an Item in the queue.
+func (pq *PriorityQueue) update(item *Item, value string, priority int) {
+	item.value = value
+	item.priority = priority
+	heap.Fix(pq, item.index)
+}
+
+// This example creates a PriorityQueue with some items, adds and manipulates an item,
+// and then removes the items in priority order.
+func main() {
+	// Some items and their priorities.
+	items := map[string]int{
+		&#34;banana&#34;: 3, &#34;apple&#34;: 2, &#34;pear&#34;: 4,
+	}
+
+	// Create a priority queue, put the items in it, and
+	// establish the priority queue (heap) invariants.
+	pq := make(PriorityQueue, len(items))
+	i := 0
+	for value, priority := range items {
+		pq[i] = &amp;Item{
+			value:    value,
+			priority: priority,
+			index:    i,
+		}
+		i++
+	}
+	heap.Init(&amp;pq)
+
+	// Insert a new item and then modify its priority.
+	item := &amp;Item{
+		value:    &#34;orange&#34;,
+		priority: 1,
+	}
+	heap.Push(&amp;pq, item)
+	pq.update(item, item.value, 5)
+
+	// Take the items out; they arrive in decreasing priority order.
+	for pq.Len() &gt; 0 {
+		item := heap.Pop(&amp;pq).(*Item)
+		fmt.Printf(&#34;%.2d:%s &#34;, item.priority, item.value)
+	}
+}
+</textarea></div>
+				<div class="output"><pre>05:orange 04:pear 03:banana 02:apple
+</pre></div>
+				<div class="buttons">
+					<a class="run" title="Run this code [shift-enter]">Run</a>
+					<a class="fmt" title="Format this code">Format</a>
+					<a class="share" title="Share this code">Share</a>
+				</div>
+			</div>
+		
+	</div>
+</div>
+
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Fix">func Fix(h Interface, i int)</a></dd>
+			
+				
+				<dd><a href="#Init">func Init(h Interface)</a></dd>
+			
+				
+				<dd><a href="#Pop">func Pop(h Interface) interface{}</a></dd>
+			
+				
+				<dd><a href="#Push">func Push(h Interface, x interface{})</a></dd>
+			
+				
+				<dd><a href="#Remove">func Remove(h Interface, i int) interface{}</a></dd>
+			
+			
+				
+				<dd><a href="#Interface">type Interface</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+		<div id="pkg-examples">
+			<h4>Examples</h4>
+			<dl>
+			
+			<dd><a class="exampleLink" href="#example__intHeap">Package (IntHeap)</a></dd>
+			
+			<dd><a class="exampleLink" href="#example__priorityQueue">Package (PriorityQueue)</a></dd>
+			
+			</dl>
+		</div>
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/container/heap/heap.go">heap.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="Fix">func <a href="/src/container/heap/heap.go?s=2773:2801#L75">Fix</a></h2>
+			<pre>func Fix(h <a href="#Interface">Interface</a>, i <a href="/pkg/builtin/#int">int</a>)</pre>
+			<p>
+Fix re-establishes the heap ordering after the element at index i has changed its value.
+Changing the value of the element at index i and then calling Fix is equivalent to,
+but less expensive than, calling Remove(h, i) followed by a Push of the new value.
+The complexity is O(log(n)) where n = h.Len().
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Init">func <a href="/src/container/heap/heap.go?s=1656:1678#L31">Init</a></h2>
+			<pre>func Init(h <a href="#Interface">Interface</a>)</pre>
+			<p>
+A heap must be initialized before any of the heap operations
+can be used. Init is idempotent with respect to the heap invariants
+and may be called whenever the heap invariants may have been invalidated.
+Its complexity is O(n) where n = h.Len().
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Pop">func <a href="/src/container/heap/heap.go?s=2106:2139#L51">Pop</a></h2>
+			<pre>func Pop(h <a href="#Interface">Interface</a>) interface{}</pre>
+			<p>
+Pop removes the minimum element (according to Less) from the heap
+and returns it. The complexity is O(log(n)) where n = h.Len().
+It is equivalent to Remove(h, 0).
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Push">func <a href="/src/container/heap/heap.go?s=1859:1896#L42">Push</a></h2>
+			<pre>func Push(h <a href="#Interface">Interface</a>, x interface{})</pre>
+			<p>
+Push pushes the element x onto the heap. The complexity is
+O(log(n)) where n = h.Len().
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Remove">func <a href="/src/container/heap/heap.go?s=2317:2360#L61">Remove</a></h2>
+			<pre>func Remove(h <a href="#Interface">Interface</a>, i <a href="/pkg/builtin/#int">int</a>) interface{}</pre>
+			<p>
+Remove removes the element at index i from the heap.
+The complexity is O(log(n)) where n = h.Len().
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Interface">type <a href="/src/container/heap/heap.go?s=1242:1394#L20">Interface</a></h2>
+			<pre>type Interface interface {
+        <a href="/pkg/sort/">sort</a>.<a href="/pkg/sort/#Interface">Interface</a>
+        Push(x interface{}) <span class="comment">// add x as element Len()</span>
+        Pop() interface{}   <span class="comment">// remove and return element Len() - 1.</span>
+}</pre>
+			<p>
+Any type that implements heap.Interface may be used as a
+min-heap with the following invariants (established after
+Init has been called or if the data is empty or sorted):
+</p>
+<pre>!h.Less(j, i) for 0 &lt;= i &lt; h.Len() and 2*i+1 &lt;= j &lt;= 2*i+2 and j &lt; h.Len()
+</pre>
+<p>
+Note that Push and Pop in this interface are for package heap&#39;s
+implementation to call.  To add and remove things from the heap,
+use heap.Push and heap.Pop.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

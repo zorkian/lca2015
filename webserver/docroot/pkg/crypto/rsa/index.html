@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>rsa - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package rsa</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "crypto/rsa"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package rsa implements RSA encryption as specified in PKCS#1.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+				<dd><a href="#pkg-constants">Constants</a></dd>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#DecryptOAEP">func DecryptOAEP(hash hash.Hash, random io.Reader, priv *PrivateKey, ciphertext []byte, label []byte) (msg []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#DecryptPKCS1v15">func DecryptPKCS1v15(rand io.Reader, priv *PrivateKey, ciphertext []byte) (out []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#DecryptPKCS1v15SessionKey">func DecryptPKCS1v15SessionKey(rand io.Reader, priv *PrivateKey, ciphertext []byte, key []byte) (err error)</a></dd>
+			
+				
+				<dd><a href="#EncryptOAEP">func EncryptOAEP(hash hash.Hash, random io.Reader, pub *PublicKey, msg []byte, label []byte) (out []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#EncryptPKCS1v15">func EncryptPKCS1v15(rand io.Reader, pub *PublicKey, msg []byte) (out []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#SignPKCS1v15">func SignPKCS1v15(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte) (s []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#SignPSS">func SignPSS(rand io.Reader, priv *PrivateKey, hash crypto.Hash, hashed []byte, opts *PSSOptions) (s []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#VerifyPKCS1v15">func VerifyPKCS1v15(pub *PublicKey, hash crypto.Hash, hashed []byte, sig []byte) (err error)</a></dd>
+			
+				
+				<dd><a href="#VerifyPSS">func VerifyPSS(pub *PublicKey, hash crypto.Hash, hashed []byte, sig []byte, opts *PSSOptions) error</a></dd>
+			
+			
+				
+				<dd><a href="#CRTValue">type CRTValue</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PSSOptions">type PSSOptions</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PSSOptions.HashFunc">func (pssOpts *PSSOptions) HashFunc() crypto.Hash</a></dd>
+				
+			
+				
+				<dd><a href="#PrecomputedValues">type PrecomputedValues</a></dd>
+				
+				
+			
+				
+				<dd><a href="#PrivateKey">type PrivateKey</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GenerateKey">func GenerateKey(random io.Reader, bits int) (priv *PrivateKey, err error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#GenerateMultiPrimeKey">func GenerateMultiPrimeKey(random io.Reader, nprimes int, bits int) (priv *PrivateKey, err error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PrivateKey.Precompute">func (priv *PrivateKey) Precompute()</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PrivateKey.Public">func (priv *PrivateKey) Public() crypto.PublicKey</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PrivateKey.Sign">func (priv *PrivateKey) Sign(rand io.Reader, msg []byte, opts crypto.SignerOpts) ([]byte, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#PrivateKey.Validate">func (priv *PrivateKey) Validate() error</a></dd>
+				
+			
+				
+				<dd><a href="#PublicKey">type PublicKey</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/crypto/rsa/pkcs1v15.go">pkcs1v15.go</a>
+			
+				<a href="/src/crypto/rsa/pss.go">pss.go</a>
+			
+				<a href="/src/crypto/rsa/rsa.go">rsa.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+			<h2 id="pkg-constants">Constants</h2>
+			
+				<pre>const (
+        <span class="comment">// PSSSaltLengthAuto causes the salt in a PSS signature to be as large</span>
+        <span class="comment">// as possible when signing, and to be auto-detected when verifying.</span>
+        <span id="PSSSaltLengthAuto">PSSSaltLengthAuto</span> = 0
+        <span class="comment">// PSSSaltLengthEqualsHash causes the salt length to equal the length</span>
+        <span class="comment">// of the hash used in the signature.</span>
+        <span id="PSSSaltLengthEqualsHash">PSSSaltLengthEqualsHash</span> = -1
+)</pre>
+				
+			
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrDecryption">ErrDecryption</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;crypto/rsa: decryption error&#34;)</pre>
+				<p>
+ErrDecryption represents a failure to decrypt a message.
+It is deliberately vague to avoid adaptive attacks.
+</p>
+
+			
+				<pre>var <span id="ErrMessageTooLong">ErrMessageTooLong</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;crypto/rsa: message too long for RSA public key size&#34;)</pre>
+				<p>
+ErrMessageTooLong is returned when attempting to encrypt a message which is
+too large for the size of the public key.
+</p>
+
+			
+				<pre>var <span id="ErrVerification">ErrVerification</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;crypto/rsa: verification error&#34;)</pre>
+				<p>
+ErrVerification represents a failure to verify a signature.
+It is deliberately vague to avoid adaptive attacks.
+</p>
+
+			
+		
+		
+			
+			
+			<h2 id="DecryptOAEP">func <a href="/src/crypto/rsa/rsa.go?s=13280:13405#L466">DecryptOAEP</a></h2>
+			<pre>func DecryptOAEP(hash <a href="/pkg/hash/">hash</a>.<a href="/pkg/hash/#Hash">Hash</a>, random <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, ciphertext []<a href="/pkg/builtin/#byte">byte</a>, label []<a href="/pkg/builtin/#byte">byte</a>) (msg []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+DecryptOAEP decrypts ciphertext using RSA-OAEP.
+If random != nil, DecryptOAEP uses RSA blinding to avoid timing side-channel attacks.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="DecryptPKCS1v15">func <a href="/src/crypto/rsa/pkcs1v15.go?s=1405:1502#L42">DecryptPKCS1v15</a></h2>
+			<pre>func DecryptPKCS1v15(rand <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, ciphertext []<a href="/pkg/builtin/#byte">byte</a>) (out []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+DecryptPKCS1v15 decrypts a plaintext using RSA and the padding scheme from PKCS#1 v1.5.
+If rand != nil, it uses RSA blinding to avoid timing side-channel attacks.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="DecryptPKCS1v15SessionKey">func <a href="/src/crypto/rsa/pkcs1v15.go?s=2656:2763#L70">DecryptPKCS1v15SessionKey</a></h2>
+			<pre>func DecryptPKCS1v15SessionKey(rand <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, ciphertext []<a href="/pkg/builtin/#byte">byte</a>, key []<a href="/pkg/builtin/#byte">byte</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+DecryptPKCS1v15SessionKey decrypts a session key using RSA and the padding scheme from PKCS#1 v1.5.
+If rand != nil, it uses RSA blinding to avoid timing side-channel attacks.
+It returns an error if the ciphertext is the wrong length or if the
+ciphertext is greater than the public modulus. Otherwise, no error is
+returned. If the padding is valid, the resulting plaintext message is copied
+into key. Otherwise, key is unchanged. These alternatives occur in constant
+time. It is intended that the user of this function generate a random
+session key beforehand and continue the protocol with the resulting value.
+This will remove any possibility that an attacker can learn any information
+about the plaintext.
+See &ldquo;Chosen Ciphertext Attacks Against Protocols Based on the RSA
+Encryption Standard PKCS #1&rdquo;, Daniel Bleichenbacher, Advances in Cryptology
+(Crypto &#39;98).
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="EncryptOAEP">func <a href="/src/crypto/rsa/rsa.go?s=8443:8559#L277">EncryptOAEP</a></h2>
+			<pre>func EncryptOAEP(hash <a href="/pkg/hash/">hash</a>.<a href="/pkg/hash/#Hash">Hash</a>, random <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, pub *<a href="#PublicKey">PublicKey</a>, msg []<a href="/pkg/builtin/#byte">byte</a>, label []<a href="/pkg/builtin/#byte">byte</a>) (out []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+EncryptOAEP encrypts the given message with RSA-OAEP.
+The message must be no longer than the length of the public modulus less
+twice the hash length plus 2.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="EncryptPKCS1v15">func <a href="/src/crypto/rsa/pkcs1v15.go?s=628:716#L11">EncryptPKCS1v15</a></h2>
+			<pre>func EncryptPKCS1v15(rand <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, pub *<a href="#PublicKey">PublicKey</a>, msg []<a href="/pkg/builtin/#byte">byte</a>) (out []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+EncryptPKCS1v15 encrypts the given message with RSA and the padding scheme from PKCS#1 v1.5.
+The message must be no longer than the length of the public modulus minus 11 bytes.
+WARNING: use of this function to encrypt plaintexts other than session keys
+is dangerous. Use RSA OAEP in new protocols.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SignPKCS1v15">func <a href="/src/crypto/rsa/pkcs1v15.go?s=7066:7172#L184">SignPKCS1v15</a></h2>
+			<pre>func SignPKCS1v15(rand <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, hash <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#Hash">Hash</a>, hashed []<a href="/pkg/builtin/#byte">byte</a>) (s []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+SignPKCS1v15 calculates the signature of hashed using RSASSA-PKCS1-V1_5-SIGN from RSA PKCS#1 v1.5.
+Note that hashed must be the result of hashing the input message using the
+given hash function. If hash is zero, hashed is signed directly. This isn&#39;t
+advisable except for interoperability.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="SignPSS">func <a href="/src/crypto/rsa/pss.go?s=6947:7066#L239">SignPSS</a></h2>
+			<pre>func SignPSS(rand <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, priv *<a href="#PrivateKey">PrivateKey</a>, hash <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#Hash">Hash</a>, hashed []<a href="/pkg/builtin/#byte">byte</a>, opts *<a href="#PSSOptions">PSSOptions</a>) (s []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+SignPSS calculates the signature of hashed using RSASSA-PSS [1].
+Note that hashed must be the result of hashing the input message using the
+given hash function. The opts argument may be nil, in which case sensible
+defaults are used.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="VerifyPKCS1v15">func <a href="/src/crypto/rsa/pkcs1v15.go?s=8052:8144#L221">VerifyPKCS1v15</a></h2>
+			<pre>func VerifyPKCS1v15(pub *<a href="#PublicKey">PublicKey</a>, hash <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#Hash">Hash</a>, hashed []<a href="/pkg/builtin/#byte">byte</a>, sig []<a href="/pkg/builtin/#byte">byte</a>) (err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+VerifyPKCS1v15 verifies an RSA PKCS#1 v1.5 signature.
+hashed is the result of hashing the input message using the given hash
+function and sig is the signature. A valid signature is indicated by
+returning a nil error. If hash is zero then hashed is used directly. This
+isn&#39;t advisable except for interoperability.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="VerifyPSS">func <a href="/src/crypto/rsa/pss.go?s=7751:7850#L264">VerifyPSS</a></h2>
+			<pre>func VerifyPSS(pub *<a href="#PublicKey">PublicKey</a>, hash <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#Hash">Hash</a>, hashed []<a href="/pkg/builtin/#byte">byte</a>, sig []<a href="/pkg/builtin/#byte">byte</a>, opts *<a href="#PSSOptions">PSSOptions</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+VerifyPSS verifies a PSS signature.
+hashed is the result of hashing the input message using the given hash
+function and sig is the signature. A valid signature is indicated by
+returning a nil error. The opts argument may be nil, in which case sensible
+defaults are used.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="CRTValue">type <a href="/src/crypto/rsa/rsa.go?s=2743:2914#L82">CRTValue</a></h2>
+			<pre>type CRTValue struct {
+        Exp   *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// D mod (prime-1).</span>
+        Coeff *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// R·Coeff ≡ 1 mod Prime.</span>
+        R     *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// product of primes prior to this (inc p and q).</span>
+}</pre>
+			<p>
+CRTValue contains the precomputed chinese remainder theorem values.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PSSOptions">type <a href="/src/crypto/rsa/pss.go?s=6027:6421#L210">PSSOptions</a></h2>
+			<pre>type PSSOptions struct {
+        <span class="comment">// SaltLength controls the length of the salt used in the PSS</span>
+        <span class="comment">// signature. It can either be a number of bytes, or one of the special</span>
+        <span class="comment">// PSSSaltLength constants.</span>
+        SaltLength <a href="/pkg/builtin/#int">int</a>
+
+        <span class="comment">// Hash, if not zero, overrides the hash function passed to SignPSS.</span>
+        <span class="comment">// This is the only way to specify the hash function when using the</span>
+        <span class="comment">// crypto.Signer interface.</span>
+        Hash <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#Hash">Hash</a>
+}</pre>
+			<p>
+PSSOptions contains options for creating and verifying PSS signatures.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="PSSOptions.HashFunc">func (*PSSOptions) <a href="/src/crypto/rsa/pss.go?s=6508:6557#L224">HashFunc</a></h3>
+				<pre>func (pssOpts *<a href="#PSSOptions">PSSOptions</a>) HashFunc() <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#Hash">Hash</a></pre>
+				<p>
+HashFunc returns pssOpts.Hash so that PSSOptions implements
+crypto.SignerOpts.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="PrecomputedValues">type <a href="/src/crypto/rsa/rsa.go?s=2305:2670#L70">PrecomputedValues</a></h2>
+			<pre>type PrecomputedValues struct {
+        Dp, Dq *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// D mod (P-1) (or mod Q-1)</span>
+        Qinv   *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// Q^-1 mod P</span>
+
+        <span class="comment">// CRTValues is used for the 3rd and subsequent primes. Due to a</span>
+        <span class="comment">// historical accident, the CRT for the first two primes is handled</span>
+        <span class="comment">// differently in PKCS#1 and interoperability is sufficiently</span>
+        <span class="comment">// important that we mirror this.</span>
+        CRTValues []<a href="#CRTValue">CRTValue</a>
+}</pre>
+			
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="PrivateKey">type <a href="/src/crypto/rsa/rsa.go?s=1272:1570#L42">PrivateKey</a></h2>
+			<pre>type PrivateKey struct {
+        <a href="#PublicKey">PublicKey</a>            <span class="comment">// public part.</span>
+        D         *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a>   <span class="comment">// private exponent</span>
+        Primes    []*<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// prime factors of N, has &gt;= 2 elements.</span>
+
+        <span class="comment">// Precomputed contains precomputed values that speed up private</span>
+        <span class="comment">// operations, if available.</span>
+        Precomputed <a href="#PrecomputedValues">PrecomputedValues</a>
+}</pre>
+			<p>
+A PrivateKey represents an RSA key
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="GenerateKey">func <a href="/src/crypto/rsa/rsa.go?s=4569:4643#L134">GenerateKey</a></h3>
+				<pre>func GenerateKey(random <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, bits <a href="/pkg/builtin/#int">int</a>) (priv *<a href="#PrivateKey">PrivateKey</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+GenerateKey generates an RSA keypair of the given bit size using the
+random source random (for example, crypto/rand.Reader).
+</p>
+
+				
+				
+			
+				
+				<h3 id="GenerateMultiPrimeKey">func <a href="/src/crypto/rsa/rsa.go?s=5285:5382#L149">GenerateMultiPrimeKey</a></h3>
+				<pre>func GenerateMultiPrimeKey(random <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, nprimes <a href="/pkg/builtin/#int">int</a>, bits <a href="/pkg/builtin/#int">int</a>) (priv *<a href="#PrivateKey">PrivateKey</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+GenerateMultiPrimeKey generates a multi-prime RSA keypair of the given bit
+size and the given random source, as suggested in [1]. Although the public
+keys are compatible (actually, indistinguishable) from the 2-prime case,
+the private keys are not. Thus it may not be possible to export multi-prime
+private keys in certain formats or to subsequently import them into other
+code.
+</p>
+<p>
+Table 1 in [2] suggests maximum numbers of primes for a given size.
+</p>
+<p>
+[1] US patent 4405829 (1972, expired)
+[2] <a href="http://www.cacr.math.uwaterloo.ca/techreports/2006/cacr2006-16.pdf">http://www.cacr.math.uwaterloo.ca/techreports/2006/cacr2006-16.pdf</a>
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="PrivateKey.Precompute">func (*PrivateKey) <a href="/src/crypto/rsa/rsa.go?s=10491:10527#L357">Precompute</a></h3>
+				<pre>func (priv *<a href="#PrivateKey">PrivateKey</a>) Precompute()</pre>
+				<p>
+Precompute performs some calculations that speed up private key operations
+in the future.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="PrivateKey.Public">func (*PrivateKey) <a href="/src/crypto/rsa/rsa.go?s=1628:1677#L53">Public</a></h3>
+				<pre>func (priv *<a href="#PrivateKey">PrivateKey</a>) Public() <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#PublicKey">PublicKey</a></pre>
+				<p>
+Public returns the public key corresponding to priv.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="PrivateKey.Sign">func (*PrivateKey) <a href="/src/crypto/rsa/rsa.go?s=2043:2139#L62">Sign</a></h3>
+				<pre>func (priv *<a href="#PrivateKey">PrivateKey</a>) Sign(rand <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>, msg []<a href="/pkg/builtin/#byte">byte</a>, opts <a href="/pkg/crypto/">crypto</a>.<a href="/pkg/crypto/#SignerOpts">SignerOpts</a>) ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Sign signs msg with priv, reading randomness from rand. If opts is a
+*PSSOptions then the PSS algorithm will be used, otherwise PKCS#1 v1.5 will
+be used. This method is intended to support keys where the private part is
+kept in, for example, a hardware module. Common uses should use the Sign*
+functions in this package.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="PrivateKey.Validate">func (*PrivateKey) <a href="/src/crypto/rsa/rsa.go?s=3047:3087#L90">Validate</a></h3>
+				<pre>func (priv *<a href="#PrivateKey">PrivateKey</a>) Validate() <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+Validate performs basic sanity checks on the key.
+It returns nil if the key is valid, or else an error describing a problem.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="PublicKey">type <a href="/src/crypto/rsa/rsa.go?s=441:520#L12">PublicKey</a></h2>
+			<pre>type PublicKey struct {
+        N *<a href="/pkg/math/big/">big</a>.<a href="/pkg/math/big/#Int">Int</a> <span class="comment">// modulus</span>
+        E <a href="/pkg/builtin/#int">int</a>      <span class="comment">// public exponent</span>
+}</pre>
+			<p>
+A PublicKey represents the public part of an RSA key.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>First-Class Functions in Go - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Codewalk: First-Class Functions in Go</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2010 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+
+<style type='text/css'>@import "/doc/codewalk/codewalk.css";</style>
+<script type="text/javascript" src="/doc/codewalk/codewalk.js"></script>
+
+<div id="codewalk-main">
+  <div class="left" id="code-column">
+    <div id='sizer'></div>
+    <div id="code-area">
+      <div id="code-header" align="center">
+        <a id="code-popout-link" href="" target="_blank">
+          <img title="View code in new window" alt="Pop Out Code" src="/doc/codewalk/popout.png" style="display: block; float: right;"/>
+        </a>
+        <select id="code-selector">
+          
+          <option value="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go">doc/codewalk/pig.go</option>
+          
+        </select>
+      </div>
+      <div id="code">
+        <iframe class="code-display" name="code-display" id="code-display"></iframe>
+      </div>
+    </div>
+    <div id="code-options" class="setting">
+      <span>code on <a id="set-code-left" class="selected" href="#">left</a> &bull; <a id="set-code-right" href="#">right</a></span>
+      <span>code width <span id="code-column-width">70%</span></span>
+      <span>filepaths <a id="show-filepaths" class="selected" href="#">shown</a> &bull; <a id="hide-filepaths" href="#">hidden</a></span>
+    </div>
+  </div>
+  <div class="right" id="comment-column">
+    <div id="comment-area">
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=0&amp;hi=0#mark" target="code-display"></a>
+        <div class="comment-title">Introduction</div>
+        <div class="comment-text">
+	
+        
+	Go supports first class functions, higher-order functions, user-defined
+	function types, function literals, closures, and multiple return values.
+  <br/><br/>
+
+	This rich feature set supports a functional programming style in a strongly
+	typed language.
+	<br/><br/>
+
+	In this codewalk we will look at a simple program that simulates a dice game
+	called <a href="http://en.wikipedia.org/wiki/Pig_(dice)">Pig</a> and evaluates
+	basic strategies.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=17&amp;hi=21#mark" target="code-display"></a>
+        <div class="comment-title">Game overview</div>
+        <div class="comment-text">
+	
+        
+  Pig is a two-player game played with a 6-sided die.  Each turn, you may roll or stay.
+	<ul>
+		<li> If you roll a 1, you lose all points for your turn and play passes to
+			your opponent.  Any other roll adds its value to your turn score.  </li>
+		<li> If you stay, your turn score is added to your total score, and play passes
+			to your opponent.  </li>
+	</ul>
+	
+	The first person to reach 100 total points wins.
+	<br/><br/>
+
+	The <code>score</code> type stores the scores of the current and opposing
+	players, in addition to the points accumulated during the current turn.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:17,21</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=23&amp;hi=24#mark" target="code-display"></a>
+        <div class="comment-title">User-defined function types</div>
+        <div class="comment-text">
+	
+        
+	In Go, functions can be passed around just like any other value. A function's
+	type signature describes the types of its arguments and return values.
+	<br/><br/>
+
+	The <code>action</code> type is a function that takes a <code>score</code>
+	and returns the resulting <code>score</code> and whether the current turn is
+	over.
+	<br/><br/>
+
+  If the turn is over, the <code>player</code> and <code>opponent</code> fields
+  in the resulting <code>score</code> should be swapped, as it is now the other player's
+  turn.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:23,24</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=26&amp;hi=41#mark" target="code-display"></a>
+        <div class="comment-title">Multiple return values</div>
+        <div class="comment-text">
+	
+        
+	Go functions can return multiple values.  
+	<br/><br/>
+
+	The functions <code>roll</code> and <code>stay</code> each return a pair of
+	values.  They also match the <code>action</code> type signature.  These
+	<code>action</code> functions define the rules of Pig.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:26,41</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=43&amp;hi=44#mark" target="code-display"></a>
+        <div class="comment-title">Higher-order functions</div>
+        <div class="comment-text">
+	
+        
+	A function can use other functions as arguments and return values.
+	<br/><br/>
+
+  A <code>strategy</code> is a function that takes a <code>score</code> as input
+  and returns an <code>action</code> to perform.  <br/>
+  (Remember, an <code>action</code> is itself a function.)
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:43,44</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=48&amp;hi=53#mark" target="code-display"></a>
+        <div class="comment-title">Function literals and closures</div>
+        <div class="comment-text">
+	
+        
+	Anonymous functions can be declared in Go, as in this example.  Function
+	literals are closures: they inherit the scope of the function in which they
+	are declared.
+	<br/><br/>
+
+	One basic strategy in Pig is to continue rolling until you have accumulated at
+	least k points in a turn, and then stay.  The argument <code>k</code> is
+	enclosed by this function literal, which matches the <code>strategy</code> type
+	signature.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:48,53</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=56&amp;hi=70#mark" target="code-display"></a>
+        <div class="comment-title">Simulating games</div>
+        <div class="comment-text">
+	
+        
+  We simulate a game of Pig by calling an <code>action</code> to update the
+  <code>score</code> until one player reaches 100 points.  Each
+  <code>action</code> is selected by calling the <code>strategy</code> function
+  associated with the current player.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:56,70</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=72&amp;hi=89#mark" target="code-display"></a>
+        <div class="comment-title">Simulating a tournament</div>
+        <div class="comment-text">
+	
+        
+	The <code>roundRobin</code> function simulates a tournament and tallies wins.
+	Each strategy plays each other strategy <code>gamesPerSeries</code> times.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:72,89</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=91&amp;hi=94#mark" target="code-display"></a>
+        <div class="comment-title">Variadic function declarations</div>
+        <div class="comment-text">
+	
+        
+	Variadic functions like <code>ratioString</code> take a variable number of
+	arguments.  These arguments are available as a slice inside the function.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:91,94</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Fpig.go&amp;lo=110&amp;hi=121#mark" target="code-display"></a>
+        <div class="comment-title">Simulation results</div>
+        <div class="comment-text">
+	
+        
+	The <code>main</code> function defines 100 basic strategies, simulates a round
+	robin tournament, and then prints the win/loss record of each strategy.
+	<br/><br/>
+
+	Among these strategies, staying at 25 is best, but the <a
+	href="http://www.google.com/search?q=optimal+play+pig">optimal strategy for
+	Pig</a> is much more complex.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/pig.go:110,121</span></div>
+      </div>
+      
+    </div>
+    <div id="comment-options" class="setting">
+      <a id="prev-comment" href="#"><span class="hotkey">p</span>revious step</a>
+      &bull;
+      <a id="next-comment" href="#"><span class="hotkey">n</span>ext step</a>
+    </div>
+  </div>
+</div>
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

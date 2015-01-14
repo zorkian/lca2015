@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>pprof - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package pprof</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "runtime/pprof"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package pprof writes runtime profiling data in the format expected
+by the pprof visualization tool.
+For more information about pprof, see
+<a href="http://code.google.com/p/google-perftools/">http://code.google.com/p/google-perftools/</a>.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Profiles">func Profiles() []*Profile</a></dd>
+			
+				
+				<dd><a href="#StartCPUProfile">func StartCPUProfile(w io.Writer) error</a></dd>
+			
+				
+				<dd><a href="#StopCPUProfile">func StopCPUProfile()</a></dd>
+			
+				
+				<dd><a href="#WriteHeapProfile">func WriteHeapProfile(w io.Writer) error</a></dd>
+			
+			
+				
+				<dd><a href="#Profile">type Profile</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Lookup">func Lookup(name string) *Profile</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#NewProfile">func NewProfile(name string) *Profile</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Profile.Add">func (p *Profile) Add(value interface{}, skip int)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Profile.Count">func (p *Profile) Count() int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Profile.Name">func (p *Profile) Name() string</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Profile.Remove">func (p *Profile) Remove(value interface{})</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Profile.WriteTo">func (p *Profile) WriteTo(w io.Writer, debug int) error</a></dd>
+				
+			
+			
+				
+				<dd><a href="#pkg-note-BUG">Bugs</a></dd>
+				
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/runtime/pprof/pprof.go">pprof.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="Profiles">func <a href="/src/runtime/pprof/pprof.go?s=3437:3463#L122">Profiles</a></h2>
+			<pre>func Profiles() []*<a href="#Profile">Profile</a></pre>
+			<p>
+Profiles returns a slice of all the known profiles, sorted by name.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="StartCPUProfile">func <a href="/src/runtime/pprof/pprof.go?s=16105:16144#L555">StartCPUProfile</a></h2>
+			<pre>func StartCPUProfile(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+StartCPUProfile enables CPU profiling for the current process.
+While profiling, the profile will be buffered and written to w.
+StartCPUProfile returns an error if profiling is already enabled.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="StopCPUProfile">func <a href="/src/runtime/pprof/pprof.go?s=17245:17266#L596">StopCPUProfile</a></h2>
+			<pre>func StopCPUProfile()</pre>
+			<p>
+StopCPUProfile stops the current CPU profile, if any.
+StopCPUProfile only returns after all the writes for the
+profile have completed.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="WriteHeapProfile">func <a href="/src/runtime/pprof/pprof.go?s=10132:10172#L359">WriteHeapProfile</a></h2>
+			<pre>func WriteHeapProfile(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>) <a href="/pkg/builtin/#error">error</a></pre>
+			<p>
+WriteHeapProfile is shorthand for Lookup(&#34;heap&#34;).WriteTo(w, 0).
+It is preserved for backwards compatibility.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Profile">type <a href="/src/runtime/pprof/pprof.go?s=1627:1767#L38">Profile</a></h2>
+			<pre>type Profile struct {
+        <span class="comment">// contains filtered or unexported fields</span>
+}</pre>
+			<p>
+A Profile is a collection of stack traces showing the call sequences
+that led to instances of a particular event, such as allocation.
+Packages can create and maintain their own profiles; the most common
+use is for tracking resources that must be explicitly closed, such as files
+or network connections.
+</p>
+<p>
+A Profile&#39;s methods can be called from multiple goroutines simultaneously.
+</p>
+<p>
+Each Profile has a unique name.  A few profiles are predefined:
+</p>
+<pre>goroutine    - stack traces of all current goroutines
+heap         - a sampling of all heap allocations
+threadcreate - stack traces that led to the creation of new OS threads
+block        - stack traces that led to blocking on synchronization primitives
+</pre>
+<p>
+These predefined profiles maintain themselves and panic on an explicit
+Add or Remove method call.
+</p>
+<p>
+The CPU profile is not available as a Profile.  It has a special API,
+the StartCPUProfile and StopCPUProfile functions, because it streams
+output to a writer during profiling.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="Lookup">func <a href="/src/runtime/pprof/pprof.go?s=3262:3295#L115">Lookup</a></h3>
+				<pre>func Lookup(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Profile">Profile</a></pre>
+				<p>
+Lookup returns the profile with the given name, or nil if no such profile exists.
+</p>
+
+				
+				
+			
+				
+				<h3 id="NewProfile">func <a href="/src/runtime/pprof/pprof.go?s=2836:2873#L97">NewProfile</a></h3>
+				<pre>func NewProfile(name <a href="/pkg/builtin/#string">string</a>) *<a href="#Profile">Profile</a></pre>
+				<p>
+NewProfile creates a new profile with the given name.
+If a profile with that name already exists, NewProfile panics.
+The convention is to use a &#39;import/path.&#39; prefix to create
+separate name spaces for each package.
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Profile.Add">func (*Profile) <a href="/src/runtime/pprof/pprof.go?s=4981:5031#L174">Add</a></h3>
+				<pre>func (p *<a href="#Profile">Profile</a>) Add(value interface{}, skip <a href="/pkg/builtin/#int">int</a>)</pre>
+				<p>
+Add adds the current execution stack to the profile, associated with value.
+Add stores value in an internal map, so value must be suitable for use as
+a map key and will not be garbage collected until the corresponding
+call to Remove.  Add panics if the profile already contains a stack for value.
+</p>
+<p>
+The skip parameter has the same meaning as runtime.Caller&#39;s skip
+and controls where the stack trace begins.  Passing skip=0 begins the
+trace in the function calling Add.  For example, given this
+execution stack:
+</p>
+<pre>Add
+called from rpc.NewClient
+called from mypkg.Run
+called from main.main
+</pre>
+<p>
+Passing skip=0 begins the stack trace at the call to Add inside rpc.NewClient.
+Passing skip=1 begins the stack trace at the call to NewClient inside mypkg.Run.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Profile.Count">func (*Profile) <a href="/src/runtime/pprof/pprof.go?s=4055:4084#L147">Count</a></h3>
+				<pre>func (p *<a href="#Profile">Profile</a>) Count() <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+Count returns the number of execution stacks currently in the profile.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Profile.Name">func (*Profile) <a href="/src/runtime/pprof/pprof.go?s=3929:3960#L142">Name</a></h3>
+				<pre>func (p *<a href="#Profile">Profile</a>) Name() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+Name returns this profile&#39;s name, which can be passed to Lookup to reobtain the profile.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Profile.Remove">func (*Profile) <a href="/src/runtime/pprof/pprof.go?s=5520:5563#L195">Remove</a></h3>
+				<pre>func (p *<a href="#Profile">Profile</a>) Remove(value interface{})</pre>
+				<p>
+Remove removes the execution stack associated with value from the profile.
+It is a no-op if the value is not in the profile.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Profile.WriteTo">func (*Profile) <a href="/src/runtime/pprof/pprof.go?s=6325:6380#L214">WriteTo</a></h3>
+				<pre>func (p *<a href="#Profile">Profile</a>) WriteTo(w <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Writer">Writer</a>, debug <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#error">error</a></pre>
+				<p>
+WriteTo writes a pprof-formatted snapshot of the profile to w.
+If a write to w returns an error, WriteTo returns that error.
+Otherwise, WriteTo returns nil.
+</p>
+<p>
+The debug parameter enables additional output.
+Passing debug=0 prints only the hexadecimal addresses that pprof needs.
+Passing debug=1 adds comments translating addresses to function names
+and line numbers, so that a programmer can read the profile without tools.
+</p>
+<p>
+The predefined profiles may assign meaning to other debug values;
+for example, when printing the &#34;goroutine&#34; profile, debug=2 means to
+print the goroutine stacks in the same form that a Go program uses
+when dying due to an unrecovered panic.
+</p>
+
+				
+				
+				
+			
+		
+	
+
+	
+		
+			<h2 id="pkg-note-BUG">Bugs</h2>
+			<ul style="list-style: none; padding: 0;">
+			
+			<li><a href="/src/runtime/pprof/pprof.go?s=469:589#L13">&#x261e;</a> Profiles are incomplete and inaccurate on NetBSD and OS X.
+See http://golang.org/issue/6047 for details.
+</li>
+			
+			</ul>
+		
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

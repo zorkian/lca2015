@@ -1,0 +1,1526 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>The Go Programming Language Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+		
+	<div class="article">
+		<h3 class="title"><a href="/gothamgo">GothamGo: gophers in the big apple</a></h3>
+		<p class="date">9 January 2015</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    Last November more than two hundred gophers from all across the United States got together for the first full-day Go conference in New York City.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The diverse speaker lineup included university students, industry experts, and Go team members.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    And good news, everybody! All the talks were recorded and are available:
+  </p>
+  
+
+      
+        
+<div class="image">
+  <img src="gothamgo/gothamgo.jpg" width="600">
+</div>
+
+      
+        
+  <ul>
+  
+    <li><a href="http://vimeo.com/115728346" target="_blank">Launching into Go</a> <i>by Kathy Spardlin</i> - a CockroachDB contributor provides pointers for people getting started with Go.</li>
+  
+    <li><a href="http://vimeo.com/115782573" target="_blank">Error Handling</a> <i>by</i> <a href="https://twitter.com/goinggodotnet" target="_blank"><i>Bill Kennedy</i></a> - ideas on how to use the Go error interface.</li>
+  
+    <li><a href="http://vimeo.com/115776445" target="_blank">7 common mistakes in Go and how to avoid them</a> <i>by</i> <a href="https://twitter.com/spf13" target="_blank"><i>Steve Francia</i></a> - the author of some popular Go libraries shares his experience.</li>
+  
+    <li><a href="http://vimeo.com/115309491" target="_blank">Cancellation, Context, and Plumbing</a> <i>by</i> <a href="https://twitter.com/sajma" target="_blank"><i>Sameer Ajmani</i></a> - the Google NYC Go team lead explains how cancellation works in Go, and how we&#39;re retrofitting the Google code base to use it.</li>
+  
+    <li><a href="http://vimeo.com/115940605" target="_blank">Dethorning Package Management</a> <i>by</i> <a href="https://twitter.com/krarick" target="_blank"><i>Keith Rarick</i></a> - the creator of godep talks about how to manage your dependencies well.</li>
+  
+    <li><a href="http://vimeo.com/115940590" target="_blank">Everything You&#39;ve Always Wanted to Know About Go Web Apps (But were afraid to ask)</a> <i>by</i> <a href="https://twitter.com/markbates" target="_blank"><i>Mark Bates</i></a> - a survey of Go packages for building web apps, and insights into why there are so few Go &#34;frameworks&#34;.</li>
+  
+    <li><a href="http://vimeo.com/116215450" target="_blank">Building high-performance database applications using Aerospike</a> <i>by Chris Stivers</i> - a principal engineer at Aerospike shares his experiences building scalable applications.</li>
+  
+    <li><a href="http://vimeo.com/115307069" target="_blank">The state of Go on the Android platform</a> <i>by</i> <a href="https://twitter.com/davidcrawshaw" target="_blank"><i>David Crawshaw</i></a> - the leader of the Go on mobile platforms project tells us what’s coming up and shows a working demo.</li>
+  
+    <li><a href="http://vimeo.com/116108566" target="_blank">Mutexes and Locks</a> <i>by</i> <a href="https://twitter.com/frazelledazzell" target="_blank"><i>Jessi Frazelle</i></a> - a member of the Docker core team tells us about concurrency and what to do when things go wrong.</li>
+  
+    <li><a href="http://vimeo.com/115618722" target="_blank">Gobot.io</a> <i>by</i> <a href="https://twitter.com/deadprogram" target="_blank"><i>Ron Evans</i></a> - awesome robots controlled by Go, with demos!</li>
+  
+    <li><a href="http://vimeo.com/114941260" target="_blank">Doing Go</a> <i>by</i> <a href="https://twitter.com/bryanl" target="_blank"><i>Bryan Liles</i></a> - a DigitalOcean engineer delivers a hilarious comedy routine that happens to be about Go.</li>
+  
+    <li><a href="http://vimeo.com/115308225" target="_blank">Things I learned teaching Go</a> <i>by</i> <a href="https://twitter.com/francesc" target="_blank"><i>Francesc Campoy</i></a> - the Developer Advocate for the Go team shares his experience teaching Go and some advice on how to become a better gopher.</li>
+  
+  </ul>
+
+      
+        
+  
+  <p>
+    Two more talks come from the Go meetup in New York City, which met the day before GothamGo:
+  </p>
+  
+
+      
+        
+  <ul>
+  
+    <li><a href="http://vimeo.com/114975899" target="_blank">Benchmarking Go</a> <i>by</i> <a href="https://twitter.com/bbulkow" target="_blank"><i>Brian Bulkowski</i></a> - the founder of Aerospike talks about profiling tools for Go and Linux, and micro benchmarks for goroutines, channels, buffers, and and other Go features.</li>
+  
+    <li><a href="http://vimeo.com/114736889" target="_blank">Go Static Analysis Tools</a> <i>by Alan Donovan</i> - a member of the Go team at Google NY gives a guided tour of several static analysis tools designed to help Go programmers understand, navigate , and refactor their code.</li>
+  
+  </ul>
+
+      
+        
+  
+  <p>
+    Make sure to have a look at all of those in preparation for the <a href="https://fosdem.org/" target="_blank">FOSDEM</a> Go devroom FOSDEM in Brussels (Belgium) and <a href="http://www.gophercon.in/" target="_blank">gophercon.in</a> in Bengaluru (India).
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Francesc Campoy</p>
+		
+	</div>
+
+	
+		
+	<div class="article">
+		<h3 class="title"><a href="/gophergala">The Gopher Gala is the first worldwide Go hackathon</a></h3>
+		<p class="date">7 January 2015</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    The <a href="http://gophergala.com/" target="_blank">Gopher Gala</a> is the first Go hackathon at a
+
+
+    global scale and will take place from January 23rd through the 25th. The event
+
+
+    is organized by the community, supported by the Go team, and sponsored by
+
+
+    Google among others.
+  </p>
+  
+
+      
+        
+<div class="image">
+  <img src="gophergala/fancygopher.jpg" width="300">
+</div>
+
+      
+        
+<div class="image">
+  <figcaption><i>Fancy Gopher, by</i> <a href="http://www.reneefrench.com/" target="_blank"><i>Renée French</i></a></figcaption>
+</div>
+
+      
+        
+  
+  <p>
+    You can read about the rules of the hackathon
+
+
+    <a href="http://gophergala.com/rules/" target="_blank">here</a>, but if you know about
+
+
+    <a href="http://railsrumble.com/" target="_blank">Rails Rumble</a> or
+
+
+    <a href="http://nodeknockout.com/" target="_blank">Node Knockout</a> you already have a pretty good idea
+
+
+    of what to expect.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    During this event gophers from all around the globe will form teams to build
+
+
+    great applications using Go as the main tool. Afterwards, all the participants
+
+
+    will vote for their favorite applications and the 20 highest voted applications
+
+
+    will be ranked by a jury of renowned names from the community, including some
+
+
+    members of the Go core team. More information on the judging phase can be found
+
+
+    <a href="http://gophergala.com/judging/" target="_blank">here</a>.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    And in case you needed one more reason to
+
+
+    <a href="https://gophers.typeform.com/to/wondM5" target="_blank">get involved</a> there will be prizes!
+  </p>
+  
+
+      
+        
+  
+  <p>
+    &#34;What prizes?&#34; you ask. Well, that’s a
+
+
+    <a href="http://gophergala.com/prizes/" target="_blank">secret</a> until January 10th but we’re pretty
+
+
+    sure you won’t be disappointed.
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Francesc Campoy</p>
+		
+	</div>
+
+	
+		
+	<div class="article">
+		<h3 class="title"><a href="/generate">Generating code</a></h3>
+		<p class="date">22 December 2014</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    A property of universal computation—Turing completeness—is that a computer program can write a computer program.
+
+
+    This is a powerful idea that is not appreciated as often as it might be, even though it happens frequently.
+
+
+    It&#39;s a big part of the definition of a compiler, for instance.
+
+
+    It&#39;s also how the <code>go</code> <code>test</code> command works: it scans the packages to be tested,
+
+
+    writes out a Go program containing a test harness customized for the package,
+
+
+    and then compiles and runs it.
+
+
+    Modern computers are so fast this expensive-sounding sequence can complete in a fraction of a second.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    There are lots of other examples of programs that write programs.
+
+
+    <a href="http://golang.org/cmd/yacc/" target="_blank">Yacc</a>, for instance, reads in a description of a grammar and writes out a program to parse that grammar.
+
+
+    The protocol buffer &#34;compiler&#34; reads an interface description and emits structure definitions,
+
+
+    methods, and other support code.
+
+
+    Configuration tools of all sorts work like this too, examining metadata or the environment
+
+
+    and emitting scaffolding customized to the local state.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Programs that write programs are therefore important elements in software engineering,
+
+
+    but programs like Yacc that produce source code need to be integrated into the build
+
+
+    process so their output can be compiled.
+
+
+    When an external build tool like Make is being used, this is usually easy to do.
+
+
+    But in Go, whose go tool gets all necessary build information from the Go source, there is a problem.
+
+
+    There is simply no mechanism to run Yacc from the go tool alone.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Until now, that is.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The <a href="http://blog.golang.org/go1.4" target="_blank">latest Go release</a>, 1.4,
+
+
+    includes a new command that makes it easier to run such tools.
+
+
+    It&#39;s called <code>go</code> <code>generate</code>, and it works by scanning for special comments in Go source code
+
+
+    that identify general commands to run.
+
+
+    It&#39;s important to understand that <code>go</code> <code>generate</code> is not part of <code>go</code> <code>build</code>.
+
+
+    It contains no dependency analysis and must be run explicitly before running <code>go</code> <code>build</code>.
+
+
+    It is intended to be used by the author of the Go package, not its clients.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The <code>go</code> <code>generate</code> command is easy to use.
+
+
+    As a warmup, here&#39;s how to use it to generate a Yacc grammar.
+
+
+    Say you have a Yacc input file called <code>gopher.y</code> that defines a grammar for your new language.
+
+
+    To produce the Go source file implementing the grammar,
+
+
+    you would normally invoke the standard Go version of Yacc like this:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>go tool yacc -o gopher.go -p parser gopher.y</pre></div>
+  
+
+      
+        
+  
+  <p>
+    The <code>-o</code> option names the output file while <code>-p</code> specifies the package name.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    To have <code>go</code> <code>generate</code> drive the process, in any one of the regular (non-generated) <code>.go</code> files
+
+
+    in the same directory, add this comment anywhere in the file:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>//go:generate go tool yacc -o gopher.go -p parser gopher.y</pre></div>
+  
+
+      
+        
+  
+  <p>
+    This text is just the command above prefixed by a special comment recognized by <code>go</code> <code>generate</code>.
+
+
+    The comment must start at the beginning of the line and have no spaces between the <code>//</code> and the <code>go:generate</code>.
+
+
+    After that marker, the rest of the line specifies a command for <code>go</code> <code>generate</code> to run.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Now run it. Change to the source directory and run <code>go</code> <code>generate</code>, then <code>go</code> <code>build</code> and so on:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>$ cd $GOPATH/myrepo/gopher
+$ go generate
+$ go build
+$ go test</pre></div>
+  
+
+      
+        
+  
+  <p>
+    That&#39;s it.
+
+
+    Assuming there are no errors, the <code>go</code> <code>generate</code> command will invoke <code>yacc</code> to create <code>gopher.go</code>,
+
+
+    at which point the directory holds the full set of Go source files, so we can build, test, and work normally.
+
+
+    Every time <code>gopher.y</code> is modified, just rerun <code>go</code> <code>generate</code> to regenerate the parser.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    For more details about how <code>go</code> <code>generate</code> works, including options, environment variables,
+
+
+    and so on, see the <a href="http://golang.org/s/go1.4-generate" target="_blank">design document</a>.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Go generate does nothing that couldn&#39;t be done with Make or some other build mechanism,
+
+
+    but it comes with the <code>go</code> tool—no extra installation required—and fits nicely into the Go ecosystem.
+
+
+    Just keep in mind that it is for package authors, not clients,
+
+
+    if only for the reason that the program it invokes might not be available on the target machine.
+
+
+    Also, if the containing package is intended for import by <code>go</code> <code>get</code>,
+
+
+    once the file is generated (and tested!) it must be checked into the
+
+
+    source code repository to be available to clients.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Now that we have it, let&#39;s use it for something new.
+
+
+    As a very different example of how <code>go</code> <code>generate</code> can help, there is a new program available in the
+
+
+    <code>golang.org/x/tools</code> repository called <code>stringer</code>.
+
+
+    It automatically writes string methods for sets of integer constants.
+
+
+    It&#39;s not part of the released distribution, but it&#39;s easy to install:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>$ go get golang.org/x/tools/cmd/stringer</pre></div>
+  
+
+      
+        
+  
+  <p>
+    Here&#39;s an example from the documentation for
+
+
+    <a href="http://godoc.org/golang.org/x/tools/cmd/stringer" target="_blank"><code>stringer</code></a>.
+
+
+    Imagine we have some code that contains a set of integer constants defining different types of pills:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>package painkiller
+
+type Pill int
+
+const (
+    Placebo Pill = iota
+    Aspirin
+    Ibuprofen
+    Paracetamol
+    Acetaminophen = Paracetamol
+)</pre></div>
+  
+
+      
+        
+  
+  <p>
+    For debugging, we&#39;d like these constants to pretty-print themselves, which means we want a method with signature,
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func (p Pill) String() string</pre></div>
+  
+
+      
+        
+  
+  <p>
+    It&#39;s easy to write one by hand, perhaps like this:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>func (p Pill) String() string {
+    switch p {
+    case Placebo:
+        return &#34;Placebo&#34;
+    case Aspirin:
+        return &#34;Aspirin&#34;
+    case Ibuprofen:
+        return &#34;Ibuprofen&#34;
+    case Paracetamol: // == Acetaminophen
+        return &#34;Paracetamol&#34;
+    }
+    return fmt.Sprintf(&#34;Pill(%d)&#34;, p)
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    There are other ways to write this function, of course.
+
+
+    We could use a slice of strings indexed by Pill, or a map, or some other technique.
+
+
+    Whatever we do, we need to maintain it if we change the set of pills, and we need to make sure it&#39;s correct.
+
+
+    (The two names for paracetamol make this trickier than it might otherwise be.)
+
+
+    Plus the very question of which approach to take depends on the types and values:
+
+
+    signed or unsigned, dense or sparse, zero-based or not, and so on.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The <code>stringer</code> program takes care of all these details.
+
+
+    Although it can be run in isolation, it is intended to be driven by <code>go</code> <code>generate</code>.
+
+
+    To use it, add a generate comment to the source, perhaps near the type definition:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>//go:generate stringer -type=Pill</pre></div>
+  
+
+      
+        
+  
+  <p>
+    This rule specifies that <code>go</code> <code>generate</code> should run the <code>stringer</code> tool to generate a <code>String</code> method for type <code>Pill</code>.
+
+
+    The output is automatically written to <code>pill_string.go</code> (a default we could override with the
+
+
+    <code>-output</code> flag).
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Let&#39;s run it:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>$ go generate
+$ cat pill_string.go
+// generated by stringer -type Pill pill.go; DO NOT EDIT
+
+package pill
+
+import &#34;fmt&#34;
+
+const _Pill_name = &#34;PlaceboAspirinIbuprofenParacetamol&#34;
+
+var _Pill_index = [...]uint8{0, 7, 14, 23, 34}
+
+func (i Pill) String() string {
+    if i &lt; 0 || i&#43;1 &gt;= Pill(len(_Pill_index)) {
+        return fmt.Sprintf(&#34;Pill(%d)&#34;, i)
+    }
+    return _Pill_name[_Pill_index[i]:_Pill_index[i&#43;1]]
+}
+$</pre></div>
+  
+
+      
+        
+  
+  <p>
+    Every time we change the definition of <code>Pill</code> or the constants, all we need to do is run
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>$ go generate</pre></div>
+  
+
+      
+        
+  
+  <p>
+    to update the <code>String</code> method.
+
+
+    And of course if we&#39;ve got multiple types set up this way in the same package,
+
+
+    that single command will update all their <code>String</code> methods with a single command.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    There&#39;s no question the generated method is ugly.
+
+
+    That&#39;s OK, though, because humans don&#39;t need to work on it; machine-generated code is often ugly.
+
+
+    It&#39;s working hard to be efficient.
+
+
+    All the names are smashed together into a single string,
+
+
+    which saves memory (only one string header for all the names, even if there are zillions of them).
+
+
+    Then an array, <code>_Pill_index</code>, maps from value to name by a simple, efficient technique.
+
+
+    Note too that <code>_Pill_index</code> is an array (not a slice; one more header eliminated) of <code>uint8</code>,
+
+
+    the smallest integer sufficient to span the space of values.
+
+
+    If there were more values, or there were negatives ones,
+
+
+    the generated type of <code>_Pill_index</code> might change to <code>uint16</code> or <code>int8</code>: whatever works best.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The approach used by the methods printed by <code>stringer</code> varies according to the properties of the constant set.
+
+
+    For instance, if the constants are sparse, it might use a map.
+
+
+    Here&#39;s a trivial example based on a constant set representing powers of two:
+  </p>
+  
+
+      
+        
+  
+  <div class="code"><pre>const _Power_name = &#34;p0p1p2p3p4p5...&#34;
+
+var _Power_map = map[Power]string{
+    1:    _Power_name[0:2],
+    2:    _Power_name[2:4],
+    4:    _Power_name[4:6],
+    8:    _Power_name[6:8],
+    16:   _Power_name[8:10],
+    32:   _Power_name[10:12],
+    ...,
+}
+
+func (i Power) String() string {
+    if str, ok := _Power_map[i]; ok {
+        return str
+    }
+    return fmt.Sprintf(&#34;Power(%d)&#34;, i)
+}</pre></div>
+  
+
+      
+        
+  
+  <p>
+    In short, generating the method automatically allows us to do a better job than we would expect a human to do.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    There are lots of other uses of <code>go</code> <code>generate</code> already installed in the Go tree.
+
+
+    Examples include generating Unicode tables in the <code>unicode</code> package,
+
+
+    creating efficient methods for encoding and decoding arrays in <code>encoding/gob</code>,
+
+
+    producing time zone data in the <code>time</code> package, and so on.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Please use <code>go</code> <code>generate</code> creatively.
+
+
+    It&#39;s there to encourage experimentation.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    And even if you don&#39;t, use the new <code>stringer</code> tool to write your <code>String</code> methods for your integer constants.
+
+
+    Let the machine do the work.
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Rob Pike</p>
+		
+	</div>
+
+	
+		
+	<div class="article">
+		<h3 class="title"><a href="/go1.4">Go 1.4 is released</a></h3>
+		<p class="date">10 December 2014</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    Today we announce Go 1.4, the fifth major stable release of Go, arriving six
+
+
+    months after our previous major release <a href="https://blog.golang.org/go1.3" target="_blank">Go 1.3</a>.
+
+
+    It contains a small language change, support for more operating systems
+
+
+    and processor architectures, and improvements to the tool chain and libraries.
+
+
+    As always, Go 1.4 keeps the promise of compatibility, and almost everything
+
+
+    will continue to compile and run without change when moved to 1.4.
+
+
+    For the full details, see the <a href="https://golang.org/doc/go1.4" target="_blank">Go 1.4 release notes</a>.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The most notable new feature in this release is official support for Android.
+
+
+    Using the support in the core and the libraries in the
+
+
+    <a href="https://godoc.org/golang.org/x/mobile" target="_blank">golang.org/x/mobile</a> repository,
+
+
+    it is now possible to write simple Android apps using only Go code.
+
+
+    At this stage, the support libraries are still nascent and under heavy development.
+
+
+    Early adopters should expect a bumpy ride, but we welcome the community to get involved.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The language change is a tweak to the syntax of for-range loops.
+
+
+    You may now write &#34;for range s {&#34; to loop over each item from s,
+
+
+    without having to assign the value, loop index, or map key.
+
+
+    See the <a href="https://golang.org/doc/go1.4#forrange" target="_blank">release notes</a> for details.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The go command has a new subcommand, go generate, to automate the running of
+
+
+    tools to generate source code before compilation.
+
+
+    For example, it can be used to automate the generation of String methods for
+
+
+    typed constants using the
+
+
+    <a href="https://godoc.org/golang.org/x/tools/cmd/stringer/" target="_blank">new stringer tool</a>.
+
+
+    For more information, see the <a href="https://golang.org/s/go1.4-generate" target="_blank">design document</a>.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Most programs will run about the same speed or slightly faster in 1.4 than in
+
+
+    1.3; some will be slightly slower.
+
+
+    There are many changes, making it hard to be precise about what to expect.
+
+
+    See the <a href="https://golang.org/doc/go1.4#performance" target="_blank">release notes</a> for more discussion.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    And, of course, there are many more improvements and bug fixes.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    In case you missed it, a few weeks ago the sub-repositories were moved to new locations.
+
+
+    For example, the go.tools packages are now imported from &#34;golang.org/x/tools&#34;.
+
+
+    See the <a href="https://groups.google.com/d/msg/golang-announce/eD8dh3T9yyA/HDOEU_ZSmvAJ" target="_blank">announcement post</a> for details.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    This release also coincides with the project&#39;s move from Mercurial to Git (for
+
+
+    source control), Rietveld to Gerrit (for code review), and Google Code to
+
+
+    Github (for issue tracking and wiki).
+
+
+    The move affects the core Go repository and its sub-repositories.
+
+
+    You can find the canonical Git repositories at
+
+
+    <a href="https://go.googlesource.com" target="_blank">go.googlesource.com</a>,
+
+
+    and the issue tracker and wiki at the
+
+
+    <a href="https://github.com/golang/go" target="_blank">golang/go GitHub repo</a>.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    While development has already moved over to the new infrastructure,
+
+
+    for the 1.4 release we still recommend that users who
+
+
+    <a href="https://golang.org/doc/install/source" target="_blank">install from source</a>
+
+
+    use the Mercurial repositories.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    For App Engine users, Go 1.4 is now available for beta testing.
+
+
+    See <a href="https://groups.google.com/d/msg/google-appengine-go/ndtQokV3oFo/25wV1W9JtywJ" target="_blank">the announcement</a> for details.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    From all of us on the Go team, please enjoy Go 1.4, and have a happy holiday season.
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+		
+	<div class="article">
+		<h3 class="title"><a href="/5years">Half a decade with Go</a></h3>
+		<p class="date">10 November 2014</p>
+		
+
+  
+  
+    
+      
+        
+  
+  <p>
+    Five years ago we launched the Go project. It seems like only yesterday that we
+
+
+    were preparing the initial public release: our
+
+
+    <a href="https://web.archive.org/web/20091112094121/http://golang.org/" target="_blank">website</a> was
+
+
+    a lovely shade of yellow, we were calling Go a &#34;systems language&#34;, and you had
+
+
+    to terminate statements with a semicolon and write Makefiles to build your
+
+
+    code. We had no idea how Go would be received. Would people share our vision
+
+
+    and goals? Would people find Go useful?
+  </p>
+  
+
+      
+        
+  
+  <p>
+    At launch, there was a flurry of attention. Google had produced a new
+
+
+    programming language, and everyone was eager to check it out. Some programmers
+
+
+    were turned off by Go&#39;s conservative feature set—at first glance they saw
+
+
+    &#34;nothing to see here&#34;—but a smaller group saw the beginnings of an ecosystem
+
+
+    tailored to their needs as working software engineers. These few would form the
+
+
+    kernel of the Go community.
+  </p>
+  
+
+      
+        
+<div class="image">
+  <img src="5years/gophers5th.jpg" width="850">
+</div>
+
+      
+        
+  
+  <p>
+    <a href="/gopher" target="_self"><i>Gopher</i></a> <i>illustration by</i> <a href="http://reneefrench.blogspot.com.au/" target="_blank"><i>Renee French</i></a>
+  </p>
+  
+
+      
+        
+  
+  <p>
+    After the initial release, it took us a while to properly communicate the
+
+
+    goals and design ethos behind Go. Rob Pike did so eloquently in his 2012 essay
+
+
+    <a href="http://talks.golang.org/2012/splash.article" target="_blank"><i>Go at Google: Language Design in the Service of Software Engineering</i></a> and
+
+
+    more personally in his blog post
+
+
+    <a href="http://commandcenter.blogspot.com.au/2012/06/less-is-exponentially-more.html" target="_blank"><i>Less is exponentially more</i></a>.
+
+
+    Andrew Gerrand&#39;s
+
+
+    <a href="http://vimeo.com/53221560" target="_blank"><i>Code that grows with grace</i></a>
+
+
+    (<a href="http://talks.golang.org/2012/chat.slide" target="_blank">slides</a>) and
+
+
+    <a href="https://www.youtube.com/watch?v=dKGmK_Z1Zl0" target="_blank"><i>Go for Gophers</i></a>
+
+
+    (<a href="http://talks.golang.org/2014/go4gophers.slide" target="_blank">slides</a>) give a
+
+
+    more in-depth, technical take on Go&#39;s design philosophy.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Over time, the few became many. The turning point for the project was the
+
+
+    release of Go 1 in March 2012, which provided a stable language and standard
+
+
+    library that developers could trust. By 2014, the project had hundreds of core
+
+
+    contributors, the ecosystem had countless <a href="https://godoc.org/" target="_blank">libraries and tools</a>
+
+
+    maintained by thousands of developers, and the greater community had
+
+
+    many passionate members (or, as we call them, &#34;gophers&#34;). Today, by our current
+
+
+    metrics, the Go community is growing faster than we believed possible.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Where can those gophers be found? They are at the many Go events that are
+
+
+    popping up around the world. This year we saw several dedicated Go conferences:
+
+
+    the inaugural <a href="http://blog.golang.org/gophercon" target="_blank">GopherCon</a> and
+
+
+    <a href="http://www.dotgo.eu/" target="_blank">dotGo</a> conferences in Denver and Paris, the
+
+
+    <a href="http://blog.golang.org/fosdem14" target="_blank">Go DevRoom at FOSDEM</a> and two more
+
+
+    instances of the biannual <a href="https://github.com/GoCon/GoCon" target="_blank">GoCon</a> conference
+
+
+    in Tokyo. At each event, gophers from around the globe eagerly presented their
+
+
+    Go projects. For the Go team, it is very satisfying to meet so many programmers
+
+
+    that share our vision and excitement.
+  </p>
+  
+
+      
+        
+<div class="image">
+  <img src="5years/conferences.jpg">
+</div>
+
+      
+        
+  
+  <p>
+    <i>More than 1,200 gophers attended GopherCon in Denver and dotGo in Paris.</i>
+  </p>
+  
+
+      
+        
+  
+  <p>
+    There are also dozens of community-run
+
+
+    <a href="http://golang.org/wiki/GoUserGroups" target="_blank">Go User Groups</a> spread across cities
+
+
+    worldwide. If you haven&#39;t visited your local group, consider going along. And
+
+
+    if there isn&#39;t a group in your area, maybe you should
+
+
+    <a href="https://blog.golang.org/getthee-to-go-meetup" target="_blank">start one</a>?
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Today, Go has found a home in the cloud. Go arrived as the industry underwent a
+
+
+    tectonic shift toward cloud computing, and we were thrilled to see it quickly
+
+
+    become an important part of that movement. Its simplicity, efficiency, built-in
+
+
+    concurrency primitives, and modern standard library make it a great fit for
+
+
+    cloud software development (after all, that&#39;s what it was designed for).
+
+
+    Significant open source cloud projects like
+
+
+    <a href="https://www.docker.com/" target="_blank">Docker</a> and
+
+
+    <a href="https://github.com/GoogleCloudPlatform/kubernetes" target="_blank">Kubernetes</a> have been
+
+
+    written in Go, and infrastructure companies like Google, CloudFlare, Canonical,
+
+
+    Digital Ocean, GitHub, Heroku, and Microsoft are now using Go to do some heavy
+
+
+    lifting.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    So, what does the future hold? We think that 2015 will be Go&#39;s biggest year yet.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    Go 1.4—in addition to its <a href="http://tip.golang.org/doc/go1.4" target="_blank">new features and fixes</a>—lays
+
+
+    the groundwork for a new low-latency garbage collector and support for running
+
+
+    Go on mobile devices. It is due to be released on December 1st 2014.
+
+
+    We expect the new GC to be available in Go 1.5, due June 1st 2015, which will
+
+
+    make Go appealing for a broader range of applications.
+
+
+    We can&#39;t wait to see where people take it.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    And there will be more great events, with <a href="http://gothamgo.com/" target="_blank">GothamGo</a> in
+
+
+    New York (15 Nov), another Go DevRoom at FOSDEM in Brussels (Jan 31 and Feb 1;
+
+
+    <a href="https://groups.google.com/d/msg/golang-nuts/1xgBazQzs1I/hwrZ5ni8cTEJ" target="_blank">get involved!</a>),
+
+
+    <a href="http://www.gophercon.in/" target="_blank">GopherCon India</a> in Bengaluru (19-21 Feb),
+
+
+    the original <a href="http://gophercon.com/" target="_blank">GopherCon</a> back at Denver in July, and
+
+
+    <a href="http://www.dotgo.eu/" target="_blank">dotGo</a> on again at Paris in November.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    The Go team would like to extend its thanks to all the gophers out there.
+
+
+    Here&#39;s to the next five years.
+  </p>
+  
+
+      
+        
+  
+  <p>
+    <i>To celebrate 5 years of Go, over the coming month the</i>
+
+
+    <a href="http://blog.gopheracademy.com/" target="_blank"><i>Gopher Academy</i></a>
+
+
+    <i>will publish a series of articles by prominent Go users. Be sure to check out</i>
+
+
+    <a href="http://blog.gopheracademy.com/" target="_blank"><i>their blog</i></a>
+
+
+    <i>for more Go action.</i>
+  </p>
+  
+
+      
+    
+  
+
+
+		
+			<p class="author">By Andrew Gerrand</p>
+		
+	</div>
+
+	
+	<p>See the <a href="/index">index</a> for more articles.
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

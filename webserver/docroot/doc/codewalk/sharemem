@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>Share Memory By Communicating - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Codewalk: Share Memory By Communicating</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2010 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+
+<style type='text/css'>@import "/doc/codewalk/codewalk.css";</style>
+<script type="text/javascript" src="/doc/codewalk/codewalk.js"></script>
+
+<div id="codewalk-main">
+  <div class="left" id="code-column">
+    <div id='sizer'></div>
+    <div id="code-area">
+      <div id="code-header" align="center">
+        <a id="code-popout-link" href="" target="_blank">
+          <img title="View code in new window" alt="Pop Out Code" src="/doc/codewalk/popout.png" style="display: block; float: right;"/>
+        </a>
+        <select id="code-selector">
+          
+          <option value="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go">doc/codewalk/urlpoll.go</option>
+          
+        </select>
+      </div>
+      <div id="code">
+        <iframe class="code-display" name="code-display" id="code-display"></iframe>
+      </div>
+    </div>
+    <div id="code-options" class="setting">
+      <span>code on <a id="set-code-left" class="selected" href="#">left</a> &bull; <a id="set-code-right" href="#">right</a></span>
+      <span>code width <span id="code-column-width">70%</span></span>
+      <span>filepaths <a id="show-filepaths" class="selected" href="#">shown</a> &bull; <a id="hide-filepaths" href="#">hidden</a></span>
+    </div>
+  </div>
+  <div class="right" id="comment-column">
+    <div id="comment-area">
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=0&amp;hi=0#mark" target="code-display"></a>
+        <div class="comment-title">Introduction</div>
+        <div class="comment-text">
+	
+        
+Go's approach to concurrency differs from the traditional use of
+threads and shared memory. Philosophically, it can be summarized:
+<br/><br/>
+<i>Don't communicate by sharing memory; share memory by communicating.</i>
+<br/><br/>
+Channels allow you to pass references to data structures between goroutines.
+If you consider this as passing around ownership of the data (the ability to
+read and write it), they become a powerful and expressive synchronization 
+mechanism.
+<br/><br/>
+In this codewalk we will look at a simple program that polls a list of
+URLs, checking their HTTP response codes and periodically printing their state.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=26&amp;hi=30#mark" target="code-display"></a>
+        <div class="comment-title">State type</div>
+        <div class="comment-text">
+	
+        
+The State type represents the state of a URL.
+<br/><br/>
+The Pollers send State values to the StateMonitor,
+which maintains a map of the current state of each URL.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:26,30</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=60&amp;hi=64#mark" target="code-display"></a>
+        <div class="comment-title">Resource type</div>
+        <div class="comment-text">
+	
+        
+A Resource represents the state of a URL to be polled: the URL itself
+and the number of errors encountered since the last successful poll.
+<br/><br/>
+When the program starts, it allocates one Resource for each URL.
+The main goroutine and the Poller goroutines send the Resources to
+each other on channels.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:60,64</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=86&amp;hi=92#mark" target="code-display"></a>
+        <div class="comment-title">Poller function</div>
+        <div class="comment-text">
+	
+        
+Each Poller receives Resource pointers from an input channel.
+In this program, the convention is that sending a Resource pointer on
+a channel passes ownership of the underlying data from the sender
+to the receiver.  Because of this convention, we know that
+no two goroutines will access this Resource at the same time.
+This means we don't have to worry about locking to prevent concurrent 
+access to these data structures.
+<br/><br/>
+The Poller processes the Resource by calling its Poll method.
+<br/><br/>
+It sends a State value to the status channel, to inform the StateMonitor
+of the result of the Poll.
+<br/><br/>
+Finally, it sends the Resource pointer to the out channel. This can be
+interpreted as the Poller saying &quot;I'm done with this Resource&quot; and 
+returning ownership of it to the main goroutine. 
+<br/><br/>
+Several goroutines run Pollers, processing Resources in parallel.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:86,92</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=66&amp;hi=77#mark" target="code-display"></a>
+        <div class="comment-title">The Poll method</div>
+        <div class="comment-text">
+	
+        
+The Poll method (of the Resource type) performs an HTTP HEAD request
+for the Resource's URL and returns the HTTP response's status code.
+If an error occurs, Poll logs the message to standard error and returns the 
+error string instead.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:66,77</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=94&amp;hi=116#mark" target="code-display"></a>
+        <div class="comment-title">main function</div>
+        <div class="comment-text">
+	
+        
+The main function starts the Poller and StateMonitor goroutines
+and then loops passing completed Resources back to the pending
+channel after appropriate delays.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:94,116</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=95&amp;hi=96#mark" target="code-display"></a>
+        <div class="comment-title">Creating channels</div>
+        <div class="comment-text">
+	
+        
+First, main makes two channels of *Resource, pending and complete.
+<br/><br/>
+Inside main, a new goroutine sends one Resource per URL to pending
+and the main goroutine receives completed Resources from complete.
+<br/><br/>
+The pending and complete channels are passed to each of the Poller
+goroutines, within which they are known as in and out. 
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:95,96</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=98&amp;hi=99#mark" target="code-display"></a>
+        <div class="comment-title">Initializing StateMonitor</div>
+        <div class="comment-text">
+	
+        
+StateMonitor will initialize and launch a goroutine that stores the state 
+of each Resource. We will look at this function in detail later. 
+<br/><br/>
+For now, the important thing to note is that it returns a channel of State, 
+which is saved as status and passed to the Poller goroutines.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:98,99</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=101&amp;hi=104#mark" target="code-display"></a>
+        <div class="comment-title">Launching Poller goroutines</div>
+        <div class="comment-text">
+	
+        
+Now that it has the necessary channels, main launches a number of
+Poller goroutines, passing the channels as arguments.
+The channels provide the means of communication between the main, Poller, and 
+StateMonitor goroutines.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:101,104</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=106&amp;hi=111#mark" target="code-display"></a>
+        <div class="comment-title">Send Resources to pending</div>
+        <div class="comment-text">
+	
+        
+To add the initial work to the system, main starts a new goroutine
+that allocates and sends one Resource per URL to pending.
+<br/><br/>
+The new goroutine is necessary because unbuffered channel sends and
+receives are synchronous. That means these channel sends will block until
+the Pollers are ready to read from pending.
+<br/><br/>
+Were these sends performed in the main goroutine with fewer Pollers than 
+channel sends, the program would reach a deadlock situation, because
+main would not yet be receiving from complete.
+<br/><br/>
+Exercise for the reader: modify this part of the program to read a list of
+URLs from a file. (You may want to move this goroutine into its own
+named function.)
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:106,111</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=113&amp;hi=115#mark" target="code-display"></a>
+        <div class="comment-title">Main Event Loop</div>
+        <div class="comment-text">
+	
+        
+When a Poller is done with a Resource, it sends it on the complete channel.
+This loop receives those Resource pointers from complete.
+For each received Resource, it starts a new goroutine calling
+the Resource's Sleep method.  Using a new goroutine for each
+ensures that the sleeps can happen in parallel.
+<br/><br/>
+Note that any single Resource pointer may only be sent on either pending or
+complete at any one time. This ensures that a Resource is either being
+handled by a Poller goroutine or sleeping, but never both simultaneously.  
+In this way, we share our Resource data by communicating.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:113,115</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=79&amp;hi=84#mark" target="code-display"></a>
+        <div class="comment-title">The Sleep method</div>
+        <div class="comment-text">
+	
+        
+Sleep calls time.Sleep to pause before sending the Resource to done.
+The pause will either be of a fixed length (pollInterval) plus an
+additional delay proportional to the number of sequential errors (r.errCount).
+<br/><br/>
+This is an example of a typical Go idiom: a function intended to run inside 
+a goroutine takes a channel, upon which it sends its return value 
+(or other indication of completed state).
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:79,84</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=32&amp;hi=50#mark" target="code-display"></a>
+        <div class="comment-title">StateMonitor</div>
+        <div class="comment-text">
+	
+        
+The StateMonitor receives State values on a channel and periodically
+outputs the state of all Resources being polled by the program.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:32,50</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=36&amp;hi=36#mark" target="code-display"></a>
+        <div class="comment-title">The updates channel</div>
+        <div class="comment-text">
+	
+        
+The variable updates is a channel of State, on which the Poller goroutines
+send State values.
+<br/><br/>
+This channel is returned by the function.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:36</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=37&amp;hi=37#mark" target="code-display"></a>
+        <div class="comment-title">The urlStatus map</div>
+        <div class="comment-text">
+	
+        
+The variable urlStatus is a map of URLs to their most recent status. 
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:37</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=38&amp;hi=38#mark" target="code-display"></a>
+        <div class="comment-title">The Ticker object</div>
+        <div class="comment-text">
+	
+        
+A time.Ticker is an object that repeatedly sends a value on a channel at a 
+specified interval. 
+<br/><br/>
+In this case, ticker triggers the printing of the current state to 
+standard output every updateInterval nanoseconds.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:38</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=39&amp;hi=48#mark" target="code-display"></a>
+        <div class="comment-title">The StateMonitor goroutine</div>
+        <div class="comment-text">
+	
+        
+StateMonitor will loop forever, selecting on two channels: 
+ticker.C and update. The select statement blocks until one of its 
+communications is ready to proceed.
+<br/><br/>
+When StateMonitor receives a tick from ticker.C, it calls logState to
+print the current state.  When it receives a State update from updates,
+it records the new status in the urlStatus map.
+<br/><br/>
+Notice that this goroutine owns the urlStatus data structure,
+ensuring that it can only be accessed sequentially. 
+This prevents memory corruption issues that might arise from parallel reads 
+and/or writes to a shared map.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go:39,48</span></div>
+      </div>
+      
+      <div class="comment first last">
+        <a class="comment-link" href="/doc/codewalk/?fileprint=/doc%2Fcodewalk%2Furlpoll.go&amp;lo=0&amp;hi=0#mark" target="code-display"></a>
+        <div class="comment-title">Conclusion</div>
+        <div class="comment-text">
+	
+        
+In this codewalk we have explored a simple example of using Go's concurrency
+primitives to share memory through communication.
+<br/><br/>
+This should provide a starting point from which to explore the ways in which
+goroutines and channels can be used to write expressive and concise concurrent
+programs.
+
+        </div>
+        <div class="comment-text file-name"><span class="path-file">doc/codewalk/urlpoll.go</span></div>
+      </div>
+      
+    </div>
+    <div id="comment-options" class="setting">
+      <a id="prev-comment" href="#"><span class="hotkey">p</span>revious step</a>
+      &bull;
+      <a id="next-comment" href="#"><span class="hotkey">n</span>ext step</a>
+    </div>
+  </div>
+</div>
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

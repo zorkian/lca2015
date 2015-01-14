@@ -1,0 +1,913 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Introducing the Go Race Detector - The Go Blog</title>
+	<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+	<link rel="alternate" type="application/atom+xml" title="blog.golang.org - Atom Feed" href="//blog.golang.org/feed.atom" />
+	<script type="text/javascript">window.initFuncs = [];</script>
+	<style>
+		#sidebar {
+			float: right;
+			padding-left: 20px;
+			width: 250px;
+			background: white;
+		}
+		#sidebar p, #sidebar ul {
+			margin: 20px 5px;
+		}
+		#sidebar ul {
+			padding: 0;
+		}
+		#sidebar li {
+			list-style-type: none;
+		}
+		#content .author {
+			font-style: italic;
+		}
+		#content .article {
+			margin-bottom: 50px;
+		}
+		#content .date {
+			color: #999;
+		}
+		#content .tags {
+			color: #999;
+			font-size: smaller;
+		}
+		#content .iframe, #content .image {
+			margin: 20px;
+		}
+		#content .title {
+			margin: 20px 0;
+		}
+	</style>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-3"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id="topbar"><div class="container">
+
+<form method="GET" action="//golang.org/search">
+<div id="menu">
+<a href="//golang.org/doc/">Documents</a>
+<a href="//golang.org/pkg/">Packages</a>
+<a href="//golang.org/project/">The Project</a>
+<a href="//golang.org/help/">Help</a>
+<a href="/">Blog</a>
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="//golang.org/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+<div id="page">
+<div class="container">
+
+<div id="sidebar">
+	
+		
+			<h4>Next article</h4>
+			<p><a href="/first-go-program">The first Go program</a></p>
+		
+		
+		
+			<h4>Previous article</h4>
+			<p><a href="/go-and-google-cloud-platform">Go and the Google Cloud Platform</a></p>
+		
+	
+	
+	<h4>Links</h4>
+	<ul>
+	<li><a href='//golang.org/'>golang.org</a></li>
+	<li><a href='//golang.org/doc/install.html'>Install Go</a></li>
+	<li><a href='//tour.golang.org/'>A Tour of Go</a></li>
+	<li><a href='//golang.org/doc/'>Go Documentation</a></li>
+	<li><a href='//groups.google.com/group/golang-nuts'>Go Mailing List</a></li>
+	<li><a href='//plus.google.com/101406623878176903605'>Go on Google+</a></li>
+	<li><a href='//plus.google.com/112164155169467723645/posts'>Go+ Community</a></li>
+	<li><a href='//twitter.com/golang'>Go on Twitter</a></li>
+	</ul>
+	
+	<p><a href="/index">Blog index</a></p>
+</div>
+
+<div id="content">
+	<h1><a href="/">The Go Blog</a></h1>
+	
+	
+	<div class="article">
+		<h3 class="title"><a href="/race-detector">Introducing the Go Race Detector</a></h3>
+		<p class="date">26 June 2013</p>
+		
+
+  
+  
+    
+      
+  <h4 id="TOC_1.">Introduction</h4>
+  
+  
+  <p>
+    <a href="http://en.wikipedia.org/wiki/Race_condition" target="_blank">Race conditions</a> are among the
+
+
+    most insidious and elusive programming errors. They typically cause erratic and
+
+
+    mysterious failures, often long after the code has been deployed to production.
+
+
+    While Go&#39;s concurrency mechanisms make it easy to write clean concurrent code,
+
+
+    they don&#39;t prevent race conditions. Care, diligence, and testing are required.
+
+
+    And tools can help.
+  </p>
+  
+
+  
+  <p>
+    We&#39;re happy to announce that Go 1.1 includes a
+
+
+    <a href="http://golang.org/doc/articles/race_detector.html" target="_blank">race detector</a>,
+
+
+    a new tool for finding race conditions in Go code.
+
+
+    It is currently available for Linux, OS X, and Windows systems
+
+
+    with 64-bit x86 processors.
+  </p>
+  
+
+  
+  <p>
+    The race detector is based on the C/C++
+
+
+    <a href="https://code.google.com/p/thread-sanitizer/" target="_blank">ThreadSanitizer runtime library</a>,
+
+
+    which has been used to detect many errors in Google&#39;s internal code base and in
+
+
+    <a href="http://www.chromium.org/" target="_blank">Chromium</a>.
+
+
+    The technology was integrated with Go in September 2012; since then it has detected
+
+
+    <a href="https://code.google.com/p/go/issues/list?can=1&amp;q=ThreadSanitizer" target="_blank">42 races</a>
+
+
+    in the standard library. It is now part of our continuous build process,
+
+
+    where it continues to catch race conditions as they arise.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_2.">How it works</h4>
+  
+  
+  <p>
+    The race detector is integrated with the go tool chain. When the
+
+
+    <code>-race</code> command-line flag is set, the compiler instruments all memory accesses
+
+
+    with code that records when and how the memory was accessed, while the runtime
+
+
+    library watches for unsynchronized accesses to shared variables.
+
+
+    When such &#34;racy&#34; behavior is detected, a warning is printed.
+
+
+    (See <a href="https://code.google.com/p/thread-sanitizer/wiki/Algorithm" target="_blank">this article</a>
+
+
+    for the details of the algorithm.)
+  </p>
+  
+
+  
+  <p>
+    Because of its design, the race detector can detect race conditions only when
+
+
+    they are actually triggered by running code, which means it&#39;s important to run
+
+
+    race-enabled binaries under realistic workloads.
+
+
+    However, race-enabled binaries can use ten times the CPU and memory, so it is
+
+
+    impractical to enable the race detector all the time.
+
+
+    One way out of this dilemma is to run some tests with the race detector
+
+
+    enabled. Load tests and integration tests are good candidates, since they tend
+
+
+    to exercise concurrent parts of the code.
+
+
+    Another approach using production workloads is to deploy a single race-enabled
+
+
+    instance within a pool of running servers.
+  </p>
+  
+
+
+    
+      
+  <h4 id="TOC_3.">Using the race detector</h4>
+  
+  
+  <p>
+    The race detector is fully integrated with the Go tool chain.
+
+
+    To build your code with the race detector enabled, just add the
+
+
+    <code>-race</code> flag to the command line:
+  </p>
+  
+
+  
+  <div class="code"><pre>$ go test -race mypkg    // test the package
+$ go run -race mysrc.go  // compile and run the program
+$ go build -race mycmd   // build the command
+$ go install -race mypkg // install the package</pre></div>
+  
+
+  
+  <p>
+    To try out the race detector for yourself, fetch and run this example program:
+  </p>
+  
+
+  
+  <div class="code"><pre>$ go get -race code.google.com/p/go.blog/support/racy
+$ racy</pre></div>
+  
+
+
+    
+      
+  <h4 id="TOC_4.">Examples</h4>
+  
+  
+  <p>
+    Here are two examples of real issues caught by the race detector.
+  </p>
+  
+
+  <h4 id="TOC_4.1.">Example 1: Timer.Reset</h4>
+  
+  
+  <p>
+    The first example is a simplified version of an actual bug found by the race
+
+
+    detector. It uses a timer to print a message after a random duration between 0
+
+
+    and 1 second. It does so repeatedly for five seconds.
+
+
+    It uses <a href="http://golang.org/pkg/time/#AfterFunc" target="_blank"><code>time.AfterFunc</code></a> to create a
+
+
+    <a href="http://golang.org/pkg/time/#Timer" target="_blank"><code>Timer</code></a> for the first message and then
+
+
+    uses the <a href="http://golang.org/pkg/time/#Timer.Reset" target="_blank"><code>Reset</code></a> method to
+
+
+    schedule the next message, re-using the <code>Timer</code> each time.
+  </p>
+  
+
+  
+	<div class="playground">
+<pre style="display: none"><span>// &#43;build OMIT
+
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;math/rand&#34;
+	&#34;time&#34;
+)
+
+</span></pre>
+
+<pre class="numbers"><span num="11">func main() {</span>
+<span num="12">    start := time.Now()</span>
+<span num="13">    var t *time.Timer</span>
+<span num="14">    t = time.AfterFunc(randomDuration(), func() {</span>
+<span num="15">        fmt.Println(time.Now().Sub(start))</span>
+<span num="16">        t.Reset(randomDuration())</span>
+<span num="17">    })</span>
+<span num="18">    time.Sleep(5 * time.Second)</span>
+<span num="19">}</span>
+<span num="20"></span>
+<span num="21">func randomDuration() time.Duration {</span>
+<span num="22">    return time.Duration(rand.Int63n(1e9))</span>
+<span num="23">}</span>
+</pre>
+
+
+</div>
+  
+
+  
+  <p>
+    This looks like reasonable code, but under certain circumstances it fails in a surprising way:
+  </p>
+  
+
+  
+  <div class="code"><pre>panic: runtime error: invalid memory address or nil pointer dereference
+[signal 0xb code=0x1 addr=0x8 pc=0x41e38a]
+
+goroutine 4 [running]:
+time.stopTimer(0x8, 0x12fe6b35d9472d96)
+    src/pkg/runtime/ztime_linux_amd64.c:35 &#43;0x25
+time.(*Timer).Reset(0x0, 0x4e5904f, 0x1)
+    src/pkg/time/sleep.go:81 &#43;0x42
+main.func·001()
+    race.go:14 &#43;0xe3
+created by time.goFunc
+    src/pkg/time/sleep.go:122 &#43;0x48</pre></div>
+  
+
+  
+  <p>
+    What&#39;s going on here? Running the program with the race detector enabled is more illuminating:
+  </p>
+  
+
+  
+  <div class="code"><pre>==================
+WARNING: DATA RACE
+Read by goroutine 5:
+  main.func·001()
+     race.go:14 &#43;0x169
+
+Previous write by goroutine 1:
+  main.main()
+      race.go:15 &#43;0x174
+
+Goroutine 5 (running) created at:
+  time.goFunc()
+      src/pkg/time/sleep.go:122 &#43;0x56
+  timerproc()
+     src/pkg/runtime/ztime_linux_amd64.c:181 &#43;0x189
+==================</pre></div>
+  
+
+  
+  <p>
+    The race detector shows the problem: an unsynchronized read and write of the
+
+
+    variable <code>t</code> from different goroutines. If the initial timer duration is very
+
+
+    small, the timer function may fire before the main goroutine has assigned a
+
+
+    value to <code>t</code> and so the call to <code>t.Reset</code> is made with a nil <code>t</code>.
+  </p>
+  
+
+  
+  <p>
+    To fix the race condition we change the code to read and write the variable
+
+
+    <code>t</code> only from the main goroutine:
+  </p>
+  
+
+  
+	<div class="playground">
+<pre style="display: none"><span>// &#43;build OMIT
+
+package main
+
+import (
+	&#34;fmt&#34;
+	&#34;math/rand&#34;
+	&#34;time&#34;
+)
+
+</span></pre>
+
+<pre class="numbers"><span num="11">func main() {</span>
+<span num="12">    start := time.Now()</span>
+<span num="13">    reset := make(chan bool)</span>
+<span num="14">    var t *time.Timer</span>
+<span num="15">    t = time.AfterFunc(randomDuration(), func() {</span>
+<span num="16">        fmt.Println(time.Now().Sub(start))</span>
+<span num="17">        reset &lt;- true</span>
+<span num="18">    })</span>
+<span num="19">    for time.Since(start) &lt; 5*time.Second {</span>
+<span num="20">        &lt;-reset</span>
+<span num="21">        t.Reset(randomDuration())</span>
+<span num="22">    }</span>
+<span num="23">}</span>
+</pre>
+
+<pre style="display: none"><span>
+func randomDuration() time.Duration {
+	return time.Duration(rand.Int63n(1e9))
+}
+</span></pre>
+</div>
+  
+
+  
+  <p>
+    Here the main goroutine is wholly responsible for setting and resetting the
+
+
+    <code>Timer</code> <code>t</code> and a new reset channel communicates the need to reset the timer in
+
+
+    a thread-safe way.
+  </p>
+  
+
+  
+  <p>
+    A simpler but less efficient approach is to
+
+
+    <a href="http://play.golang.org/p/kuWTrY0pS4" target="_blank">avoid reusing timers</a>.
+  </p>
+  
+
+
+  <h4 id="TOC_4.2.">Example 2: ioutil.Discard</h4>
+  
+  
+  <p>
+    The second example is more subtle.
+  </p>
+  
+
+  
+  <p>
+    The <code>ioutil</code> package&#39;s
+
+
+    <a href="http://golang.org/pkg/io/ioutil/#Discard" target="_blank"><code>Discard</code></a> object implements 
+
+
+    <a href="http://golang.org/pkg/io/#Writer" target="_blank"><code>io.Writer</code></a>,
+
+
+    but discards all the data written to it.
+
+
+    Think of it like <code>/dev/null</code>: a place to send data that you need to read but
+
+
+    don&#39;t want to store.
+
+
+    It is commonly used with <a href="http://golang.org/pkg/io/#Copy" target="_blank"><code>io.Copy</code></a>
+
+
+    to drain a reader, like this:
+  </p>
+  
+
+  
+  <div class="code"><pre>io.Copy(ioutil.Discard, reader)</pre></div>
+  
+
+  
+  <p>
+    Back in July 2011 the Go team noticed that using <code>Discard</code> in this way was
+
+
+    inefficient: the <code>Copy</code> function allocates an internal 32 kB buffer each time it
+
+
+    is called, but when used with <code>Discard</code> the buffer is unnecessary since we&#39;re
+
+
+    just throwing the read data away.
+
+
+    We thought that this idiomatic use of <code>Copy</code> and <code>Discard</code> should not be so costly.
+  </p>
+  
+
+  
+  <p>
+    The fix was simple.
+
+
+    If the given <code>Writer</code> implements a <code>ReadFrom</code> method, a <code>Copy</code> call like this:
+  </p>
+  
+
+  
+  <div class="code"><pre>io.Copy(writer, reader)</pre></div>
+  
+
+  
+  <p>
+    is delegated to this potentially more efficient call:
+  </p>
+  
+
+  
+  <div class="code"><pre>writer.ReadFrom(reader)</pre></div>
+  
+
+  
+  <p>
+    We
+
+
+    <a href="https://code.google.com/p/go/source/detail?r=13faa632ba3a#" target="_blank">added a ReadFrom method</a>
+
+
+    to Discard&#39;s underlying type, which has an internal buffer that is shared
+
+
+    between all its users.
+
+
+    We knew this was theoretically a race condition, but since all writes to the
+
+
+    buffer should be thrown away we didn&#39;t think it was important.
+  </p>
+  
+
+  
+  <p>
+    When the race detector was implemented it immediately
+
+
+    <a href="https://code.google.com/p/go/issues/detail?id=3970" target="_blank">flagged this code</a> as racy.
+
+
+    Again, we considered that the code might be problematic, but decided that the
+
+
+    race condition wasn&#39;t &#34;real&#34;.
+
+
+    To avoid the &#34;false positive&#34; in our build we implemented
+
+
+    <a href="https://code.google.com/p/go/source/detail?r=1e55cf10aa4f" target="_blank">a non-racy version</a>
+
+
+    that is enabled only when the race detector is running.
+  </p>
+  
+
+  
+  <p>
+    But a few months later <a href="http://bradfitz.com/" target="_blank">Brad</a> encountered a
+
+
+    <a href="https://code.google.com/p/go/issues/detail?id=4589" target="_blank">frustrating and strange bug</a>.
+
+
+    After a few days of debugging, he narrowed it down to a real race condition
+
+
+    caused by <code>ioutil.Discard</code>.
+  </p>
+  
+
+  
+  <p>
+    Here is the known-racy code in <code>io/ioutil</code>, where <code>Discard</code> is a
+
+
+    <code>devNull</code> that shares a single buffer between all of its users.
+  </p>
+  
+
+  
+	<div class="code">
+
+
+<pre><span num="5">var blackHole [4096]byte // shared buffer</span>
+<span num="6"></span>
+<span num="7">func (devNull) ReadFrom(r io.Reader) (n int64, err error) {</span>
+<span num="8">    readSize := 0</span>
+<span num="9">    for {</span>
+<span num="10">        readSize, err = r.Read(blackHole[:])</span>
+<span num="11">        n &#43;= int64(readSize)</span>
+<span num="12">        if err != nil {</span>
+<span num="13">            if err == io.EOF {</span>
+<span num="14">                return n, nil</span>
+<span num="15">            }</span>
+<span num="16">            return</span>
+<span num="17">        }</span>
+<span num="18">    }</span>
+<span num="19">}</span>
+</pre>
+
+
+</div>
+  
+
+  
+  <p>
+    Brad&#39;s program includes a <code>trackDigestReader</code> type, which wraps an <code>io.Reader</code>
+
+
+    and records the hash digest of what it reads.
+  </p>
+  
+
+  
+  <div class="code"><pre>type trackDigestReader struct {
+    r io.Reader
+    h hash.Hash
+}
+
+func (t trackDigestReader) Read(p []byte) (n int, err error) {
+    n, err = t.r.Read(p)
+    t.h.Write(p[:n])
+    return
+}</pre></div>
+  
+
+  
+  <p>
+    For example, it could be used to compute the SHA-1 hash of a file while reading it:
+  </p>
+  
+
+  
+  <div class="code"><pre>tdr := trackDigestReader{r: file, h: sha1.New()}
+io.Copy(writer, tdr)
+fmt.Printf(&#34;File hash: %x&#34;, tdr.h.Sum(nil))</pre></div>
+  
+
+  
+  <p>
+    In some cases there would be nowhere to write the data—but still a need to hash
+
+
+    the file—and so <code>Discard</code> would be used:
+  </p>
+  
+
+  
+  <div class="code"><pre>io.Copy(ioutil.Discard, tdr)</pre></div>
+  
+
+  
+  <p>
+    But in this case the <code>blackHole</code> buffer isn&#39;t just a black hole; it is a
+
+
+    legitimate place to store the data between reading it from the source
+
+
+    <code>io.Reader</code> and writing it to the <code>hash.Hash</code>.
+
+
+    With multiple goroutines hashing files simultaneously, each sharing the same
+
+
+    <code>blackHole</code> buffer, the race condition manifested itself by corrupting the data
+
+
+    between reading and hashing.
+
+
+    No errors or panics occurred, but the hashes were wrong. Nasty!
+  </p>
+  
+
+  
+  <div class="code"><pre>func (t trackDigestReader) Read(p []byte) (n int, err error) {
+    // the buffer p is blackHole
+    n, err = t.r.Read(p)
+    // p may be corrupted by another goroutine here,
+    // between the Read above and the Write below
+    t.h.Write(p[:n])
+    return
+}</pre></div>
+  
+
+  
+  <p>
+    The bug was finally
+
+
+    <a href="https://code.google.com/p/go/source/detail?r=4b61f121966b" target="_blank">fixed</a>
+
+
+    by giving a unique buffer to each use of <code>ioutil.Discard</code>, eliminating the race
+
+
+    condition on the shared buffer.
+  </p>
+  
+
+
+
+    
+      
+  <h4 id="TOC_5.">Conclusions</h4>
+  
+  
+  <p>
+    The race detector is a powerful tool for checking the correctness of concurrent
+
+
+    programs. It will not issue false positives, so take its warnings seriously.
+
+
+    But it is only as good as your tests; you must make sure they thoroughly
+
+
+    exercise the concurrent properties of your code so that the race detector can
+
+
+    do its job.
+  </p>
+  
+
+  
+  <p>
+    What are you waiting for? Run <code>&#34;go test -race&#34;</code> on your code today!
+  </p>
+  
+
+
+    
+  
+
+
+		
+			<p class="author">By Dmitry Vyukov and Andrew Gerrand</p>
+		
+	</div>
+
+	
+		<h2>Related articles</h2>
+		<ul>
+		
+			<li><a href="/generate">Generating code</a></li>
+		
+			<li><a href="/context">Go Concurrency Patterns: Context</a></li>
+		
+			<li><a href="/pipelines">Go Concurrency Patterns: Pipelines and cancellation</a></li>
+		
+			<li><a href="/advanced-go-concurrency-patterns">Advanced Go Concurrency Patterns</a></li>
+		
+			<li><a href="/go-maps-in-action">Go maps in action</a></li>
+		
+			<li><a href="/go-fmt-your-code">go fmt your code</a></li>
+		
+			<li><a href="/concurrency-is-not-parallelism">Concurrency is not parallelism</a></li>
+		
+			<li><a href="/organizing-go-code">Organizing Go code</a></li>
+		
+			<li><a href="/go-videos-from-google-io-2012">Go videos from Google I/O 2012</a></li>
+		
+			<li><a href="/debugging-go-programs-with-gnu-debugger">Debugging Go programs with the GNU Debugger</a></li>
+		
+			<li><a href="/go-imagedraw-package">The Go image/draw package</a></li>
+		
+			<li><a href="/go-image-package">The Go image package</a></li>
+		
+			<li><a href="/laws-of-reflection">The Laws of Reflection</a></li>
+		
+			<li><a href="/error-handling-and-go">Error handling and Go</a></li>
+		
+			<li><a href="/first-class-functions-in-go-and-new-go">&#34;First Class Functions in Go&#34;</a></li>
+		
+			<li><a href="/profiling-go-programs">Profiling Go Programs</a></li>
+		
+			<li><a href="/gif-decoder-exercise-in-go-interfaces">A GIF decoder: an exercise in Go interfaces</a></li>
+		
+			<li><a href="/introducing-gofix">Introducing Gofix</a></li>
+		
+			<li><a href="/godoc-documenting-go-code">Godoc: documenting Go code</a></li>
+		
+			<li><a href="/gobs-of-data">Gobs of data</a></li>
+		
+			<li><a href="/c-go-cgo">C? Go? Cgo!</a></li>
+		
+			<li><a href="/json-and-go">JSON and Go</a></li>
+		
+			<li><a href="/go-slices-usage-and-internals">Go Slices: usage and internals</a></li>
+		
+			<li><a href="/go-concurrency-patterns-timing-out-and">Go Concurrency Patterns: Timing out, moving on</a></li>
+		
+			<li><a href="/defer-panic-and-recover">Defer, Panic, and Recover</a></li>
+		
+			<li><a href="/share-memory-by-communicating">Share Memory By Communicating</a></li>
+		
+			<li><a href="/json-rpc-tale-of-interfaces">JSON-RPC: a tale of interfaces</a></li>
+		
+		</ul>
+	
+
+</div>
+
+<div id="footer">
+	<p>
+	Except as
+	<a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+	the content of this page is licensed under the Creative Commons
+	Attribution 3.0 License,<br>
+	and code is licensed under a <a href="//golang.org/LICENSE">BSD license</a>.<br>
+	<a href="//golang.org/doc/tos.html">Terms of Service</a> | 
+	<a href="//www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+	</p>
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+<script src="/lib/godoc/jquery.js"></script>
+<script src="/lib/godoc/playground.js"></script>
+<script src="/lib/godoc/play.js"></script>
+<script src="/lib/godoc/godocs.js"></script>
+<script>
+$(function() {
+	
+	$('.playground > pre.numbers, .code > pre.numbers').each(function() {
+		var $spans = $(this).find('> span');
+
+		
+		var max = 0;
+		$spans.each(function() {
+			var n = $(this).attr('num')*1;
+			if (n > max) max = n;
+		});
+		var width = 2;
+		while (max > 10) {
+			max = max / 10;
+			width++;
+		}
+
+		
+		$spans.each(function() {
+			var n = $(this).attr('num')+' ';
+			while (n.length < width) n = ' '+n;
+			$('<span class="number">').text(n).insertBefore(this);
+		});
+	});
+
+	initPlayground(new HTTPTransport());
+});
+</script>
+</html>

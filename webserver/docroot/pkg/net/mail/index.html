@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>mail - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package mail</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "net/mail"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package mail implements parsing of mail messages.
+</p>
+<p>
+For the most part, this package follows the syntax as specified by RFC 5322.
+Notable divergences:
+</p>
+<pre>* Obsolete address formats are not parsed, including addresses with
+  embedded route information.
+* Group addresses are not parsed.
+* The full range of spacing (the CFWS syntax element) is not supported,
+  such as breaking addresses across lines.
+</pre>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+				<dd><a href="#pkg-variables">Variables</a></dd>
+			
+			
+				
+				<dd><a href="#ParseAddressList">func ParseAddressList(list string) ([]*Address, error)</a></dd>
+			
+			
+				
+				<dd><a href="#Address">type Address</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ParseAddress">func ParseAddress(address string) (*Address, error)</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Address.String">func (a *Address) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#Header">type Header</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Header.AddressList">func (h Header) AddressList(key string) ([]*Address, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Header.Date">func (h Header) Date() (time.Time, error)</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#Header.Get">func (h Header) Get(key string) string</a></dd>
+				
+			
+				
+				<dd><a href="#Message">type Message</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ReadMessage">func ReadMessage(r io.Reader) (msg *Message, err error)</a></dd>
+				
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/net/mail/message.go">message.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+			<h2 id="pkg-variables">Variables</h2>
+			
+				<pre>var <span id="ErrHeaderNotPresent">ErrHeaderNotPresent</span> = <a href="/pkg/errors/">errors</a>.<a href="/pkg/errors/#New">New</a>(&#34;mail: header not in message&#34;)</pre>
+				
+			
+		
+		
+			
+			
+			<h2 id="ParseAddressList">func <a href="/src/net/mail/message.go?s=3774:3828#L138">ParseAddressList</a></h2>
+			<pre>func ParseAddressList(list <a href="/pkg/builtin/#string">string</a>) ([]*<a href="#Address">Address</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+ParseAddressList parses the given string as a list of addresses.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="Address">type <a href="/src/net/mail/message.go?s=3428:3528#L127">Address</a></h2>
+			<pre>type Address struct {
+        Name    <a href="/pkg/builtin/#string">string</a> <span class="comment">// Proper name; may be empty.</span>
+        Address <a href="/pkg/builtin/#string">string</a> <span class="comment">// user@domain</span>
+}</pre>
+			<p>
+Address represents a single mail address.
+An address such as &#34;Barry Gibbs &lt;bg@example.com&gt;&#34; is represented
+as Address{Name: &#34;Barry Gibbs&#34;, Address: &#34;bg@example.com&#34;}.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="ParseAddress">func <a href="/src/net/mail/message.go?s=3603:3654#L133">ParseAddress</a></h3>
+				<pre>func ParseAddress(address <a href="/pkg/builtin/#string">string</a>) (*<a href="#Address">Address</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Parses a single RFC 5322 address, e.g. &#34;Barry Gibbs &lt;bg@example.com&gt;&#34;
+</p>
+
+				
+				
+			
+
+			
+				
+				<h3 id="Address.String">func (*Address) <a href="/src/net/mail/message.go?s=4047:4080#L145">String</a></h3>
+				<pre>func (a *<a href="#Address">Address</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+String formats the address as a valid RFC 5322 address.
+If the address&#39;s name contains non-ASCII characters
+the name will be rendered according to RFC 2047.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Header">type <a href="/src/net/mail/message.go?s=2512:2543#L96">Header</a></h2>
+			<pre>type Header map[<a href="/pkg/builtin/#string">string</a>][]<a href="/pkg/builtin/#string">string</a></pre>
+			<p>
+A Header represents the key-value pairs in a mail message header.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="Header.AddressList">func (Header) <a href="/src/net/mail/message.go?s=3085:3144#L116">AddressList</a></h3>
+				<pre>func (h <a href="#Header">Header</a>) AddressList(key <a href="/pkg/builtin/#string">string</a>) ([]*<a href="#Address">Address</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+AddressList parses the named header field as a list of addresses.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Header.Date">func (Header) <a href="/src/net/mail/message.go?s=2863:2904#L107">Date</a></h3>
+				<pre>func (h <a href="#Header">Header</a>) Date() (<a href="/pkg/time/">time</a>.<a href="/pkg/time/#Time">Time</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+Date parses the Date header field.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="Header.Get">func (Header) <a href="/src/net/mail/message.go?s=2671:2709#L100">Get</a></h3>
+				<pre>func (h <a href="#Header">Header</a>) Get(key <a href="/pkg/builtin/#string">string</a>) <a href="/pkg/builtin/#string">string</a></pre>
+				<p>
+Get gets the first value associated with the given key.
+If there are no values associated with the key, Get returns &#34;&#34;.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Message">type <a href="/src/net/mail/message.go?s=928:984#L35">Message</a></h2>
+			<pre>type Message struct {
+        Header <a href="#Header">Header</a>
+        Body   <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>
+}</pre>
+			<p>
+A Message represents a parsed mail message.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+				
+				<h3 id="ReadMessage">func <a href="/src/net/mail/message.go?s=1121:1176#L43">ReadMessage</a></h3>
+				<pre>func ReadMessage(r <a href="/pkg/io/">io</a>.<a href="/pkg/io/#Reader">Reader</a>) (msg *<a href="#Message">Message</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+				<p>
+ReadMessage reads a message from r.
+The headers are parsed, and the body of the message will be available
+for reading from r.
+</p>
+
+				
+				
+			
+
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+

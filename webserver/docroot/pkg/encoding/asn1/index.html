@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>asn1 - The Go Programming Language</title>
+
+<link type="text/css" rel="stylesheet" href="/lib/godoc/style.css">
+
+<link rel="search" type="application/opensearchdescription+xml" title="godoc" href="/opensearch.xml" />
+
+<link rel="stylesheet" href="/lib/godoc/jquery.treeview.css">
+<script type="text/javascript">window.initFuncs = [];</script>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(["_setAccount", "UA-11222381-2"]);
+_gaq.push(["b._setAccount", "UA-49880327-6"]);
+window.trackPageview = function() {
+  _gaq.push(["_trackPageview", location.pathname+location.hash]);
+  _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+};
+window.trackPageview();
+</script>
+</head>
+<body>
+
+<div id='lowframe' style="position: fixed; bottom: 0; left: 0; height: 0; width: 100%; border-top: thin solid grey; background-color: white; overflow: auto;">
+...
+</div><!-- #lowframe -->
+
+<div id="topbar" class="wide"><div class="container">
+
+<form method="GET" action="/search">
+<div id="menu">
+<a href="/doc/">Documents</a>
+<a href="/pkg/">Packages</a>
+<a href="/project/">The Project</a>
+<a href="/help/">Help</a>
+<a href="/blog/">Blog</a>
+
+<a id="playgroundButton" href="http://play.golang.org/" title="Show Go Playground">Play</a>
+
+<input type="text" id="search" name="q" class="inactive" value="Search" placeholder="Search">
+</div>
+<div id="heading"><a href="/">The Go Programming Language</a></div>
+</form>
+
+</div></div>
+
+
+<div id="playground" class="play">
+	<div class="input"><textarea class="code">package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}</textarea></div>
+	<div class="output"></div>
+	<div class="buttons">
+		<a class="run" title="Run this code [shift-enter]">Run</a>
+		<a class="fmt" title="Format this code">Format</a>
+		<a class="share" title="Share this code">Share</a>
+	</div>
+</div>
+
+
+<div id="page" class="wide">
+<div class="container">
+
+
+  <h1>Package asn1</h1>
+
+
+
+
+<div id="nav"></div>
+
+
+<!--
+	Copyright 2009 The Go Authors. All rights reserved.
+	Use of this source code is governed by a BSD-style
+	license that can be found in the LICENSE file.
+-->
+<!--
+	Note: Static (i.e., not template-generated) href and id
+	attributes start with "pkg-" to make it impossible for
+	them to conflict with generated attributes (some of which
+	correspond to Go identifiers).
+-->
+
+	<script type='text/javascript'>
+	document.ANALYSIS_DATA = null;
+	document.CALLGRAPH = null;
+	</script>
+
+	
+		
+		<div id="short-nav">
+			<dl>
+			<dd><code>import "encoding/asn1"</code></dd>
+			</dl>
+			<dl>
+			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
+			<dd><a href="#pkg-index" class="indexLink">Index</a></dd>
+			
+			
+			</dl>
+		</div>
+		<!-- The package's Name is printed as title by the top-level template -->
+		<div id="pkg-overview" class="toggleVisible">
+			<div class="collapsed">
+				<h2 class="toggleButton" title="Click to show Overview section">Overview ▹</h2>
+			</div>
+			<div class="expanded">
+				<h2 class="toggleButton" title="Click to hide Overview section">Overview ▾</h2>
+				<p>
+Package asn1 implements parsing of DER-encoded ASN.1 data structures,
+as defined in ITU-T Rec X.690.
+</p>
+<p>
+See also &ldquo;A Layman&#39;s Guide to a Subset of ASN.1, BER, and DER,&rdquo;
+<a href="http://luca.ntop.org/Teaching/Appunti/asn1.html">http://luca.ntop.org/Teaching/Appunti/asn1.html</a>.
+</p>
+
+			</div>
+		</div>
+		
+
+		<div id="pkg-index" class="toggleVisible">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Index section">Index ▹</h2>
+		</div>
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Index section">Index ▾</h2>
+
+		<!-- Table of contents for API; must be named manual-nav to turn off auto nav. -->
+			<div id="manual-nav">
+			<dl>
+			
+			
+			
+				
+				<dd><a href="#Marshal">func Marshal(val interface{}) ([]byte, error)</a></dd>
+			
+				
+				<dd><a href="#Unmarshal">func Unmarshal(b []byte, val interface{}) (rest []byte, err error)</a></dd>
+			
+				
+				<dd><a href="#UnmarshalWithParams">func UnmarshalWithParams(b []byte, val interface{}, params string) (rest []byte, err error)</a></dd>
+			
+			
+				
+				<dd><a href="#BitString">type BitString</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BitString.At">func (b BitString) At(i int) int</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#BitString.RightAlign">func (b BitString) RightAlign() []byte</a></dd>
+				
+			
+				
+				<dd><a href="#Enumerated">type Enumerated</a></dd>
+				
+				
+			
+				
+				<dd><a href="#Flag">type Flag</a></dd>
+				
+				
+			
+				
+				<dd><a href="#ObjectIdentifier">type ObjectIdentifier</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ObjectIdentifier.Equal">func (oi ObjectIdentifier) Equal(other ObjectIdentifier) bool</a></dd>
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#ObjectIdentifier.String">func (oi ObjectIdentifier) String() string</a></dd>
+				
+			
+				
+				<dd><a href="#RawContent">type RawContent</a></dd>
+				
+				
+			
+				
+				<dd><a href="#RawValue">type RawValue</a></dd>
+				
+				
+			
+				
+				<dd><a href="#StructuralError">type StructuralError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#StructuralError.Error">func (e StructuralError) Error() string</a></dd>
+				
+			
+				
+				<dd><a href="#SyntaxError">type SyntaxError</a></dd>
+				
+				
+					
+					<dd>&nbsp; &nbsp; <a href="#SyntaxError.Error">func (e SyntaxError) Error() string</a></dd>
+				
+			
+			
+			</dl>
+			</div><!-- #manual-nav -->
+
+		
+
+		
+			<h4>Package files</h4>
+			<p>
+			<span style="font-size:90%">
+			
+				<a href="/src/encoding/asn1/asn1.go">asn1.go</a>
+			
+				<a href="/src/encoding/asn1/common.go">common.go</a>
+			
+				<a href="/src/encoding/asn1/marshal.go">marshal.go</a>
+			
+			</span>
+			</p>
+		
+		</div><!-- .expanded -->
+		</div><!-- #pkg-index -->
+
+		<div id="pkg-callgraph" class="toggle" style="display: none">
+		<div class="collapsed">
+			<h2 class="toggleButton" title="Click to show Internal Call Graph section">Internal call graph ▹</h2>
+		</div> <!-- .expanded -->
+		<div class="expanded">
+			<h2 class="toggleButton" title="Click to hide Internal Call Graph section">Internal call graph ▾</h2>
+			<p>
+			  In the call graph viewer below, each node
+			  is a function belonging to this package
+			  and its children are the functions it
+			  calls&mdash;perhaps dynamically.
+			</p>
+			<p>
+			  The root nodes are the entry points of the
+			  package: functions that may be called from
+			  outside the package.
+			  There may be non-exported or anonymous
+			  functions among them if they are called
+			  dynamically from another package.
+			</p>
+			<p>
+			  Click a node to visit that function's source code.
+			  From there you can visit its callers by
+			  clicking its declaring <code>func</code>
+			  token.
+			</p>
+			<p>
+			  Functions may be omitted if they were
+			  determined to be unreachable in the
+			  particular programs or tests that were
+			  analyzed.
+			</p>
+			<!-- Zero means show all package entry points. -->
+			<ul style="margin-left: 0.5in" id="callgraph-0" class="treeview"></ul>
+		</div>
+		</div> <!-- #pkg-callgraph -->
+
+		
+		
+		
+			
+			
+			<h2 id="Marshal">func <a href="/src/encoding/asn1/marshal.go?s=13346:13391#L626">Marshal</a></h2>
+			<pre>func Marshal(val interface{}) ([]<a href="/pkg/builtin/#byte">byte</a>, <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Marshal returns the ASN.1 encoding of val.
+</p>
+<p>
+In addition to the struct tags recognised by Unmarshal, the following can be
+used:
+</p>
+<pre>ia5:		causes strings to be marshaled as ASN.1, IA5 strings
+omitempty:	causes empty slices to be skipped
+printable:	causes strings to be marshaled as ASN.1, PrintableString strings.
+utf8:		causes strings to be marshaled as ASN.1, UTF8 strings
+</pre>
+
+			
+			
+
+		
+			
+			
+			<h2 id="Unmarshal">func <a href="/src/encoding/asn1/asn1.go?s=25345:25411#L899">Unmarshal</a></h2>
+			<pre>func Unmarshal(b []<a href="/pkg/builtin/#byte">byte</a>, val interface{}) (rest []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+Unmarshal parses the DER-encoded ASN.1 data structure b
+and uses the reflect package to fill in an arbitrary value pointed at by val.
+Because Unmarshal uses the reflect package, the structs
+being written to must use upper case field names.
+</p>
+<p>
+An ASN.1 INTEGER can be written to an int, int32, int64,
+or *big.Int (from the math/big package).
+If the encoded value does not fit in the Go type,
+Unmarshal returns a parse error.
+</p>
+<p>
+An ASN.1 BIT STRING can be written to a BitString.
+</p>
+<p>
+An ASN.1 OCTET STRING can be written to a []byte.
+</p>
+<p>
+An ASN.1 OBJECT IDENTIFIER can be written to an
+ObjectIdentifier.
+</p>
+<p>
+An ASN.1 ENUMERATED can be written to an Enumerated.
+</p>
+<p>
+An ASN.1 UTCTIME or GENERALIZEDTIME can be written to a time.Time.
+</p>
+<p>
+An ASN.1 PrintableString or IA5String can be written to a string.
+</p>
+<p>
+Any of the above ASN.1 values can be written to an interface{}.
+The value stored in the interface has the corresponding Go type.
+For integers, that type is int64.
+</p>
+<p>
+An ASN.1 SEQUENCE OF x or SET OF x can be written
+to a slice if an x can be written to the slice&#39;s element type.
+</p>
+<p>
+An ASN.1 SEQUENCE or SET can be written to a struct
+if each of the elements in the sequence can be
+written to the corresponding element in the struct.
+</p>
+<p>
+The following tags on struct fields have special meaning to Unmarshal:
+</p>
+<pre>application	specifies that a APPLICATION tag is used
+default:x	sets the default value for optional integer fields
+explicit	specifies that an additional, explicit tag wraps the implicit one
+optional	marks the field as ASN.1 OPTIONAL
+set		causes a SET, rather than a SEQUENCE type to be expected
+tag:x		specifies the ASN.1 tag number; implies ASN.1 CONTEXT SPECIFIC
+</pre>
+<p>
+If the type of the first field of a structure is RawContent then the raw
+ASN1 contents of the struct will be stored in it.
+</p>
+<p>
+If the type name of a slice element ends with &#34;SET&#34; then it&#39;s treated as if
+the &#34;set&#34; tag was set on it. This can be used with nested slices where a
+struct tag cannot be given.
+</p>
+<p>
+Other ASN.1 types are not supported; if it encounters them,
+Unmarshal returns a parse error.
+</p>
+
+			
+			
+
+		
+			
+			
+			<h2 id="UnmarshalWithParams">func <a href="/src/encoding/asn1/asn1.go?s=25604:25695#L905">UnmarshalWithParams</a></h2>
+			<pre>func UnmarshalWithParams(b []<a href="/pkg/builtin/#byte">byte</a>, val interface{}, params <a href="/pkg/builtin/#string">string</a>) (rest []<a href="/pkg/builtin/#byte">byte</a>, err <a href="/pkg/builtin/#error">error</a>)</pre>
+			<p>
+UnmarshalWithParams allows field parameters to be specified for the
+top-level element. The form of the params is the same as the field tags.
+</p>
+
+			
+			
+
+		
+		
+			
+			
+			<h2 id="BitString">type <a href="/src/encoding/asn1/asn1.go?s=3537:3644#L120">BitString</a></h2>
+			<pre>type BitString struct {
+        Bytes     []<a href="/pkg/builtin/#byte">byte</a> <span class="comment">// bits packed into bytes.</span>
+        BitLength <a href="/pkg/builtin/#int">int</a>    <span class="comment">// length in bits.</span>
+}</pre>
+			<p>
+BitString is the structure to use when you want an ASN.1 BIT STRING type. A
+bit string is padded up to the nearest byte in memory and the number of
+valid bits is recorded. Padding bits will be zero.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="BitString.At">func (BitString) <a href="/src/encoding/asn1/asn1.go?s=3738:3770#L127">At</a></h3>
+				<pre>func (b <a href="#BitString">BitString</a>) At(i <a href="/pkg/builtin/#int">int</a>) <a href="/pkg/builtin/#int">int</a></pre>
+				<p>
+At returns the bit at the given index. If the index is out of range it
+returns false.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="BitString.RightAlign">func (BitString) <a href="/src/encoding/asn1/asn1.go?s=4010:4048#L138">RightAlign</a></h3>
+				<pre>func (b <a href="#BitString">BitString</a>) RightAlign() []<a href="/pkg/builtin/#byte">byte</a></pre>
+				<p>
+RightAlign returns a slice where the padding bits are at the beginning. The
+slice may share memory with the BitString.
+</p>
+
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="Enumerated">type <a href="/src/encoding/asn1/asn1.go?s=6537:6556#L248">Enumerated</a></h2>
+			<pre>type Enumerated <a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+An Enumerated is represented as a plain int.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="Flag">type <a href="/src/encoding/asn1/asn1.go?s=6625:6639#L253">Flag</a></h2>
+			<pre>type Flag <a href="/pkg/builtin/#bool">bool</a></pre>
+			<p>
+A Flag accepts any data and is set to true if present.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="ObjectIdentifier">type <a href="/src/encoding/asn1/asn1.go?s=4936:4963#L175">ObjectIdentifier</a></h2>
+			<pre>type ObjectIdentifier []<a href="/pkg/builtin/#int">int</a></pre>
+			<p>
+An ObjectIdentifier represents an ASN.1 OBJECT IDENTIFIER.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="ObjectIdentifier.Equal">func (ObjectIdentifier) <a href="/src/encoding/asn1/asn1.go?s=5034:5095#L178">Equal</a></h3>
+				<pre>func (oi <a href="#ObjectIdentifier">ObjectIdentifier</a>) Equal(other <a href="#ObjectIdentifier">ObjectIdentifier</a>) <a href="/pkg/builtin/#bool">bool</a></pre>
+				<p>
+Equal reports whether oi and other represent the same identifier.
+</p>
+
+				
+				
+				
+			
+				
+				<h3 id="ObjectIdentifier.String">func (ObjectIdentifier) <a href="/src/encoding/asn1/asn1.go?s=5241:5283#L191">String</a></h3>
+				<pre>func (oi <a href="#ObjectIdentifier">ObjectIdentifier</a>) String() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="RawContent">type <a href="/src/encoding/asn1/asn1.go?s=9831:9853#L372">RawContent</a></h2>
+			<pre>type RawContent []<a href="/pkg/builtin/#byte">byte</a></pre>
+			<p>
+RawContent is used to signal that the undecoded, DER data needs to be
+preserved for a struct. To use it, the first field of the struct must have
+this type. It&#39;s an error for any of the other fields to have this type.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="RawValue">type <a href="/src/encoding/asn1/asn1.go?s=9477:9603#L362">RawValue</a></h2>
+			<pre>type RawValue struct {
+        Class, Tag <a href="/pkg/builtin/#int">int</a>
+        IsCompound <a href="/pkg/builtin/#bool">bool</a>
+        Bytes      []<a href="/pkg/builtin/#byte">byte</a>
+        FullBytes  []<a href="/pkg/builtin/#byte">byte</a> <span class="comment">// includes the tag and length</span>
+}</pre>
+			<p>
+A RawValue represents an undecoded ASN.1 object.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+		
+			
+			
+			<h2 id="StructuralError">type <a href="/src/encoding/asn1/asn1.go?s=1143:1186#L22">StructuralError</a></h2>
+			<pre>type StructuralError struct {
+        Msg <a href="/pkg/builtin/#string">string</a>
+}</pre>
+			<p>
+A StructuralError suggests that the ASN.1 data is valid, but the Go type
+which is receiving it doesn&#39;t match.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="StructuralError.Error">func (StructuralError) <a href="/src/encoding/asn1/asn1.go?s=1188:1227#L26">Error</a></h3>
+				<pre>func (e <a href="#StructuralError">StructuralError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+			
+			
+			<h2 id="SyntaxError">type <a href="/src/encoding/asn1/asn1.go?s=1332:1371#L29">SyntaxError</a></h2>
+			<pre>type SyntaxError struct {
+        Msg <a href="/pkg/builtin/#string">string</a>
+}</pre>
+			<p>
+A SyntaxError suggests that the ASN.1 data is invalid.
+</p>
+
+
+			
+
+			
+
+			
+			
+			
+
+			
+
+			
+				
+				<h3 id="SyntaxError.Error">func (SyntaxError) <a href="/src/encoding/asn1/asn1.go?s=1373:1408#L33">Error</a></h3>
+				<pre>func (e <a href="#SyntaxError">SyntaxError</a>) Error() <a href="/pkg/builtin/#string">string</a></pre>
+				
+				
+				
+				
+			
+		
+	
+
+	
+
+
+
+
+
+
+
+<div id="footer">
+Build version go1.4.<br>
+Except as <a href="https://developers.google.com/site-policies#restrictions">noted</a>,
+the content of this page is licensed under the
+Creative Commons Attribution 3.0 License,
+and code is licensed under a <a href="/LICENSE">BSD license</a>.<br>
+<a href="/doc/tos.html">Terms of Service</a> | 
+<a href="http://www.google.com/intl/en/policies/privacy/">Privacy Policy</a>
+</div>
+
+</div><!-- .container -->
+</div><!-- #page -->
+
+<!-- TODO(adonovan): load these from <head> using "defer" attribute? -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.js"></script>
+<script type="text/javascript" src="/lib/godoc/jquery.treeview.edit.js"></script>
+
+
+<script type="text/javascript" src="/lib/godoc/playground.js"></script>
+
+<script type="text/javascript" src="/lib/godoc/godocs.js"></script>
+
+<script type="text/javascript">
+(function() {
+  var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+  ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+  var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
+
