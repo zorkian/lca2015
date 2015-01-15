@@ -17,6 +17,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/rpc"
 	"sync"
 	"time"
 )
@@ -30,6 +31,7 @@ type RequestStats struct {
 
 type LcaProxy struct {
 	Addr        string
+	RpcAddr     string
 	Requests    map[string]*RequestStats
 	RequestLock sync.Mutex
 	Balancer    *Balancer
@@ -38,6 +40,14 @@ type LcaProxy struct {
 // GoToWork sets up the listening socket and starts waiting for connections. Only returns when
 // the program is done.
 func (p *LcaProxy) GoToWork() {
+	rpc.Register(p)
+	rpc.HandleHTTP()
+	l, err := net.Listen("tcp", p.RpcAddr)
+	if err != nil {
+		log.Fatalf("Failed to listen: %s", err)
+	}
+	go http.Serve(l, nil)
+
 	ln, err := net.Listen("tcp", p.Addr)
 	if err != nil {
 		log.Fatalf("Failed to listen: %s", err)
