@@ -86,7 +86,7 @@ func (b *Balancer) BackendFinished(response *BalanceResponse) {
 	select {
 	case b.backendQueue <- response.Backend:
 		// Do nothing, queued.
-	default:
+	case <-time.After(250 * time.Millisecond):
 		response.Backend.Conn.Close()
 	}
 }
